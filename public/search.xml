@@ -576,7 +576,7 @@
     <title>MySQL实战基础篇1-查询语句的执行</title>
     <url>/blog/2021/10/17/%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
     <content><![CDATA[
-    <div id="aplayer-sxsGrvPh" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-AwuRtaMP" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="697054881" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86"
     ></div>
 
@@ -672,6 +672,72 @@
         <tag>Mysql</tag>
         <tag>数据库</tag>
         <tag>Mysql实战</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法</title>
+    <url>/blog/2021/08/10/%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="第一章-算法基础"><a href="#第一章-算法基础" class="headerlink" title="第一章 算法基础"></a>第一章 算法基础</h1><h2 id="1-学习算法和刷题框架思维"><a href="#1-学习算法和刷题框架思维" class="headerlink" title="1. 学习算法和刷题框架思维"></a>1. 学习算法和刷题框架思维</h2><h3 id="1-数据结构构成"><a href="#1-数据结构构成" class="headerlink" title="1.数据结构构成"></a>1.数据结构构成</h3><h4 id="数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）"><a href="#数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）" class="headerlink" title="数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）"></a>数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）</h4><p>散列表、栈队列、堆、树、图等各种数据结构的基础都是由数据链表的结构基础，不断组合形成并带有某些普通数组和链表所不具备的特性。</p>
+<p><strong>数组和链表的特点：</strong></p>
+<ol>
+<li><strong>数组：随机访问、节约空间、连续存储。但是必须一次性分配空间。如果空间不足需要扩容复制到新的数组中。插入和删除时间复杂度高，查找复杂度底</strong></li>
+<li><strong>链表：不连续存储、不存在扩容复制问题、不能随机访问。插入删除删减复杂度低、查找时间复杂度高。</strong></li>
+</ol>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="2-数据结构的基本操作"><a href="#2-数据结构的基本操作" class="headerlink" title="2. 数据结构的基本操作"></a>2. 数据结构的基本操作</h3><p><strong>遍历+访问（增删改查）</strong></p>
+<h4 id="遍历-访问方式"><a href="#遍历-访问方式" class="headerlink" title="遍历+访问方式"></a>遍历+访问方式</h4><ol>
+<li>线性： for、while循环</li>
+<li>非线性： 递归</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* 基本的单链表节点 */</span><br><span class="line">class ListNode &#123;</span><br><span class="line">    int val;</span><br><span class="line">    ListNode next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void traverse(ListNode head) &#123;</span><br><span class="line">    for (ListNode p = head; p != null; p = p.next) &#123;</span><br><span class="line">        // 迭代访问 p.val</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void traverse(ListNode head) &#123;</span><br><span class="line">    // 递归访问 head.val</span><br><span class="line">    traverse(head.next);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-刷题指南"><a href="#3-刷题指南" class="headerlink" title="3. 刷题指南"></a>3. 刷题指南</h3><p><strong>先刷二叉树！！！！</strong></p>
+<p><strong>理由：培养刷题框架思维，大部分算法都是树的遍历问题！！！有利于理解动态规划、回溯等一些算法技巧。</strong></p>
+<h1 id="第二章-数据结构刷题指南"><a href="#第二章-数据结构刷题指南" class="headerlink" title="第二章 数据结构刷题指南"></a>第二章 数据结构刷题指南</h1><h2 id="1-二叉树"><a href="#1-二叉树" class="headerlink" title="1.二叉树"></a>1.二叉树</h2><h3 id="1-二叉树的重要性"><a href="#1-二叉树的重要性" class="headerlink" title="1. 二叉树的重要性"></a>1. 二叉树的重要性</h3><p><strong>二叉树的算法思想运用广泛，许多算法那都可以抽象成二叉树相关思路去解决。</strong></p>
+<p><strong>大部分递归算法都可以抽象成二叉树问题！！！</strong></p>
+<h3 id="2-递归算法"><a href="#2-递归算法" class="headerlink" title="2. 递归算法"></a>2. 递归算法</h3><p>递归算法关键：</p>
+<ol>
+<li><p><strong>明确每个函数的作用！！！！</strong></p>
+</li>
+<li><p>用这个函数推导出结果</p>
+</li>
+<li><p><strong>不要跳入递归细节！！！</strong></p>
+</li>
+<li><p>明确根节点应该做什么</p>
+</li>
+<li><p>确定遍历顺序</p>
+</li>
+</ol>
+<h3 id="3-算法实践"><a href="#3-算法实践" class="headerlink" title="3. 算法实践"></a>3. 算法实践</h3><h4 id="1-翻转二叉树"><a href="#1-翻转二叉树" class="headerlink" title="1. 翻转二叉树"></a>1. <a href="https://leetcode-cn.com/problems/invert-binary-tree/">翻转二叉树</a></h4><h5 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1. 解题思路"></a>1. 解题思路</h5><ol>
+<li>通过递归进行后序遍历二叉树</li>
+<li>递归中将子树的左右节点进行交换</li>
+</ol>
+<h5 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public TreeNode invertTree(TreeNode root) &#123;</span><br><span class="line">       return reverse(root);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public TreeNode reverse(TreeNode root)&#123;</span><br><span class="line">       if(root==null) return null;</span><br><span class="line">       TreeNode temp=  new TreeNode(root.val,root.left,root.right);</span><br><span class="line">       root.right=reverse(temp.left);</span><br><span class="line">       root.left=reverse(temp.right);</span><br><span class="line">       return root;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="2-填充每个节点的下一个右侧节点指针"><a href="#2-填充每个节点的下一个右侧节点指针" class="headerlink" title="2. 填充每个节点的下一个右侧节点指针"></a>2. <a href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/">填充每个节点的下一个右侧节点指针</a></h4><h5 id="1-解题思路-1"><a href="#1-解题思路-1" class="headerlink" title="1. 解题思路"></a>1. 解题思路</h5><ol>
+<li><p>创建一个指向方法传入子树左右节点</p>
+</li>
+<li><p>调用左节点的子左节点、右节点</p>
+</li>
+<li><p>左节点的子右节点、右节点的子左节点</p>
+</li>
+<li><p>右节点的子左节点、右节点的子右节点</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public Node connect(Node root) &#123;</span><br><span class="line">     if(root==null) return root;</span><br><span class="line">      pointNext(root.left,root.right);</span><br><span class="line">      root.next=null;</span><br><span class="line">      return root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void  pointNext(Node left,Node right)&#123;</span><br><span class="line">        if(left==null)&#123;</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">        pointNext(left.left,left.right);</span><br><span class="line">        pointNext(left.right,right.left);</span><br><span class="line">        pointNext(right.left,right.right);</span><br><span class="line">        left.next=right;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-构造最大二叉树"><a href="#3-构造最大二叉树" class="headerlink" title="3.构造最大二叉树"></a>3.<a href="https://labuladong.gitee.io/algo/2/16/20/#%E6%9E%84%E9%80%A0%E6%9C%80%E5%A4%A7%E4%BA%8C%E5%8F%89%E6%A0%91">构造最大二叉树</a></h4>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
       </tags>
   </entry>
   <entry>
@@ -778,72 +844,6 @@
         <tag>Mysql</tag>
         <tag>数据库</tag>
         <tag>Mysql实战</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法</title>
-    <url>/blog/2021/08/10/%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="第一章-算法基础"><a href="#第一章-算法基础" class="headerlink" title="第一章 算法基础"></a>第一章 算法基础</h1><h2 id="1-学习算法和刷题框架思维"><a href="#1-学习算法和刷题框架思维" class="headerlink" title="1. 学习算法和刷题框架思维"></a>1. 学习算法和刷题框架思维</h2><h3 id="1-数据结构构成"><a href="#1-数据结构构成" class="headerlink" title="1.数据结构构成"></a>1.数据结构构成</h3><h4 id="数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）"><a href="#数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）" class="headerlink" title="数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）"></a>数据结构的本质存储方式只有两种：数组（顺序存储）和链表（链式存储）</h4><p>散列表、栈队列、堆、树、图等各种数据结构的基础都是由数据链表的结构基础，不断组合形成并带有某些普通数组和链表所不具备的特性。</p>
-<p><strong>数组和链表的特点：</strong></p>
-<ol>
-<li><strong>数组：随机访问、节约空间、连续存储。但是必须一次性分配空间。如果空间不足需要扩容复制到新的数组中。插入和删除时间复杂度高，查找复杂度底</strong></li>
-<li><strong>链表：不连续存储、不存在扩容复制问题、不能随机访问。插入删除删减复杂度低、查找时间复杂度高。</strong></li>
-</ol>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="2-数据结构的基本操作"><a href="#2-数据结构的基本操作" class="headerlink" title="2. 数据结构的基本操作"></a>2. 数据结构的基本操作</h3><p><strong>遍历+访问（增删改查）</strong></p>
-<h4 id="遍历-访问方式"><a href="#遍历-访问方式" class="headerlink" title="遍历+访问方式"></a>遍历+访问方式</h4><ol>
-<li>线性： for、while循环</li>
-<li>非线性： 递归</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* 基本的单链表节点 */</span><br><span class="line">class ListNode &#123;</span><br><span class="line">    int val;</span><br><span class="line">    ListNode next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void traverse(ListNode head) &#123;</span><br><span class="line">    for (ListNode p = head; p != null; p = p.next) &#123;</span><br><span class="line">        // 迭代访问 p.val</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void traverse(ListNode head) &#123;</span><br><span class="line">    // 递归访问 head.val</span><br><span class="line">    traverse(head.next);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="3-刷题指南"><a href="#3-刷题指南" class="headerlink" title="3. 刷题指南"></a>3. 刷题指南</h3><p><strong>先刷二叉树！！！！</strong></p>
-<p><strong>理由：培养刷题框架思维，大部分算法都是树的遍历问题！！！有利于理解动态规划、回溯等一些算法技巧。</strong></p>
-<h1 id="第二章-数据结构刷题指南"><a href="#第二章-数据结构刷题指南" class="headerlink" title="第二章 数据结构刷题指南"></a>第二章 数据结构刷题指南</h1><h2 id="1-二叉树"><a href="#1-二叉树" class="headerlink" title="1.二叉树"></a>1.二叉树</h2><h3 id="1-二叉树的重要性"><a href="#1-二叉树的重要性" class="headerlink" title="1. 二叉树的重要性"></a>1. 二叉树的重要性</h3><p><strong>二叉树的算法思想运用广泛，许多算法那都可以抽象成二叉树相关思路去解决。</strong></p>
-<p><strong>大部分递归算法都可以抽象成二叉树问题！！！</strong></p>
-<h3 id="2-递归算法"><a href="#2-递归算法" class="headerlink" title="2. 递归算法"></a>2. 递归算法</h3><p>递归算法关键：</p>
-<ol>
-<li><p><strong>明确每个函数的作用！！！！</strong></p>
-</li>
-<li><p>用这个函数推导出结果</p>
-</li>
-<li><p><strong>不要跳入递归细节！！！</strong></p>
-</li>
-<li><p>明确根节点应该做什么</p>
-</li>
-<li><p>确定遍历顺序</p>
-</li>
-</ol>
-<h3 id="3-算法实践"><a href="#3-算法实践" class="headerlink" title="3. 算法实践"></a>3. 算法实践</h3><h4 id="1-翻转二叉树"><a href="#1-翻转二叉树" class="headerlink" title="1. 翻转二叉树"></a>1. <a href="https://leetcode-cn.com/problems/invert-binary-tree/">翻转二叉树</a></h4><h5 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1. 解题思路"></a>1. 解题思路</h5><ol>
-<li>通过递归进行后序遍历二叉树</li>
-<li>递归中将子树的左右节点进行交换</li>
-</ol>
-<h5 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public TreeNode invertTree(TreeNode root) &#123;</span><br><span class="line">       return reverse(root);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public TreeNode reverse(TreeNode root)&#123;</span><br><span class="line">       if(root==null) return null;</span><br><span class="line">       TreeNode temp=  new TreeNode(root.val,root.left,root.right);</span><br><span class="line">       root.right=reverse(temp.left);</span><br><span class="line">       root.left=reverse(temp.right);</span><br><span class="line">       return root;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h4 id="2-填充每个节点的下一个右侧节点指针"><a href="#2-填充每个节点的下一个右侧节点指针" class="headerlink" title="2. 填充每个节点的下一个右侧节点指针"></a>2. <a href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/">填充每个节点的下一个右侧节点指针</a></h4><h5 id="1-解题思路-1"><a href="#1-解题思路-1" class="headerlink" title="1. 解题思路"></a>1. 解题思路</h5><ol>
-<li><p>创建一个指向方法传入子树左右节点</p>
-</li>
-<li><p>调用左节点的子左节点、右节点</p>
-</li>
-<li><p>左节点的子右节点、右节点的子左节点</p>
-</li>
-<li><p>右节点的子左节点、右节点的子右节点</p>
-</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public Node connect(Node root) &#123;</span><br><span class="line">     if(root==null) return root;</span><br><span class="line">      pointNext(root.left,root.right);</span><br><span class="line">      root.next=null;</span><br><span class="line">      return root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void  pointNext(Node left,Node right)&#123;</span><br><span class="line">        if(left==null)&#123;</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">        pointNext(left.left,left.right);</span><br><span class="line">        pointNext(left.right,right.left);</span><br><span class="line">        pointNext(right.left,right.right);</span><br><span class="line">        left.next=right;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-构造最大二叉树"><a href="#3-构造最大二叉树" class="headerlink" title="3.构造最大二叉树"></a>3.<a href="https://labuladong.gitee.io/algo/2/16/20/#%E6%9E%84%E9%80%A0%E6%9C%80%E5%A4%A7%E4%BA%8C%E5%8F%89%E6%A0%91">构造最大二叉树</a></h4>]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
       </tags>
   </entry>
   <entry>

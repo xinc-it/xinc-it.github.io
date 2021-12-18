@@ -287,108 +287,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MySQL实战基础篇1-查询语句的执行</title>
-    <url>/2021/10/17/%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
-    <content><![CDATA[
-    <div id="aplayer-mFoYYqXj" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="697054881" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86"
-    ></div>
-
-
-
-<p><strong>MySQL逻辑架构图</strong></p>
-<p><img src="https://gitee.com/xincao20/picgo-gitee/raw/master/img//20211016180221.png" alt="img"></p>
-<h3 id="1-Server层"><a href="#1-Server层" class="headerlink" title="1. Server层"></a>1. Server层</h3><h4 id=""><a href="#" class="headerlink" title=""></a></h4><p>Server层包括连接器、分析器、优化器、执行器、查询缓存。</p>
-<h4 id="1-连接器"><a href="#1-连接器" class="headerlink" title="1. 连接器"></a>1. 连接器</h4><p>==<strong>作用：==</strong></p>
-<ol>
-<li><p><strong>==负责跟客户端建立连接==</strong></p>
-</li>
-<li><p><strong>==获取权限==</strong></p>
-</li>
-<li><p><strong>==维持和管理连接==</strong></p>
-</li>
-</ol>
-<p>连接指令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql -h$ip -P$port -u$user -p</span><br></pre></td></tr></table></figure>
-
-<p>获取权限：通过TCP握手后，连接器验证身份，通过输入的用户名和密码。查询MySQL数据库中的user表。查询对应的用户权限。</p>
-<p><strong>长连接和短链接</strong></p>
-<p>长连接：连接成功后，如果客户端持续有请求，则一直使用该连接</p>
-<p>短连接：每次执行完几次查询就断开连接，下次查询在重新建立连接。</p>
-<p>建议使用长连接，因为建立连接过程比较复杂，尽量减少建立连接的动作。</p>
-<p>但是建立长连接也会导致内存消耗增加。因为Mysql在执行时使用的内存是在连接对象里面的。这些资源会在断开时释放。</p>
-<p>如果长连接累计下来，可能导致内存占用太大。</p>
-<p>解决方法</p>
-<ol>
-<li>定期断开长连接</li>
-<li>执行mysql_reset_connectionc初始化连接资源。针对5.7以后。</li>
-</ol>
-<h4 id="2-查询缓存"><a href="#2-查询缓存" class="headerlink" title="2. 查询缓存"></a>2. 查询缓存</h4><p><strong>==作用：用于做缓存==</strong></p>
-<p>Mysql拿到请求后会先去缓存中，查看是否有对应的查询语句。缓存以key-value的形式存储。</p>
-<p>查询语句作为key ,查询结果作为value存入缓存中。</p>
-<p>但是不建议使用查询缓存。因为缓存数据失效的很频繁。</p>
-<p><strong>8.0之后MySQL删掉了查询缓存</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//缓存查询</span><br><span class="line"></span><br><span class="line">select  SQL_CACHE *  from T ;</span><br><span class="line"></span><br><span class="line">// 不查询缓存</span><br><span class="line">select   DEMAND *  from T ; </span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="3-分析器"><a href="#3-分析器" class="headerlink" title="3. 分析器"></a>3. 分析器</h4><p><strong>==作用： 进行sql语句的解析。==</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from T where ID=1;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>词法分析</li>
-</ol>
-<p>通过关键字 <strong>select</strong> 识别为查询语句。将对应的T识别成对应的表名T，将字符串”ID” 识别成列”ID”.</p>
-<ol>
-<li>语法分析</li>
-</ol>
-<p>判断Sql语句是否满足Mysql语法。如果语句不对，则会受到错误提醒。</p>
-<h4 id="4-优化器"><a href="#4-优化器" class="headerlink" title="4. 优化器"></a>4. 优化器</h4><p>作用：决定执行方案</p>
-<ol>
-<li>决定使用哪个索引，多个索引情况下。</li>
-<li>决定各表连接顺序，多个表关联的情况下。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from t1 join t2 using(ID) where t1.c=10 and t2.d=20;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>既可以先从表 t1 里面取出 c=10 的记录的 ID 值，再根据 ID 值关联到表 t2，再判断 t2 里面 d 的值是否等于 20。</li>
-<li>也可以先从表 t2 里面取出 d=20 的记录的 ID 值，再根据 ID 值关联到 t1，再判断 t1 里面 c 的值是否等于 10。</li>
-</ul>
-<p>优化器会决定执行哪种方案。</p>
-<h4 id="5-执行器"><a href="#5-执行器" class="headerlink" title="5. 执行器"></a>5. 执行器</h4><p><strong>==作用：执行sql语句==</strong></p>
-<ol>
-<li>判断用户对这个表有无查询权限</li>
-<li>根据表引擎提供的接口执行查询</li>
-</ol>
-<ul>
-<li>调用 InnoDB 引擎接口取这个表的第一行，判断 ID 值是不是 10，如果不是则跳过，如果是则将这行存在结果集中；</li>
-<li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li>
-<li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li>
-</ul>
-<p>####6.小结</p>
-<ol>
-<li><p>连接器主要作用让客户端和服务端建立连接、获取登录用户权限、维持和管理连接。</p>
-</li>
-<li><p>查询缓存用于通过查询的sql语句作为key，判断是否存在对应的key,如果存在直接返回缓存中存储的查询结果。</p>
-</li>
-<li><p>分析器用于**==判断sql语句语法是否正确==**！将查询的sql语句的字段名解析成对应的数据库中对应的字段和表</p>
-</li>
-<li><p>分析器作用**==优化查询条件==**。查询条件判断使用哪种索引进行查询以及各表的连接顺序</p>
-</li>
-<li><p>执行器用于**==执行sql语句==**。</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
-        <tag>数据库</tag>
-        <tag>Mysql实战</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL实战笔记</title>
     <url>/2021/12/18/%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E5%92%8C%E4%B8%8D%E9%9A%94%E7%A6%BB/</url>
     <content><![CDATA[<h3 id="学习重点"><a href="#学习重点" class="headerlink" title="学习重点"></a>学习重点</h3><h1 id="1-基础篇"><a href="#1-基础篇" class="headerlink" title="1. 基础篇"></a>1. 基础篇</h1><h2 id="1-查询语句的执行"><a href="#1-查询语句的执行" class="headerlink" title="1. 查询语句的执行"></a>1. 查询语句的执行</h2><p><strong>MySQL逻辑架构图</strong></p>
@@ -836,6 +734,108 @@
 </ul>
 <p>你会选择哪一种方法呢？为什么呢？</p>
 <p>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>Mysql实战</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL实战基础篇1-查询语句的执行</title>
+    <url>/2021/10/17/%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
+    <content><![CDATA[
+    <div id="aplayer-fmiDRfGJ" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="697054881" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86"
+    ></div>
+
+
+
+<p><strong>MySQL逻辑架构图</strong></p>
+<p><img src="https://gitee.com/xincao20/picgo-gitee/raw/master/img//20211016180221.png" alt="img"></p>
+<h3 id="1-Server层"><a href="#1-Server层" class="headerlink" title="1. Server层"></a>1. Server层</h3><h4 id=""><a href="#" class="headerlink" title=""></a></h4><p>Server层包括连接器、分析器、优化器、执行器、查询缓存。</p>
+<h4 id="1-连接器"><a href="#1-连接器" class="headerlink" title="1. 连接器"></a>1. 连接器</h4><p>==<strong>作用：==</strong></p>
+<ol>
+<li><p><strong>==负责跟客户端建立连接==</strong></p>
+</li>
+<li><p><strong>==获取权限==</strong></p>
+</li>
+<li><p><strong>==维持和管理连接==</strong></p>
+</li>
+</ol>
+<p>连接指令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql -h$ip -P$port -u$user -p</span><br></pre></td></tr></table></figure>
+
+<p>获取权限：通过TCP握手后，连接器验证身份，通过输入的用户名和密码。查询MySQL数据库中的user表。查询对应的用户权限。</p>
+<p><strong>长连接和短链接</strong></p>
+<p>长连接：连接成功后，如果客户端持续有请求，则一直使用该连接</p>
+<p>短连接：每次执行完几次查询就断开连接，下次查询在重新建立连接。</p>
+<p>建议使用长连接，因为建立连接过程比较复杂，尽量减少建立连接的动作。</p>
+<p>但是建立长连接也会导致内存消耗增加。因为Mysql在执行时使用的内存是在连接对象里面的。这些资源会在断开时释放。</p>
+<p>如果长连接累计下来，可能导致内存占用太大。</p>
+<p>解决方法</p>
+<ol>
+<li>定期断开长连接</li>
+<li>执行mysql_reset_connectionc初始化连接资源。针对5.7以后。</li>
+</ol>
+<h4 id="2-查询缓存"><a href="#2-查询缓存" class="headerlink" title="2. 查询缓存"></a>2. 查询缓存</h4><p><strong>==作用：用于做缓存==</strong></p>
+<p>Mysql拿到请求后会先去缓存中，查看是否有对应的查询语句。缓存以key-value的形式存储。</p>
+<p>查询语句作为key ,查询结果作为value存入缓存中。</p>
+<p>但是不建议使用查询缓存。因为缓存数据失效的很频繁。</p>
+<p><strong>8.0之后MySQL删掉了查询缓存</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//缓存查询</span><br><span class="line"></span><br><span class="line">select  SQL_CACHE *  from T ;</span><br><span class="line"></span><br><span class="line">// 不查询缓存</span><br><span class="line">select   DEMAND *  from T ; </span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-分析器"><a href="#3-分析器" class="headerlink" title="3. 分析器"></a>3. 分析器</h4><p><strong>==作用： 进行sql语句的解析。==</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from T where ID=1;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>词法分析</li>
+</ol>
+<p>通过关键字 <strong>select</strong> 识别为查询语句。将对应的T识别成对应的表名T，将字符串”ID” 识别成列”ID”.</p>
+<ol>
+<li>语法分析</li>
+</ol>
+<p>判断Sql语句是否满足Mysql语法。如果语句不对，则会受到错误提醒。</p>
+<h4 id="4-优化器"><a href="#4-优化器" class="headerlink" title="4. 优化器"></a>4. 优化器</h4><p>作用：决定执行方案</p>
+<ol>
+<li>决定使用哪个索引，多个索引情况下。</li>
+<li>决定各表连接顺序，多个表关联的情况下。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from t1 join t2 using(ID) where t1.c=10 and t2.d=20;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>既可以先从表 t1 里面取出 c=10 的记录的 ID 值，再根据 ID 值关联到表 t2，再判断 t2 里面 d 的值是否等于 20。</li>
+<li>也可以先从表 t2 里面取出 d=20 的记录的 ID 值，再根据 ID 值关联到 t1，再判断 t1 里面 c 的值是否等于 10。</li>
+</ul>
+<p>优化器会决定执行哪种方案。</p>
+<h4 id="5-执行器"><a href="#5-执行器" class="headerlink" title="5. 执行器"></a>5. 执行器</h4><p><strong>==作用：执行sql语句==</strong></p>
+<ol>
+<li>判断用户对这个表有无查询权限</li>
+<li>根据表引擎提供的接口执行查询</li>
+</ol>
+<ul>
+<li>调用 InnoDB 引擎接口取这个表的第一行，判断 ID 值是不是 10，如果不是则跳过，如果是则将这行存在结果集中；</li>
+<li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li>
+<li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li>
+</ul>
+<p>####6.小结</p>
+<ol>
+<li><p>连接器主要作用让客户端和服务端建立连接、获取登录用户权限、维持和管理连接。</p>
+</li>
+<li><p>查询缓存用于通过查询的sql语句作为key，判断是否存在对应的key,如果存在直接返回缓存中存储的查询结果。</p>
+</li>
+<li><p>分析器用于**==判断sql语句语法是否正确==**！将查询的sql语句的字段名解析成对应的数据库中对应的字段和表</p>
+</li>
+<li><p>分析器作用**==优化查询条件==**。查询条件判断使用哪种索引进行查询以及各表的连接顺序</p>
+</li>
+<li><p>执行器用于**==执行sql语句==**。</p>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>数据库</category>

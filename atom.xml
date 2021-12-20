@@ -3,11 +3,11 @@
   <title>无心博客</title>
   
   
-  <link href="https://xincao20.gitee.io/blog/atom.xml" rel="self"/>
+  <link href="http://example.com/atom.xml" rel="self"/>
   
-  <link href="https://xincao20.gitee.io/blog/"/>
+  <link href="http://example.com/"/>
   <updated>2021-12-20T03:37:09.931Z</updated>
-  <id>https://xincao20.gitee.io/blog/</id>
+  <id>http://example.com/</id>
   
   <author>
     <name>无心</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title></title>
-    <link href="https://xincao20.gitee.io/blog/2021/12/20/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3/"/>
-    <id>https://xincao20.gitee.io/blog/2021/12/20/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3/</id>
+    <link href="http://example.com/2021/12/20/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3/"/>
+    <id>http://example.com/2021/12/20/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3/</id>
     <published>2021-12-20T03:37:09.931Z</published>
     <updated>2021-12-20T03:37:09.931Z</updated>
     
@@ -45,8 +45,8 @@
   
   <entry>
     <title>JUC</title>
-    <link href="https://xincao20.gitee.io/blog/2021/12/18/JUC/"/>
-    <id>https://xincao20.gitee.io/blog/2021/12/18/JUC/</id>
+    <link href="http://example.com/2021/12/18/JUC/"/>
+    <id>http://example.com/2021/12/18/JUC/</id>
     <published>2021-12-18T12:47:34.000Z</published>
     <updated>2021-12-20T03:37:10.146Z</updated>
     
@@ -61,12 +61,12 @@
     
     
     
-    <category term="Java" scheme="https://xincao20.gitee.io/blog/categories/Java/"/>
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
     
     
-    <category term="JUC" scheme="https://xincao20.gitee.io/blog/tags/JUC/"/>
+    <category term="JUC" scheme="http://example.com/tags/JUC/"/>
     
-    <category term="Java高级" scheme="https://xincao20.gitee.io/blog/tags/Java%E9%AB%98%E7%BA%A7/"/>
+    <category term="Java高级" scheme="http://example.com/tags/Java%E9%AB%98%E7%BA%A7/"/>
     
   </entry>
   

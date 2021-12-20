@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title></title>
-    <url>/2021/12/20/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3/</url>
+    <url>/blog/2021/12/20/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<p>123123<br>​</p>
 <p>​</p>
 <p>123123123<br>​</p>
@@ -30,7 +30,7 @@
   </entry>
   <entry>
     <title>JUC</title>
-    <url>/2021/12/18/JUC/</url>
+    <url>/blog/2021/12/18/JUC/</url>
     <content><![CDATA[<p>​</p>
 <h1 id="1-并发基础"><a href="#1-并发基础" class="headerlink" title="1. 并发基础"></a>1. 并发基础</h1><h2 id="1-多线程实现"><a href="#1-多线程实现" class="headerlink" title="1. 多线程实现"></a>1. 多线程实现</h2><h3 id="1-实现方法分类"><a href="#1-实现方法分类" class="headerlink" title="1. 实现方法分类"></a>1. 实现方法分类</h3><ol>
 <li>继承 Thread 类，重写 run 方法</li>

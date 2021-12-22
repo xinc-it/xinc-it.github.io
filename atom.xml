@@ -3,11 +3,11 @@
   <title>无心博客</title>
   
   
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://xinc-it.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="https://xinc-it.github.io/"/>
   <updated>2021-12-21T05:42:16.038Z</updated>
-  <id>http://example.com/</id>
+  <id>https://xinc-it.github.io/</id>
   
   <author>
     <name>无心</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Buttterfly美化教程集合</title>
-    <link href="http://example.com/2021/12/20/Buttterfly%E7%BE%8E%E5%8C%96%E6%95%99%E7%A8%8B%E9%9B%86%E5%90%88/"/>
-    <id>http://example.com/2021/12/20/Buttterfly%E7%BE%8E%E5%8C%96%E6%95%99%E7%A8%8B%E9%9B%86%E5%90%88/</id>
+    <link href="https://xinc-it.github.io/2021/12/20/Buttterfly%E7%BE%8E%E5%8C%96%E6%95%99%E7%A8%8B%E9%9B%86%E5%90%88/"/>
+    <id>https://xinc-it.github.io/2021/12/20/Buttterfly%E7%BE%8E%E5%8C%96%E6%95%99%E7%A8%8B%E9%9B%86%E5%90%88/</id>
     <published>2021-12-20T14:06:26.000Z</published>
     <updated>2021-12-21T05:42:16.038Z</updated>
     
@@ -33,17 +33,17 @@
     
     
     
-    <category term="目录名" scheme="http://example.com/categories/%E7%9B%AE%E5%BD%95%E5%90%8D/"/>
+    <category term="目录名" scheme="https://xinc-it.github.io/categories/%E7%9B%AE%E5%BD%95%E5%90%8D/"/>
     
     
-    <category term="hexo" scheme="http://example.com/tags/hexo/"/>
+    <category term="hexo" scheme="https://xinc-it.github.io/tags/hexo/"/>
     
   </entry>
   
   <entry>
     <title>JUC</title>
-    <link href="http://example.com/2021/12/18/JUC/"/>
-    <id>http://example.com/2021/12/18/JUC/</id>
+    <link href="https://xinc-it.github.io/2021/12/18/JUC/"/>
+    <id>https://xinc-it.github.io/2021/12/18/JUC/</id>
     <published>2021-12-18T12:47:34.000Z</published>
     <updated>2021-12-20T14:57:06.868Z</updated>
     
@@ -58,12 +58,12 @@
     
     
     
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    <category term="Java" scheme="https://xinc-it.github.io/categories/Java/"/>
     
     
-    <category term="JUC" scheme="http://example.com/tags/JUC/"/>
+    <category term="JUC" scheme="https://xinc-it.github.io/tags/JUC/"/>
     
-    <category term="Java高级" scheme="http://example.com/tags/Java%E9%AB%98%E7%BA%A7/"/>
+    <category term="Java高级" scheme="https://xinc-it.github.io/tags/Java%E9%AB%98%E7%BA%A7/"/>
     
   </entry>
   

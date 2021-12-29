@@ -20,6 +20,9 @@
 <h1 id="3-页脚徽标设置"><a href="#3-页脚徽标设置" class="headerlink" title="3. 页脚徽标设置"></a>3. 页脚徽标设置</h1><h2 id="1-效果图-2"><a href="#1-效果图-2" class="headerlink" title="1. 效果图"></a>1. 效果图</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1640017751461-338d3075-c47d-4fc5-9e9b-e6d863333636.png#clientId=u69b8f327-ff26-4&amp;from=paste&amp;height=30&amp;id=u8575727c&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=59&amp;originWidth=878&amp;originalType=binary&amp;ratio=1&amp;size=10582&amp;status=done&amp;style=none&amp;taskId=uefa87f9e-ab64-4c2c-b25f-6ead943b2af&amp;width=439" alt="image.png"></p>
 <h2 id="2-步骤-2"><a href="#2-步骤-2" class="headerlink" title="2.步骤"></a>2.步骤</h2><p>在_cofing.yml 中添加如下配置</p>
 <figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">footer:</span></span><br><span class="line">  <span class="attr">custom_text:</span> <span class="string">&lt;p&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://hexo.io/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo"</span> <span class="string">title="博客框架为</span> <span class="string">Hexo"</span> <span class="string">alt="HEXO"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://butterfly.js.org/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender"</span> <span class="string">title="主题采用</span> <span class="string">Butterfly"</span> <span class="string">alt="Butterfly"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://www.jsdelivr.com/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&amp;logo=jsDelivr"</span> <span class="string">title="本站使用</span> <span class="string">Jsdelivr</span> <span class="string">为静态资源提供CDN加速"</span> <span class="string">alt="Jsdelivr"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://github.com/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub"</span> <span class="string">title="本站项目由</span> <span class="string">GitHub</span> <span class="string">托管"</span> <span class="string">alt="GitHub"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris"</span> <span class="string">alt="img"</span> <span class="string">title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"&gt;&lt;/a&gt;&lt;/p&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><a href="http://img.wuxin.website/img/b3f6b2565c3149a2a8df94ab43cf3a3b.jpg">
+</a></p>
 </body></html>]]></content>
       <categories>
         <category>目录名</category>
@@ -238,72 +241,6 @@
         <tag>Java</tag>
         <tag>SpringSecurity</tag>
         <tag>开发问题</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>标题名</title>
-    <url>/2021/12/21/%E6%B5%8B%E8%AF%95%E8%AF%AD%E9%9B%80%E6%96%87%E6%A1%A3/</url>
-    <content><![CDATA[<html><head></head><body><p>​</p>
-<p>123123123<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署<br>测试部署测试部署<br>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<p>​</p>
-<hr>
-<p>title: 标题名<br>comments: true<br>date: 2021/12/21 14:38:04<br>categories: 目录名<br>tags: [标签名 1,2,3]</p>
-<hr>
-<p>​</p>
-<p>123123123<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署<br>测试部署测试部署<br>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<h2 id="测试部署测试部署测试部署"><a href="#测试部署测试部署测试部署" class="headerlink" title="测试部署测试部署测试部署"></a>测试部署测试部署测试部署</h2><p>title: 标题名<br>comments: true<br>date: 2021/12/21 14:38:04<br>categories: 目录名<br>tags: [标签名 1,2,3]</p>
-<hr>
-<p>​</p>
-<p>123123123<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署<br>测试部署测试部署<br>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>​</p>
-<p>测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>​</p>
-<p>​</p>
-<p>123123123 测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>测试部署测试部署测试部署测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>测试部署测试部署测试部署测试部署测试部署测试部署<br>测试部署测试部署测试部署<br>测试部署测试部署测试部署</p>
-</body></html>]]></content>
-      <categories>
-        <category>目录名</category>
-      </categories>
-      <tags>
-        <tag>标签名1</tag>
-        <tag>2</tag>
-        <tag>3</tag>
       </tags>
   </entry>
   <entry>

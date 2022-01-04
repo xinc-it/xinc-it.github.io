@@ -33,51 +33,6 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode将有序数组转化为二叉搜索树</title>
-    <url>/2020/12/20/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
-    <content><![CDATA[<html><head></head><body><h1 id="一、将有序数组转化为二叉搜索树"><a href="#一、将有序数组转化为二叉搜索树" class="headerlink" title="一、将有序数组转化为二叉搜索树"></a>一、将有序数组转化为二叉搜索树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219235754380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=a4Uzj&amp;originHeight=547&amp;originWidth=573&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>详情链接：</strong><a href="https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/">有序数组转二叉树</a></p>
-<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><h2 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1.解题思路"></a>1.解题思路</h2><p>将当前数组的中间值用于创建当前的节点，然后中间值左边的数，分为一个新的子数组，这里我们暂且叫左子数组，将右边的分为右子数组。将左子数组放入当前节点的左子树。右子树组，放入当前节点的右子树。重复上述步骤即可。</p>
-<h2 id="2-解题步骤"><a href="#2-解题步骤" class="headerlink" title="2.解题步骤"></a>2.解题步骤</h2><ol>
-<li>创建一个新的节点节点值为数组的中位值 。</li>
-<li>判断当前子数组大小是否为 1。</li>
-</ol>
-<ul>
-<li>如果为 1，则直接返回该节点。</li>
-<li>反之执行第三步。</li>
-</ul>
-<ol>
-<li>判断当前数组的 <strong>(中间值得索引-1)&gt;=0</strong>， <strong>就是判断当前节点是否存在左子树</strong>。</li>
-</ol>
-<ul>
-<li><pre><code>如果大于0，创建一个新的数组命名为左子数组，值为当前数组的中间值左边的所有数值。然后将将左子数组传入当前函数执行。
-</code></pre>
-</li>
-<li>反之，则表明数组越界。直接执行第四步</li>
-</ul>
-<ol>
-<li>判断当前数组的**(中间值的索引是+1)&lt;=当前数组的长度** ，就是判断当前节点是否存在右子树。</li>
-</ol>
-<ul>
-<li>如果小于的话，创建一个新的数组命名为右子数组，值为当前数组的中间值右边的所有数值。然后将将右子数组传入当前函数执行。</li>
-<li>反之，执行第五步</li>
-</ul>
-<ol>
-<li>返回当前节点。</li>
-</ol>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">sortedArrayToBST</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(nums==<span class="keyword">null</span>||nums.length==<span class="number">0</span>){</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }{</span><br><span class="line">            <span class="keyword">return</span> arrrayToBST(nums,<span class="number">0</span>,nums.length-<span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">arrrayToBST</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> start ,<span class="keyword">int</span> end)</span></span>{</span><br><span class="line">       <span class="keyword">int</span> length=end-start+<span class="number">1</span>;</span><br><span class="line">        TreeNode root=<span class="keyword">new</span> TreeNode(nums[start+length/<span class="number">2</span>]);</span><br><span class="line">        <span class="keyword">if</span>(start==end){</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }<span class="keyword">else</span> {</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(length/<span class="number">2</span>-<span class="number">1</span>&gt;=<span class="number">0</span>){</span><br><span class="line"></span><br><span class="line">                root.left=arrrayToBST(nums,start,start+length/<span class="number">2</span>-<span class="number">1</span>);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span>(length/<span class="number">2</span>+<span class="number">1</span>&lt;=length-<span class="number">1</span>){</span><br><span class="line"></span><br><span class="line">                root.right=arrrayToBST(nums,start+length/<span class="number">2</span>+<span class="number">1</span>,end);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>树的问题一般是通过递归和三种遍历方式来解决。目前我所写的很多树的比较简单的题目都是通过递归和树的三种遍历方式来实现的。</p>
-<p><strong>各位大佬们看完后觉得我写得很差的的话，可以在评论去疯狂踩踏我蹂躏我。但是最最为重要的事就是不要白嫖！！！！虽然我知道在看的各位都是白嫖党！！！！</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LeetCode-汉明距离</title>
     <url>/2021/01/16/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
     <content><![CDATA[<html><head></head><body><h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png#id=rp6JQ&amp;originHeight=609&amp;originWidth=745&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
@@ -100,6 +55,36 @@
 <h2 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2.暴力破解"></a>2.暴力破解</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">       ArrayList&lt;Integer&gt; xArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">do</span>{</span><br><span class="line">       xArray.add(x%<span class="number">2</span>);</span><br><span class="line">       x=x/<span class="number">2</span>;</span><br><span class="line">     }<span class="keyword">while</span>(x!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">       ArrayList&lt;Integer&gt; yArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">do</span>{</span><br><span class="line">       yArray.add(y%<span class="number">2</span>);</span><br><span class="line">       y=y/<span class="number">2</span>;</span><br><span class="line">     }<span class="keyword">while</span>(y!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> distance=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">//当y的二进制更长时</span></span><br><span class="line">       <span class="keyword">if</span>(yArray.size()&gt;=xArray.size()){</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;yArray.size();j++){</span><br><span class="line">                <span class="keyword">if</span>(j&lt;xArray.size()){</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j)){</span><br><span class="line">                       distance++;</span><br><span class="line">                   }</span><br><span class="line">                }<span class="keyword">else</span>{</span><br><span class="line">                    <span class="keyword">if</span>(yArray.get(j)!=<span class="number">0</span>){</span><br><span class="line">                        distance++;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">       }<span class="keyword">else</span>{<span class="comment">//x的二进制更长</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;xArray.size();j++){</span><br><span class="line">               <span class="keyword">if</span>(j&lt;yArray.size()){</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j)){</span><br><span class="line">                       distance++;</span><br><span class="line">                   }</span><br><span class="line">                }<span class="keyword">else</span>{</span><br><span class="line">                    <span class="keyword">if</span>(xArray.get(j)!=<span class="number">0</span>){</span><br><span class="line">                        distance++;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> distance;</span><br><span class="line">   }</span><br></pre></td></tr></tbody></table></figure>
 
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我一开始使用的暴力破解法。但觉得暴力破解法太麻烦了。所以就去看了官方的解题教程，发现位运算这一方法更为简单和高效。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode之合并二叉树</title>
+    <url>/2021/01/04/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
+    <content><![CDATA[<html><head></head><body><p>[</p>
+<p>](%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95)</p>
+<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&amp;originHeight=520&amp;originWidth=740&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
+<h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
+<li>判断当前节点是否为空<ul>
+<li>如果为空，直接返回上一节点的高度</li>
+<li>反之高度加 1 ，并执行下一步</li>
+</ul>
+</li>
+<li>继续递归调用该函数，将其节点设置为当前节点，同时高度设置为当前节点的高度。并设置变量用于获取函数的返回值。</li>
+<li>比较左右两个节点函数返回值，取其最大值。</li>
+</ol>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><p>代码如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> maxHeight(root,<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxHeight</span><span class="params">(TreeNode root,<span class="keyword">int</span> height)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">            height++;</span><br><span class="line">            <span class="keyword">int</span> leftHeight=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> rightHeight=<span class="number">0</span>;</span><br><span class="line">            leftHeight=maxHeight(root.left,height);</span><br><span class="line">            rightHeight=maxHeight(root.right,height);</span><br><span class="line">            <span class="keyword">return</span> leftHeight&gt;rightHeight?leftHeight:rightHeight;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> height;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里面主要用到了递归的思想。递归在与树有关的很多的题目都可以使用该思想。通过该思想可以很大程度上简化代码。但是也不是没有缺点，如果递归次数过多的话，可能会造成堆栈溢出。</p>
 </body></html>]]></content>
       <categories>
         <category>算法</category>
@@ -154,25 +139,48 @@
       </tags>
   </entry>
   <entry>
-    <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
-    <url>/2021/05/13/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<html><head></head><body><p>​</p>
-<p>​</p>
-<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
-<h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><h2 id="1-表单登录页面"><a href="#1-表单登录页面" class="headerlink" title="1. 表单登录页面"></a>1. 表单登录页面</h2><p><img src="https://img-blog.csdnimg.cn/20210513173942750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=vD5Kl&amp;originHeight=213&amp;originWidth=806&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
-<h2 id="2-配置类"><a href="#2-配置类" class="headerlink" title="2. 配置类"></a>2. 配置类</h2><p><img src="https://img-blog.csdnimg.cn/20210513173201531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=jxOTr&amp;originHeight=285&amp;originWidth=983&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
-<h2 id="3-loadUserByUsername-方法"><a href="#3-loadUserByUsername-方法" class="headerlink" title="3. loadUserByUsername 方法"></a>3. loadUserByUsername 方法</h2><p><img src="https://img-blog.csdnimg.cn/20210513173433199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=msIDN&amp;originHeight=219&amp;originWidth=1217&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
-<h4 id="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。"><a href="#所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。" class="headerlink" title="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。"></a>所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。</h4><p><img src="https://img-blog.csdnimg.cn/20210513173819188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=CEEDw&amp;originHeight=259&amp;originWidth=902&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><img src="https://img-blog.csdnimg.cn/20210513173839414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=n9Noa&amp;originHeight=227&amp;originWidth=1798&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
-<h1 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h1><p>因此判断是 loginProcessUrl 方法的问题。进入 loginProcessUrl 方法内部发现。关键信息<br><img src="https://img-blog.csdnimg.cn/20210513174339209.png#id=h0HbJ&amp;originHeight=117&amp;originWidth=1070&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br>登录表单申请方式必须为 post 才行，springsecurity 才会进行登录认证。</p>
-<hr>
-<h1 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h1><h2 id="将登录表单中提交方法更改为-post-方式即可"><a href="#将登录表单中提交方法更改为-post-方式即可" class="headerlink" title="将登录表单中提交方法更改为 post 方式即可"></a>将登录表单中提交方法更改为 post 方式即可</h2></body></html>]]></content>
+    <title>LeetCode将有序数组转化为二叉搜索树</title>
+    <url>/2020/12/20/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
+    <content><![CDATA[<html><head></head><body><h1 id="一、将有序数组转化为二叉搜索树"><a href="#一、将有序数组转化为二叉搜索树" class="headerlink" title="一、将有序数组转化为二叉搜索树"></a>一、将有序数组转化为二叉搜索树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219235754380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=a4Uzj&amp;originHeight=547&amp;originWidth=573&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>详情链接：</strong><a href="https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/">有序数组转二叉树</a></p>
+<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><h2 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1.解题思路"></a>1.解题思路</h2><p>将当前数组的中间值用于创建当前的节点，然后中间值左边的数，分为一个新的子数组，这里我们暂且叫左子数组，将右边的分为右子数组。将左子数组放入当前节点的左子树。右子树组，放入当前节点的右子树。重复上述步骤即可。</p>
+<h2 id="2-解题步骤"><a href="#2-解题步骤" class="headerlink" title="2.解题步骤"></a>2.解题步骤</h2><ol>
+<li>创建一个新的节点节点值为数组的中位值 。</li>
+<li>判断当前子数组大小是否为 1。</li>
+</ol>
+<ul>
+<li>如果为 1，则直接返回该节点。</li>
+<li>反之执行第三步。</li>
+</ul>
+<ol>
+<li>判断当前数组的 <strong>(中间值得索引-1)&gt;=0</strong>， <strong>就是判断当前节点是否存在左子树</strong>。</li>
+</ol>
+<ul>
+<li><pre><code>如果大于0，创建一个新的数组命名为左子数组，值为当前数组的中间值左边的所有数值。然后将将左子数组传入当前函数执行。
+</code></pre>
+</li>
+<li>反之，则表明数组越界。直接执行第四步</li>
+</ul>
+<ol>
+<li>判断当前数组的**(中间值的索引是+1)&lt;=当前数组的长度** ，就是判断当前节点是否存在右子树。</li>
+</ol>
+<ul>
+<li>如果小于的话，创建一个新的数组命名为右子数组，值为当前数组的中间值右边的所有数值。然后将将右子数组传入当前函数执行。</li>
+<li>反之，执行第五步</li>
+</ul>
+<ol>
+<li>返回当前节点。</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">sortedArrayToBST</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(nums==<span class="keyword">null</span>||nums.length==<span class="number">0</span>){</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }{</span><br><span class="line">            <span class="keyword">return</span> arrrayToBST(nums,<span class="number">0</span>,nums.length-<span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">arrrayToBST</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> start ,<span class="keyword">int</span> end)</span></span>{</span><br><span class="line">       <span class="keyword">int</span> length=end-start+<span class="number">1</span>;</span><br><span class="line">        TreeNode root=<span class="keyword">new</span> TreeNode(nums[start+length/<span class="number">2</span>]);</span><br><span class="line">        <span class="keyword">if</span>(start==end){</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }<span class="keyword">else</span> {</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(length/<span class="number">2</span>-<span class="number">1</span>&gt;=<span class="number">0</span>){</span><br><span class="line"></span><br><span class="line">                root.left=arrrayToBST(nums,start,start+length/<span class="number">2</span>-<span class="number">1</span>);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span>(length/<span class="number">2</span>+<span class="number">1</span>&lt;=length-<span class="number">1</span>){</span><br><span class="line"></span><br><span class="line">                root.right=arrrayToBST(nums,start+length/<span class="number">2</span>+<span class="number">1</span>,end);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>树的问题一般是通过递归和三种遍历方式来解决。目前我所写的很多树的比较简单的题目都是通过递归和树的三种遍历方式来实现的。</p>
+<p><strong>各位大佬们看完后觉得我写得很差的的话，可以在评论去疯狂踩踏我蹂躏我。但是最最为重要的事就是不要白嫖！！！！虽然我知道在看的各位都是白嫖党！！！！</strong></p>
+</body></html>]]></content>
       <categories>
-        <category>Java</category>
+        <category>算法</category>
       </categories>
       <tags>
-        <tag>Java</tag>
-        <tag>SpringSecurity</tag>
-        <tag>开发问题</tag>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
       </tags>
   </entry>
   <entry>
@@ -192,6 +200,28 @@
       <tags>
         <tag>算法</tag>
         <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
+    <url>/2021/05/13/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<html><head></head><body><p>​</p>
+<p>​</p>
+<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
+<h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><h2 id="1-表单登录页面"><a href="#1-表单登录页面" class="headerlink" title="1. 表单登录页面"></a>1. 表单登录页面</h2><p><img src="https://img-blog.csdnimg.cn/20210513173942750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=vD5Kl&amp;originHeight=213&amp;originWidth=806&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
+<h2 id="2-配置类"><a href="#2-配置类" class="headerlink" title="2. 配置类"></a>2. 配置类</h2><p><img src="https://img-blog.csdnimg.cn/20210513173201531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=jxOTr&amp;originHeight=285&amp;originWidth=983&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
+<h2 id="3-loadUserByUsername-方法"><a href="#3-loadUserByUsername-方法" class="headerlink" title="3. loadUserByUsername 方法"></a>3. loadUserByUsername 方法</h2><p><img src="https://img-blog.csdnimg.cn/20210513173433199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=msIDN&amp;originHeight=219&amp;originWidth=1217&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
+<h4 id="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。"><a href="#所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。" class="headerlink" title="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。"></a>所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。</h4><p><img src="https://img-blog.csdnimg.cn/20210513173819188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=CEEDw&amp;originHeight=259&amp;originWidth=902&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><img src="https://img-blog.csdnimg.cn/20210513173839414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=n9Noa&amp;originHeight=227&amp;originWidth=1798&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
+<h1 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h1><p>因此判断是 loginProcessUrl 方法的问题。进入 loginProcessUrl 方法内部发现。关键信息<br><img src="https://img-blog.csdnimg.cn/20210513174339209.png#id=h0HbJ&amp;originHeight=117&amp;originWidth=1070&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br>登录表单申请方式必须为 post 才行，springsecurity 才会进行登录认证。</p>
+<hr>
+<h1 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h1><h2 id="将登录表单中提交方法更改为-post-方式即可"><a href="#将登录表单中提交方法更改为-post-方式即可" class="headerlink" title="将登录表单中提交方法更改为 post 方式即可"></a>将登录表单中提交方法更改为 post 方式即可</h2></body></html>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>SpringSecurity</tag>
+        <tag>开发问题</tag>
       </tags>
   </entry>
 </search>

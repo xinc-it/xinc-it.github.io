@@ -83,82 +83,6 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode之合并二叉树</title>
-    <url>/2020/12/19/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<html><head></head><body><p>​</p>
-<p>​</p>
-<p>​</p>
-<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=ZaF2E&amp;originHeight=739&amp;originWidth=698&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
-<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
-<h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
-<li> 判断当前两颗树的节点全为空，如果为空则返回空。</li>
-<li> 反之有以下三种</li>
-</ol>
-<ul>
-<li>可能两个节点都不为空</li>
-<li>左节点为空，右节点不为空</li>
-<li>右节点为空，左节点不为空</li>
-</ul>
-<ol start="3">
-<li> 采取以下措施</li>
-</ol>
-<ul>
-<li>当为第一种情况时 ,创建一个新的节点，节点值为左右节点值的和,之后遍历左右节点</li>
-<li>当为第二种情况时 ,创建一个新的节点，节点值为右节点值,之后遍历右节点.</li>
-<li>当为第三种情况时 ,创建一个新的节点，节点值为左节点值,之后遍历左节点。</li>
-</ul>
-<ol start="4">
-<li> 返回创建的新的节点。</li>
-</ol>
-<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">mergeTrees</span><span class="params">(TreeNode t1, TreeNode t2)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(t1==<span class="keyword">null</span>&amp;&amp;t2==<span class="keyword">null</span>){</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            TreeNode t3;</span><br><span class="line">            <span class="keyword">if</span>(t1!=<span class="keyword">null</span>&amp;&amp;t2!=<span class="keyword">null</span>){</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val+t2.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,t2.right);</span><br><span class="line">                t3.left=mergeTrees(t1.left,t2.left);</span><br><span class="line">            }<span class="keyword">else</span> <span class="keyword">if</span>(t1!=<span class="keyword">null</span>){</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,<span class="keyword">null</span>);</span><br><span class="line">                t3.left=mergeTrees(t1.left,<span class="keyword">null</span>);</span><br><span class="line">            }<span class="keyword">else</span>{</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t2.val);</span><br><span class="line">                t3.right=mergeTrees(<span class="keyword">null</span>,t2.right);</span><br><span class="line">                t3.left=mergeTrees(<span class="keyword">null</span>,t2.left);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> t3;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>以目前我做的与树相关的题目来说。所需要做的事基本上就是一件事：<strong>遍历</strong>。而树的遍历一般可以通过递归的方式来进行一些简单的遍历。遍历一般分为三种：前序遍历、中序遍历、后序遍历。前序、中序、后序的名字是按照遍历中父节点，相对于左右子节点中的顺序。如果父节点，在其子父节点中最后一个遍历，称之为后序遍历。其他的遍历顺序可由以上类推。<br>​</p>
-<p>​</p>
-<p>​</p>
-<p>​</p>
-<p>​</p>
-</body></html>]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode-汉明距离</title>
-    <url>/2021/01/16/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
-    <content><![CDATA[<html><head></head><body><h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png#id=rp6JQ&amp;originHeight=609&amp;originWidth=745&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这里有两种解题思路</p>
-<h2 id="1-位运算法"><a href="#1-位运算法" class="headerlink" title="1. 位运算法"></a>1. 位运算法</h2><p><strong>位运算</strong>如果你不了解的话，可以看下第二种解题思路。但是整体代码有点冗余，而且效率也不高。<br><code>^</code>的运算规则二进制位中各个位上数就是相同为 0，不同为 1。<br><code>&amp;</code>的运算规则是都为 1 时结果为 1，反之全为 0。<br><code>|</code>的运算规则是只要有 1 结果为 1，反之为 0。<br><code>&gt;&gt;</code>当前数二级制向右移一位，同时最高位根据数的正负来补 0 或 1<br><code>&lt;&lt;</code> 当前数二进制向左移一位，同时最低位补 0。</p>
-<p><strong>位运算法</strong></p>
-<ol>
-<li> 将两个数<code>^</code>运算</li>
-<li>判断运算结果中 1 的个数。即为两个数二进制中各个位的值不同的个数<br> 这里有两种计算 1 个数的方法<br> 2.1.1 &nbsp; 将运算结果按 2 求余，如果为 1 就个数加 1。反之就忽略<br> 2.1.2 将运算结果右移一位。并重复上述步骤 32 次。<br> 2.2.1 将运算结果和运算结果-1 进行<code>&amp;</code>运算，然后将值返回作为新的运算结果。1 的个数加 1。<br> 2.2.2 直到运算结果为 0 时跳出循环</li>
-</ol>
-<h2 id="2-暴力破解法"><a href="#2-暴力破解法" class="headerlink" title="2. 暴力破解法"></a>2. 暴力破解法</h2><ol>
-<li>将上述两个数将其二进制位分别放入到不同的 List 容器中</li>
-<li>判断两个容器的长度，将长度较大的容器作为遍历次数</li>
-<li>获取两个容器中当前索引的值，并判断是否相等，如果不等距离加 1</li>
-<li>如果较小容器遍历完了的话，就判断较大容器中的值是否等于 0。如果不等距离加 1</li>
-<li>最后得到的距离即为结果</li>
-</ol>
-<h1 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h1><h2 id="1-位运算"><a href="#1-位运算" class="headerlink" title="1.位运算"></a>1.位运算</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>{</span><br><span class="line">     <span class="keyword">int</span> res=x^y;</span><br><span class="line">     <span class="keyword">int</span> times=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">while</span>(res!=<span class="number">0</span>){</span><br><span class="line">       res=res&amp;(res-<span class="number">1</span>);</span><br><span class="line">       times++;</span><br><span class="line">   }</span><br><span class="line">   <span class="keyword">return</span> times;</span><br><span class="line"> }</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2.暴力破解"></a>2.暴力破解</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">       ArrayList&lt;Integer&gt; xArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">do</span>{</span><br><span class="line">       xArray.add(x%<span class="number">2</span>);</span><br><span class="line">       x=x/<span class="number">2</span>;</span><br><span class="line">     }<span class="keyword">while</span>(x!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">       ArrayList&lt;Integer&gt; yArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">do</span>{</span><br><span class="line">       yArray.add(y%<span class="number">2</span>);</span><br><span class="line">       y=y/<span class="number">2</span>;</span><br><span class="line">     }<span class="keyword">while</span>(y!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> distance=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">//当y的二进制更长时</span></span><br><span class="line">       <span class="keyword">if</span>(yArray.size()&gt;=xArray.size()){</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;yArray.size();j++){</span><br><span class="line">                <span class="keyword">if</span>(j&lt;xArray.size()){</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j)){</span><br><span class="line">                       distance++;</span><br><span class="line">                   }</span><br><span class="line">                }<span class="keyword">else</span>{</span><br><span class="line">                    <span class="keyword">if</span>(yArray.get(j)!=<span class="number">0</span>){</span><br><span class="line">                        distance++;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">       }<span class="keyword">else</span>{<span class="comment">//x的二进制更长</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;xArray.size();j++){</span><br><span class="line">               <span class="keyword">if</span>(j&lt;yArray.size()){</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j)){</span><br><span class="line">                       distance++;</span><br><span class="line">                   }</span><br><span class="line">                }<span class="keyword">else</span>{</span><br><span class="line">                    <span class="keyword">if</span>(xArray.get(j)!=<span class="number">0</span>){</span><br><span class="line">                        distance++;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> distance;</span><br><span class="line">   }</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我一开始使用的暴力破解法。但觉得暴力破解法太麻烦了。所以就去看了官方的解题教程，发现位运算这一方法更为简单和高效。</p>
-</body></html>]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LeetCode将有序数组转化为二叉搜索树</title>
     <url>/2020/12/20/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
     <content><![CDATA[<html><head></head><body><h1 id="一、将有序数组转化为二叉搜索树"><a href="#一、将有序数组转化为二叉搜索树" class="headerlink" title="一、将有序数组转化为二叉搜索树"></a>一、将有序数组转化为二叉搜索树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219235754380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=a4Uzj&amp;originHeight=547&amp;originWidth=573&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>详情链接：</strong><a href="https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/">有序数组转二叉树</a></p>
@@ -204,6 +128,38 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode-汉明距离</title>
+    <url>/2021/01/16/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
+    <content><![CDATA[<html><head></head><body><h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png#id=rp6JQ&amp;originHeight=609&amp;originWidth=745&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这里有两种解题思路</p>
+<h2 id="1-位运算法"><a href="#1-位运算法" class="headerlink" title="1. 位运算法"></a>1. 位运算法</h2><p><strong>位运算</strong>如果你不了解的话，可以看下第二种解题思路。但是整体代码有点冗余，而且效率也不高。<br><code>^</code>的运算规则二进制位中各个位上数就是相同为 0，不同为 1。<br><code>&amp;</code>的运算规则是都为 1 时结果为 1，反之全为 0。<br><code>|</code>的运算规则是只要有 1 结果为 1，反之为 0。<br><code>&gt;&gt;</code>当前数二级制向右移一位，同时最高位根据数的正负来补 0 或 1<br><code>&lt;&lt;</code> 当前数二进制向左移一位，同时最低位补 0。</p>
+<p><strong>位运算法</strong></p>
+<ol>
+<li> 将两个数<code>^</code>运算</li>
+<li>判断运算结果中 1 的个数。即为两个数二进制中各个位的值不同的个数<br> 这里有两种计算 1 个数的方法<br> 2.1.1 &nbsp; 将运算结果按 2 求余，如果为 1 就个数加 1。反之就忽略<br> 2.1.2 将运算结果右移一位。并重复上述步骤 32 次。<br> 2.2.1 将运算结果和运算结果-1 进行<code>&amp;</code>运算，然后将值返回作为新的运算结果。1 的个数加 1。<br> 2.2.2 直到运算结果为 0 时跳出循环</li>
+</ol>
+<h2 id="2-暴力破解法"><a href="#2-暴力破解法" class="headerlink" title="2. 暴力破解法"></a>2. 暴力破解法</h2><ol>
+<li>将上述两个数将其二进制位分别放入到不同的 List 容器中</li>
+<li>判断两个容器的长度，将长度较大的容器作为遍历次数</li>
+<li>获取两个容器中当前索引的值，并判断是否相等，如果不等距离加 1</li>
+<li>如果较小容器遍历完了的话，就判断较大容器中的值是否等于 0。如果不等距离加 1</li>
+<li>最后得到的距离即为结果</li>
+</ol>
+<h1 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h1><h2 id="1-位运算"><a href="#1-位运算" class="headerlink" title="1.位运算"></a>1.位运算</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>{</span><br><span class="line">     <span class="keyword">int</span> res=x^y;</span><br><span class="line">     <span class="keyword">int</span> times=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">while</span>(res!=<span class="number">0</span>){</span><br><span class="line">       res=res&amp;(res-<span class="number">1</span>);</span><br><span class="line">       times++;</span><br><span class="line">   }</span><br><span class="line">   <span class="keyword">return</span> times;</span><br><span class="line"> }</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2.暴力破解"></a>2.暴力破解</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">       ArrayList&lt;Integer&gt; xArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">do</span>{</span><br><span class="line">       xArray.add(x%<span class="number">2</span>);</span><br><span class="line">       x=x/<span class="number">2</span>;</span><br><span class="line">     }<span class="keyword">while</span>(x!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">       ArrayList&lt;Integer&gt; yArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">do</span>{</span><br><span class="line">       yArray.add(y%<span class="number">2</span>);</span><br><span class="line">       y=y/<span class="number">2</span>;</span><br><span class="line">     }<span class="keyword">while</span>(y!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> distance=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">//当y的二进制更长时</span></span><br><span class="line">       <span class="keyword">if</span>(yArray.size()&gt;=xArray.size()){</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;yArray.size();j++){</span><br><span class="line">                <span class="keyword">if</span>(j&lt;xArray.size()){</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j)){</span><br><span class="line">                       distance++;</span><br><span class="line">                   }</span><br><span class="line">                }<span class="keyword">else</span>{</span><br><span class="line">                    <span class="keyword">if</span>(yArray.get(j)!=<span class="number">0</span>){</span><br><span class="line">                        distance++;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">       }<span class="keyword">else</span>{<span class="comment">//x的二进制更长</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;xArray.size();j++){</span><br><span class="line">               <span class="keyword">if</span>(j&lt;yArray.size()){</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j)){</span><br><span class="line">                       distance++;</span><br><span class="line">                   }</span><br><span class="line">                }<span class="keyword">else</span>{</span><br><span class="line">                    <span class="keyword">if</span>(xArray.get(j)!=<span class="number">0</span>){</span><br><span class="line">                        distance++;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> distance;</span><br><span class="line">   }</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我一开始使用的暴力破解法。但觉得暴力破解法太麻烦了。所以就去看了官方的解题教程，发现位运算这一方法更为简单和高效。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode递增顺序查找树</title>
     <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
     <content><![CDATA[<html><head></head><body><h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&amp;originHeight=560&amp;originWidth=770&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
@@ -213,6 +169,50 @@
 <h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>{</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>){</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>){</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode之合并二叉树</title>
+    <url>/2020/12/19/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<html><head></head><body><p>​</p>
+<p>​</p>
+<p>​</p>
+<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=ZaF2E&amp;originHeight=739&amp;originWidth=698&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
+<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
+<h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
+<li> 判断当前两颗树的节点全为空，如果为空则返回空。</li>
+<li> 反之有以下三种</li>
+</ol>
+<ul>
+<li>可能两个节点都不为空</li>
+<li>左节点为空，右节点不为空</li>
+<li>右节点为空，左节点不为空</li>
+</ul>
+<ol start="3">
+<li> 采取以下措施</li>
+</ol>
+<ul>
+<li>当为第一种情况时 ,创建一个新的节点，节点值为左右节点值的和,之后遍历左右节点</li>
+<li>当为第二种情况时 ,创建一个新的节点，节点值为右节点值,之后遍历右节点.</li>
+<li>当为第三种情况时 ,创建一个新的节点，节点值为左节点值,之后遍历左节点。</li>
+</ul>
+<ol start="4">
+<li> 返回创建的新的节点。</li>
+</ol>
+<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h2><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">mergeTrees</span><span class="params">(TreeNode t1, TreeNode t2)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(t1==<span class="keyword">null</span>&amp;&amp;t2==<span class="keyword">null</span>){</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            TreeNode t3;</span><br><span class="line">            <span class="keyword">if</span>(t1!=<span class="keyword">null</span>&amp;&amp;t2!=<span class="keyword">null</span>){</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val+t2.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,t2.right);</span><br><span class="line">                t3.left=mergeTrees(t1.left,t2.left);</span><br><span class="line">            }<span class="keyword">else</span> <span class="keyword">if</span>(t1!=<span class="keyword">null</span>){</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,<span class="keyword">null</span>);</span><br><span class="line">                t3.left=mergeTrees(t1.left,<span class="keyword">null</span>);</span><br><span class="line">            }<span class="keyword">else</span>{</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t2.val);</span><br><span class="line">                t3.right=mergeTrees(<span class="keyword">null</span>,t2.right);</span><br><span class="line">                t3.left=mergeTrees(<span class="keyword">null</span>,t2.left);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> t3;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>以目前我做的与树相关的题目来说。所需要做的事基本上就是一件事：<strong>遍历</strong>。而树的遍历一般可以通过递归的方式来进行一些简单的遍历。遍历一般分为三种：前序遍历、中序遍历、后序遍历。前序、中序、后序的名字是按照遍历中父节点，相对于左右子节点中的顺序。如果父节点，在其子父节点中最后一个遍历，称之为后序遍历。其他的遍历顺序可由以上类推。<br>​</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
 </body></html>]]></content>
       <categories>
         <category>算法</category>

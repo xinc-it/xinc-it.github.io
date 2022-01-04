@@ -21,8 +21,18 @@
 <h2 id="2-步骤-2"><a href="#2-步骤-2" class="headerlink" title="2.步骤"></a>2.步骤</h2><p>在_cofing.yml 中添加如下配置</p>
 <figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">footer:</span></span><br><span class="line">  <span class="attr">custom_text:</span> <span class="string">&lt;p&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://hexo.io/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo"</span> <span class="string">title="博客框架为</span> <span class="string">Hexo"</span> <span class="string">alt="HEXO"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://butterfly.js.org/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender"</span> <span class="string">title="主题采用</span> <span class="string">Butterfly"</span> <span class="string">alt="Butterfly"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://www.jsdelivr.com/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&amp;logo=jsDelivr"</span> <span class="string">title="本站使用</span> <span class="string">Jsdelivr</span> <span class="string">为静态资源提供CDN加速"</span> <span class="string">alt="Jsdelivr"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"</span> <span class="string">href="https://github.com/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub"</span> <span class="string">title="本站项目由</span> <span class="string">GitHub</span> <span class="string">托管"</span> <span class="string">alt="GitHub"&gt;&lt;/a&gt;&lt;a</span> <span class="string">style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"&gt;&lt;img</span> <span class="string">src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris"</span> <span class="string">alt="img"</span> <span class="string">title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"&gt;&lt;/a&gt;&lt;/p&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
-<p><a href="http://img.wuxin.website/img/b3f6b2565c3149a2a8df94ab43cf3a3b.jpg">
-</a></p>
+<h1 id="4-图片懒加载"><a href="#4-图片懒加载" class="headerlink" title="4. 图片懒加载"></a>4. 图片懒加载</h1><h2 id="1-步骤"><a href="#1-步骤" class="headerlink" title="1. 步骤"></a>1. 步骤</h2><ol>
+<li>安装懒加载插件</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install hexo-lazyload-image --save</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>在配置文件对应主题.yml 中添加配置</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">lazyload:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  onlypost: <span class="literal">false</span>  <span class="comment"># 是否只对文章的图片做懒加载</span></span><br><span class="line">  loadingImg: <span class="comment"># eg ./images/loading.gif</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>[</p>
+<p>](<a href="http://img.wuxin.website/img/b3f6b2565c3149a2a8df94ab43cf3a3b.jpg">http://img.wuxin.website/img/b3f6b2565c3149a2a8df94ab43cf3a3b.jpg</a>)</p>
 </body></html>]]></content>
       <categories>
         <category>Butterfly</category>
@@ -30,6 +40,36 @@
       <tags>
         <tag>hexo</tag>
         <tag>Butterfly</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode之合并二叉树</title>
+    <url>/2021/01/04/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
+    <content><![CDATA[<html><head></head><body><p>[</p>
+<p>](%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95)</p>
+<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&amp;originHeight=520&amp;originWidth=740&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
+<h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
+<li>判断当前节点是否为空<ul>
+<li>如果为空，直接返回上一节点的高度</li>
+<li>反之高度加 1 ，并执行下一步</li>
+</ul>
+</li>
+<li>继续递归调用该函数，将其节点设置为当前节点，同时高度设置为当前节点的高度。并设置变量用于获取函数的返回值。</li>
+<li>比较左右两个节点函数返回值，取其最大值。</li>
+</ol>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><p>代码如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> maxHeight(root,<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxHeight</span><span class="params">(TreeNode root,<span class="keyword">int</span> height)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">            height++;</span><br><span class="line">            <span class="keyword">int</span> leftHeight=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> rightHeight=<span class="number">0</span>;</span><br><span class="line">            leftHeight=maxHeight(root.left,height);</span><br><span class="line">            rightHeight=maxHeight(root.right,height);</span><br><span class="line">            <span class="keyword">return</span> leftHeight&gt;rightHeight?leftHeight:rightHeight;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> height;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里面主要用到了递归的思想。递归在与树有关的很多的题目都可以使用该思想。通过该思想可以很大程度上简化代码。但是也不是没有缺点，如果递归次数过多的话，可能会造成堆栈溢出。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
       </tags>
   </entry>
   <entry>

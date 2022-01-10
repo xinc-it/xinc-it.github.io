@@ -43,11 +43,9 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode之合并二叉树</title>
+    <title>LeetCode-求二叉树的最大深度</title>
     <url>/2021/01/04/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
-    <content><![CDATA[<html><head></head><body><p>[</p>
-<p>](%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95)</p>
-<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&amp;originHeight=520&amp;originWidth=740&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
+    <content><![CDATA[<html><head></head><body><h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&amp;originHeight=520&amp;originWidth=740&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
 <h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
 <li>判断当前节点是否为空<ul>

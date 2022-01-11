@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
-    <url>/2022/01/11/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
+    <title>Mysql-更新语句的执行</title>
+    <url>/2022/11/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-更新语句执行流程"><a href="#1-更新语句执行流程" class="headerlink" title="1. 更新语句执行流程"></a>1. 更新语句执行流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630974533552-29681b12-3ee4-4012-ae23-882ab740984d.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=337&amp;id=u6f547220&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=674&amp;originWidth=928&amp;originalType=binary&amp;ratio=1&amp;size=239274&amp;status=done&amp;style=none&amp;taskId=u902b2c56-0159-4ac1-9ecc-7c0453d9054&amp;width=464" alt="image.png"></p>
 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">mysql&gt; update T <span class="built_in">set</span> c=c+1 <span class="built_in">where</span> ID=2;</span><br></pre></td></tr></tbody></table></figure>
 
@@ -74,10 +74,18 @@
 </li>
 </ol>
 </body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
+      </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/01/11/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
+    <title>Mysql-事务隔离</title>
+    <url>/2022/11/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
 <li><strong>原子性</strong></li>
 <li><strong>持久性</strong></li>
@@ -122,10 +130,18 @@
 </li>
 </ol>
 </body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
+      </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/01/11/4!%E7%B4%A2%E5%BC%95/</url>
+    <title>Mysql-行锁</title>
+    <url>/2022/11/09/4!%E7%B4%A2%E5%BC%95/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=286&amp;id=u7fa963ac&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=572&amp;originWidth=848&amp;originalType=binary&amp;ratio=1&amp;size=173484&amp;status=done&amp;style=none&amp;taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&amp;width=424" alt="image.png"></p>
 <p>通过 hash 算法将 key 换算成确定的位置，然后把 value 放入到这个数组的位置。如果数组已经存在值，<br>则通过拉链法，拉出一条链表。<br>​</p>
 <p>​</p>
@@ -211,10 +227,18 @@
 <li>最左前缀原则</li>
 </ol>
 </body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
+      </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/01/11/5!%E9%94%81/</url>
+    <title>Mysql-锁</title>
+    <url>/2021/11/10/5!%E9%94%81/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
 <ol>
 <li><strong>全局锁</strong></li>
@@ -276,11 +300,20 @@
 <li>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</li>
 </ol>
 </body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
+      </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/01/11/6!%E8%A1%8C%E9%94%81/</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&amp;from=paste&amp;height=284&amp;id=tMiKr&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=568&amp;originWidth=857&amp;originalType=binary&amp;ratio=1&amp;size=76026&amp;status=done&amp;style=none&amp;taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&amp;width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
+    <title>Mysql-行锁</title>
+    <url>/2022/11/11/6!%E8%A1%8C%E9%94%81/</url>
+    <content><![CDATA[<html><head></head><body><p>​</p>
+<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&amp;from=paste&amp;height=284&amp;id=tMiKr&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=568&amp;originWidth=857&amp;originalType=binary&amp;ratio=1&amp;size=76026&amp;status=done&amp;style=none&amp;taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&amp;width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
 <p><strong>​</strong></p>
 <p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong><br><strong>​</strong></p>
 <p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
@@ -321,6 +354,14 @@
 </ul>
 <p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
 </body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
+      </tags>
   </entry>
   <entry>
     <title>Buttterfly美化教程集合</title>
@@ -555,8 +596,7 @@
   <entry>
     <title>Mysql技术内幕-第一章</title>
     <url>/2022/01/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
-    <content><![CDATA[<html><head></head><body><p>​</p>
-<h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id="​"><a href="#​" class="headerlink" title="​"></a>​</h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>​</p>
+    <content><![CDATA[<html><head></head><body><h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id="​"><a href="#​" class="headerlink" title="​"></a>​</h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>​</p>
 <ol>
 <li>数据库**： **操作系统或者是内存中数据库类型文件的集合。</li>
 </ol>

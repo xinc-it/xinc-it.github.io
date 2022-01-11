@@ -213,6 +213,116 @@
 </body></html>]]></content>
   </entry>
   <entry>
+    <title></title>
+    <url>/2022/01/11/5!%E9%94%81/</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
+<ol>
+<li><strong>全局锁</strong></li>
+<li><strong>表级锁</strong></li>
+<li><strong>行锁</strong></li>
+</ol>
+<p><strong>​</strong></p>
+<p><strong>​</strong></p>
+<h2 id="2-全局锁"><a href="#2-全局锁" class="headerlink" title="2. 全局锁"></a>2. 全局锁</h2><p>全局读锁命令<br><strong>全局锁就是对整个数据库实例加锁，Mysql 提供了一个加全局读锁的命令。可以让整个数据库处于只读状态。</strong><br>导致数据的增删改、建表修改表语句、事务的提交语句失效。</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line">Flush tables with read lock</span><br></pre></td></tr></tbody></table></figure>
+
+<p>场景：<strong>全库的逻辑备份(也可以开启可重复读事务级别来进行备份)</strong><br>另一种方式是使用 mysqldump 工具使用参数-single-transaction 进行数据库备份。前提：数据库中所有的表支持可重复读。<br>​</p>
+<p>​</p>
+<p>场景：用户买课和买课后的余额。不加锁导致两个表的数据前后不一致。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018821575-900c6793-130c-47c3-8b6c-b3533bf27c70.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=271&amp;id=u5e04065e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=542&amp;originWidth=882&amp;originalType=binary&amp;ratio=1&amp;size=204494&amp;status=done&amp;style=none&amp;taskId=uadb7ab82-ba93-48d1-a88f-e117005dcaf&amp;width=441" alt="image.png"></p>
+<h2 id="3-表级锁"><a href="#3-表级锁" class="headerlink" title="3. 表级锁"></a>3. 表级锁</h2><ol>
+<li>两种表锁</li>
+</ol>
+<p>​</p>
+<ul>
+<li>表锁</li>
+<li>元数据锁</li>
+</ul>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<ol start="2">
+<li>表锁</li>
+</ol>
+<p>​</p>
+<p>作用：<strong>锁定表只能进行读或读和写操作。不允许操作其他表。（处理并发的常用方式）</strong></p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line">lock tables t1 read, t2 write;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​</p>
+<p>只能对 t1 表进行读，t2 表进行读和写。直到执行<strong>unlock tables</strong>之前不允许对其他表进行读写操作。<br>​</p>
+<p>​</p>
+<ol start="3">
+<li>MDL ( meatadata lock)</li>
+</ol>
+<p>​</p>
+<p>作用：保证读写的正确性。防止 DDL(加字段等修改表结构的操作)和 DML 冲突（增删改数据）<br>特点： 自动加上，不需要使用 sql 语句。在对表进行数据的增删改查操作时加读锁。修改表结构时，加写锁。<br>​</p>
+<p>​</p>
+<p>读读锁共存、读写锁、写写锁互斥。<br>​</p>
+<p><strong>示例</strong><br><strong>​</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634388295266-c5897d57-05ac-4ac9-b910-e2d9950d6f1e.png#clientId=ubaf7a982-8eca-4&amp;from=paste&amp;height=261&amp;id=u0e8aeaeb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=521&amp;originWidth=834&amp;originalType=binary&amp;ratio=1&amp;size=78640&amp;status=done&amp;style=none&amp;taskId=u2b78eb8a-f57d-433e-935f-d586ac65ede&amp;width=417" alt="image.png"></p>
+<p>在多个事务开启且未结束的过程中给某个表添加个字段导致读写锁冲突。<br>​</p>
+<p>解决方法<br>在 information_schema 库中 innodb_trx 表中查询出正在执行事务，可以暂停表变更事务、或者是长事务。<br>​</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
+<li>全局锁主要是用来逻辑备份，有两种方式一种是通过命令 flush tables with read lock;。另一种需要支持库中所有的表支持可重复读事务，使用 mysqldump -single-transaction 进行备份。</li>
+</ol>
+<p>​</p>
+<ol start="2">
+<li>表锁通过 sql 语句限制指定表只能进行读、读/写操作,且不允许对其他表操作在解锁前。</li>
+</ol>
+<p>​</p>
+<ol start="3">
+<li>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</li>
+</ol>
+</body></html>]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2022/01/11/6!%E8%A1%8C%E9%94%81/</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&amp;from=paste&amp;height=284&amp;id=tMiKr&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=568&amp;originWidth=857&amp;originalType=binary&amp;ratio=1&amp;size=76026&amp;status=done&amp;style=none&amp;taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&amp;width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
+<p><strong>​</strong></p>
+<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong><br><strong>​</strong></p>
+<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
+<ol>
+<li>从顾客 A 账户余额中扣除电影票价；</li>
+<li>给影院 B 的账户余额增加这张电影票价；</li>
+<li>记录一条交易日志。</li>
+</ol>
+<p>​</p>
+<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。<br>​</p>
+<p>​</p>
+<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&amp;from=paste&amp;height=281&amp;id=uf1f2e0cc&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=561&amp;originWidth=871&amp;originalType=binary&amp;ratio=1&amp;size=90990&amp;status=done&amp;style=none&amp;taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&amp;width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。<br>​</p>
+<p>​</p>
+<p>解决方法</p>
+<ul>
+<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
+<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
+</ul>
+<p>死锁检测的缺点：</p>
+<ol>
+<li>确保业务不会出现死锁，关闭死锁检测</li>
+<li>控制并发度</li>
+</ol>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
+<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
+<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
+<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
+</ol>
+<p><strong>​</strong></p>
+<p><strong>​</strong></p>
+<ul>
+<li>第一种，直接执行 delete from T limit 10000;</li>
+<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
+<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
+</ul>
+<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>Buttterfly美化教程集合</title>
     <url>/2021/12/20/Buttterfly%E7%BE%8E%E5%8C%96%E6%95%99%E7%A8%8B%E9%9B%86%E5%90%88/</url>
     <content><![CDATA[<html><head></head><body><h1 id="1-设置背景渐变效果"><a href="#1-设置背景渐变效果" class="headerlink" title="1. 设置背景渐变效果"></a>1. 设置背景渐变效果</h1><h2 id="1-效果图"><a href="#1-效果图" class="headerlink" title="1.效果图"></a>1.效果图</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1640016968691-40cf8542-0c0d-476f-a342-ef7803df0029.png#clientId=u69b8f327-ff26-4&amp;from=paste&amp;height=167&amp;id=ua08fe870&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=334&amp;originWidth=1134&amp;originalType=binary&amp;ratio=1&amp;size=156444&amp;status=done&amp;style=none&amp;taskId=u6648ddf4-3cf6-4796-94e8-d4a74dfc23b&amp;width=567" alt="image.png"></p>

@@ -426,34 +426,6 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode-求二叉树的最大深度</title>
-    <url>/2021/01/04/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
-    <content><![CDATA[<html><head></head><body><h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&amp;originHeight=520&amp;originWidth=740&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
-<h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
-<li>判断当前节点是否为空<ul>
-<li>如果为空，直接返回上一节点的高度</li>
-<li>反之高度加 1 ，并执行下一步</li>
-</ul>
-</li>
-<li>继续递归调用该函数，将其节点设置为当前节点，同时高度设置为当前节点的高度。并设置变量用于获取函数的返回值。</li>
-<li>比较左右两个节点函数返回值，取其最大值。</li>
-</ol>
-<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><p>代码如下：</p>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> maxHeight(root,<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxHeight</span><span class="params">(TreeNode root,<span class="keyword">int</span> height)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">            height++;</span><br><span class="line">            <span class="keyword">int</span> leftHeight=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> rightHeight=<span class="number">0</span>;</span><br><span class="line">            leftHeight=maxHeight(root.left,height);</span><br><span class="line">            rightHeight=maxHeight(root.right,height);</span><br><span class="line">            <span class="keyword">return</span> leftHeight&gt;rightHeight?leftHeight:rightHeight;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> height;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里面主要用到了递归的思想。递归在与树有关的很多的题目都可以使用该思想。通过该思想可以很大程度上简化代码。但是也不是没有缺点，如果递归次数过多的话，可能会造成堆栈溢出。</p>
-</body></html>]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LeetCode-汉明距离</title>
     <url>/2021/01/16/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
     <content><![CDATA[<html><head></head><body><h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png#id=rp6JQ&amp;originHeight=609&amp;originWidth=745&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"></p>
@@ -486,15 +458,24 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode递增顺序查找树</title>
-    <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
-    <content><![CDATA[<html><head></head><body><h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&amp;originHeight=560&amp;originWidth=770&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
-<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></tbody></table></figure>
+    <title>LeetCode-求二叉树的最大深度</title>
+    <url>/2021/01/04/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
+    <content><![CDATA[<html><head></head><body><h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&amp;originHeight=520&amp;originWidth=740&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
+<h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
+<li>判断当前节点是否为空<ul>
+<li>如果为空，直接返回上一节点的高度</li>
+<li>反之高度加 1 ，并执行下一步</li>
+</ul>
+</li>
+<li>继续递归调用该函数，将其节点设置为当前节点，同时高度设置为当前节点的高度。并设置变量用于获取函数的返回值。</li>
+<li>比较左右两个节点函数返回值，取其最大值。</li>
+</ol>
+<h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2. 代码"></a>2. 代码</h2><p>代码如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> maxHeight(root,<span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxHeight</span><span class="params">(TreeNode root,<span class="keyword">int</span> height)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">            height++;</span><br><span class="line">            <span class="keyword">int</span> leftHeight=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> rightHeight=<span class="number">0</span>;</span><br><span class="line">            leftHeight=maxHeight(root.left,height);</span><br><span class="line">            rightHeight=maxHeight(root.right,height);</span><br><span class="line">            <span class="keyword">return</span> leftHeight&gt;rightHeight?leftHeight:rightHeight;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> height;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>{</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>){</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>){</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
+<hr>
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里面主要用到了递归的思想。递归在与树有关的很多的题目都可以使用该思想。通过该思想可以很大程度上简化代码。但是也不是没有缺点，如果递归次数过多的话，可能会造成堆栈溢出。</p>
 </body></html>]]></content>
       <categories>
         <category>算法</category>
@@ -591,6 +572,131 @@
       <tags>
         <tag>算法</tag>
         <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode递增顺序查找树</title>
+    <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <content><![CDATA[<html><head></head><body><h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&amp;originHeight=560&amp;originWidth=770&amp;originalType=binary&amp;ratio=1&amp;status=done&amp;style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
+<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>){</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>{</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>){</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>){</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        }<span class="keyword">else</span>{</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql技术内幕-第一章</title>
+    <url>/2021/12/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id="​"><a href="#​" class="headerlink" title="​"></a>​</h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>​</p>
+<ol>
+<li>数据库**： **操作系统或者是内存中数据库类型文件的集合。</li>
+</ol>
+<p>​</p>
+<ol start="2">
+<li>实例： 数据库实例是真正操作数据库的对象。通过数据库实例完成对数据库文件的增删改查。</li>
+</ol>
+<p>​</p>
+<p>​</p>
+<p>MySQL 是一个单进程多线程的数据库。MySQL 数据库实例在系统上表现的就是一个进程。<br>​</p>
+<p>​</p>
+<h1 id="2-MySQL-体系结构"><a href="#2-MySQL-体系结构" class="headerlink" title="2. MySQL 体系结构"></a>2. MySQL 体系结构</h1><h2 id="1-结构图"><a href="#1-结构图" class="headerlink" title="1. 结构图"></a>1. 结构图</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635610498443-00dd90e5-027b-45cc-9abd-453e79201f37.png#clientId=u65aa59ec-0f7c-4&amp;from=paste&amp;height=297&amp;id=u870f042c&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=593&amp;originWidth=916&amp;originalType=binary&amp;ratio=1&amp;size=162280&amp;status=done&amp;style=none&amp;taskId=u84e62d2d-ba28-4b0e-b986-287bccf284f&amp;width=458" alt="image.png"></p>
+<h2 id="2-MySQL-组成部分"><a href="#2-MySQL-组成部分" class="headerlink" title="2. MySQL 组成部分"></a>2. MySQL 组成部分</h2><h3 id="1-8-大组成部分"><a href="#1-8-大组成部分" class="headerlink" title="1. 8 大组成部分"></a>1. 8 大组成部分</h3><ol>
+<li>连接池</li>
+<li>管理服务和工具组件</li>
+<li>Sql 接口组件</li>
+<li>查询分析器</li>
+<li>优化器</li>
+<li>缓存</li>
+<li>插件式存储引擎</li>
+<li>物理文件</li>
+</ol>
+<p><strong>存储引擎是基于表的，而不是数据库。</strong><br>​</p>
+<p><strong>​</strong></p>
+<p><strong>​</strong></p>
+<p><strong>​</strong></p>
+<h1 id="3-MySQL-存储引擎"><a href="#3-MySQL-存储引擎" class="headerlink" title="3. MySQL 存储引擎"></a>3. MySQL 存储引擎</h1><h2 id="1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎"><a href="#1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎" class="headerlink" title="1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)"></a>1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>行锁设计</strong></li>
+<li><strong>支持外键</strong></li>
+<li><strong>类似于 Oracle 的非锁定读</strong></li>
+</ol>
+<p>​</p>
+<p>​</p>
+<h3 id="2-主要功能"><a href="#2-主要功能" class="headerlink" title="2. 主要功能"></a>2. 主要功能</h3><ol>
+<li>InnoDB 使用<strong>多版本并发控制（MVCC）来实现高并发性。</strong></li>
+<li><strong>实现了 4 种隔离级别</strong>。默认的为 REPEATABLE 级别</li>
+<li>使用<strong>next-key locking 策略来避免幻读现象</strong></li>
+<li>提供了插入缓冲（insert buffer）、二次写、自适应哈希索引、预读等高性能和高可用功能</li>
+<li>数据的存储的采用了<strong>聚集的方式</strong>，表的数据存储按主键的顺序存放。如果没有主键会默认每行生成一个 ROWID 作为主键。</li>
+</ol>
+<p>​</p>
+<h3 id="3-面向对象"><a href="#3-面向对象" class="headerlink" title="3. 面向对象"></a>3. 面向对象</h3><p>设计目标主要面向<strong>在线事务处理应用。</strong><br><strong>​</strong></p>
+<p><strong>​</strong></p>
+<h2 id="2-MyISAM-存储引擎（5-58-之前默认存储引擎）"><a href="#2-MyISAM-存储引擎（5-58-之前默认存储引擎）" class="headerlink" title="2. MyISAM 存储引擎（5.58 之前默认存储引擎）"></a>2. MyISAM 存储引擎（5.58 之前默认存储引擎）</h2><h3 id="1-特点-1"><a href="#1-特点-1" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>不支持事务、表锁/行锁</strong></li>
+<li><strong>支持全文索引</strong></li>
+<li><strong>缓冲池只缓存索引文件</strong>，不缓存数据。</li>
+<li>MyISAM 存储引擎表的由 MYD 和 MYI 两种文件存储。MYD 存储数据，MYI 存储索引。</li>
+</ol>
+<p>​</p>
+<p>​</p>
+<h2 id="3-NDB-存储引擎-集群存储引擎"><a href="#3-NDB-存储引擎-集群存储引擎" class="headerlink" title="3. NDB 存储引擎(集群存储引擎)"></a>3. NDB 存储引擎(集群存储引擎)</h2><h3 id="1-特点-2"><a href="#1-特点-2" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>数据全部放在内存中</strong>，5.1 后，可将非索引数据存放到磁盘上。</li>
+<li><strong>主键查找速度极快</strong></li>
+<li>通过增加 NDB 数据存储节点，可以线性提高数据性能。是高可用、高性能集群系统</li>
+<li><strong>查询速度慢</strong>。由于 NDB 存储引擎连接操作在数据库层完成，导致需要巨大网络开销。</li>
+</ol>
+<h2 id="4-Memory-存储引擎"><a href="#4-Memory-存储引擎" class="headerlink" title="4. Memory 存储引擎"></a>4. Memory 存储引擎</h2><h3 id="1-特点-3"><a href="#1-特点-3" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>数据存放在内存中</strong></li>
+<li><strong>默认使用哈希索引</strong></li>
+<li><strong>只支持表锁，并发性能差</strong></li>
+<li><strong>不支持 TEXT 和 BLOBl 乐行</strong></li>
+<li><strong>浪费内存，存储 varchar 是按照 char 的方式存储。</strong></li>
+</ol>
+<p><strong>​</strong></p>
+<h2 id="5-存储引擎的比较"><a href="#5-存储引擎的比较" class="headerlink" title="5. 存储引擎的比较"></a>5. 存储引擎的比较</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613196777-e8e4aa9e-8031-41f7-9c6b-2759e7734602.png#clientId=u0834a0c7-dbbe-4&amp;from=paste&amp;height=288&amp;id=ub63fdd4b&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=576&amp;originWidth=858&amp;originalType=binary&amp;ratio=1&amp;size=96128&amp;status=done&amp;style=none&amp;taskId=u8a3c4e80-50ac-4e4b-94fd-03638655320&amp;width=429" alt="image.png"></p>
+<h1 id="4-连接-MySQL"><a href="#4-连接-MySQL" class="headerlink" title="4. 连接 MySQL"></a>4. 连接 MySQL</h1><p>本质： MySQL 实例和连接进程的进行通信。<br>进程间的通信方式：TCP/IP 套接字，UNIX 域套接字、管道、命名管道。<br>​</p>
+<p>​</p>
+<h3 id="1-TCP-IP（常用）"><a href="#1-TCP-IP（常用）" class="headerlink" title="1. TCP/IP（常用）"></a>1. TCP/IP（常用）</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613490753-6a0743d1-db16-4a40-867b-8e10c6b131bb.png#clientId=u0834a0c7-dbbe-4&amp;from=paste&amp;height=65&amp;id=u2b227af7&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=130&amp;originWidth=781&amp;originalType=binary&amp;ratio=1&amp;size=12153&amp;status=done&amp;style=none&amp;taskId=ub2eb1b22-c425-4278-a08b-e32c658f8b5&amp;width=390.5" alt="image.png"><br>客户端通过向 MySQL 服务器发送 TCP/IP 连接请求，连接成功后。MySQL 数据库会查权限视图，判断用户的客户端 IP 是否连接到 MySQL 实例。</p>
+<h1 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h1><ol>
+<li>介绍了实例和数据库的区别。实例是操作数据库的对象，数据库是所有数据库类型文件的集合</li>
+<li>MySQL 的体系结构和其中的组件<ol>
+<li>连接池</li>
+<li>管理服务和工具组件</li>
+<li>Sql 接口</li>
+<li>查询和分析器</li>
+<li>优化器</li>
+<li>缓存</li>
+<li>插件式存储引擎</li>
+<li>物理文件</li>
+</ol>
+</li>
+<li>MySQL 主流的存储引擎及其特点<ol>
+<li>InnoDB 支持行锁、事务\外键</li>
+<li>MyISAM 不支持行表锁、事务。支持全文索引</li>
+<li>Memory 支持哈希索引、表锁、不支持 BLOB、TEXT 类型。varchar 定长.</li>
+<li>NDB 数据存放在内存中</li>
+</ol>
+</li>
+</ol>
+<p>​</p>
+<p>​</p>
+</body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
       </tags>
   </entry>
   <entry>
@@ -769,112 +875,6 @@
 <p>​</p>
 <h1 id="-3"><a href="#-3" class="headerlink" title=""></a></h1><p>​</p>
 <h3 id="​-1"><a href="#​-1" class="headerlink" title="​"></a>​</h3></body></html>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
-        <tag>数据库</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql技术内幕-第一章</title>
-    <url>/2021/12/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id="​"><a href="#​" class="headerlink" title="​"></a>​</h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>​</p>
-<ol>
-<li>数据库**： **操作系统或者是内存中数据库类型文件的集合。</li>
-</ol>
-<p>​</p>
-<ol start="2">
-<li>实例： 数据库实例是真正操作数据库的对象。通过数据库实例完成对数据库文件的增删改查。</li>
-</ol>
-<p>​</p>
-<p>​</p>
-<p>MySQL 是一个单进程多线程的数据库。MySQL 数据库实例在系统上表现的就是一个进程。<br>​</p>
-<p>​</p>
-<h1 id="2-MySQL-体系结构"><a href="#2-MySQL-体系结构" class="headerlink" title="2. MySQL 体系结构"></a>2. MySQL 体系结构</h1><h2 id="1-结构图"><a href="#1-结构图" class="headerlink" title="1. 结构图"></a>1. 结构图</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635610498443-00dd90e5-027b-45cc-9abd-453e79201f37.png#clientId=u65aa59ec-0f7c-4&amp;from=paste&amp;height=297&amp;id=u870f042c&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=593&amp;originWidth=916&amp;originalType=binary&amp;ratio=1&amp;size=162280&amp;status=done&amp;style=none&amp;taskId=u84e62d2d-ba28-4b0e-b986-287bccf284f&amp;width=458" alt="image.png"></p>
-<h2 id="2-MySQL-组成部分"><a href="#2-MySQL-组成部分" class="headerlink" title="2. MySQL 组成部分"></a>2. MySQL 组成部分</h2><h3 id="1-8-大组成部分"><a href="#1-8-大组成部分" class="headerlink" title="1. 8 大组成部分"></a>1. 8 大组成部分</h3><ol>
-<li>连接池</li>
-<li>管理服务和工具组件</li>
-<li>Sql 接口组件</li>
-<li>查询分析器</li>
-<li>优化器</li>
-<li>缓存</li>
-<li>插件式存储引擎</li>
-<li>物理文件</li>
-</ol>
-<p><strong>存储引擎是基于表的，而不是数据库。</strong><br>​</p>
-<p><strong>​</strong></p>
-<p><strong>​</strong></p>
-<p><strong>​</strong></p>
-<h1 id="3-MySQL-存储引擎"><a href="#3-MySQL-存储引擎" class="headerlink" title="3. MySQL 存储引擎"></a>3. MySQL 存储引擎</h1><h2 id="1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎"><a href="#1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎" class="headerlink" title="1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)"></a>1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>行锁设计</strong></li>
-<li><strong>支持外键</strong></li>
-<li><strong>类似于 Oracle 的非锁定读</strong></li>
-</ol>
-<p>​</p>
-<p>​</p>
-<h3 id="2-主要功能"><a href="#2-主要功能" class="headerlink" title="2. 主要功能"></a>2. 主要功能</h3><ol>
-<li>InnoDB 使用<strong>多版本并发控制（MVCC）来实现高并发性。</strong></li>
-<li><strong>实现了 4 种隔离级别</strong>。默认的为 REPEATABLE 级别</li>
-<li>使用<strong>next-key locking 策略来避免幻读现象</strong></li>
-<li>提供了插入缓冲（insert buffer）、二次写、自适应哈希索引、预读等高性能和高可用功能</li>
-<li>数据的存储的采用了<strong>聚集的方式</strong>，表的数据存储按主键的顺序存放。如果没有主键会默认每行生成一个 ROWID 作为主键。</li>
-</ol>
-<p>​</p>
-<h3 id="3-面向对象"><a href="#3-面向对象" class="headerlink" title="3. 面向对象"></a>3. 面向对象</h3><p>设计目标主要面向<strong>在线事务处理应用。</strong><br><strong>​</strong></p>
-<p><strong>​</strong></p>
-<h2 id="2-MyISAM-存储引擎（5-58-之前默认存储引擎）"><a href="#2-MyISAM-存储引擎（5-58-之前默认存储引擎）" class="headerlink" title="2. MyISAM 存储引擎（5.58 之前默认存储引擎）"></a>2. MyISAM 存储引擎（5.58 之前默认存储引擎）</h2><h3 id="1-特点-1"><a href="#1-特点-1" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>不支持事务、表锁/行锁</strong></li>
-<li><strong>支持全文索引</strong></li>
-<li><strong>缓冲池只缓存索引文件</strong>，不缓存数据。</li>
-<li>MyISAM 存储引擎表的由 MYD 和 MYI 两种文件存储。MYD 存储数据，MYI 存储索引。</li>
-</ol>
-<p>​</p>
-<p>​</p>
-<h2 id="3-NDB-存储引擎-集群存储引擎"><a href="#3-NDB-存储引擎-集群存储引擎" class="headerlink" title="3. NDB 存储引擎(集群存储引擎)"></a>3. NDB 存储引擎(集群存储引擎)</h2><h3 id="1-特点-2"><a href="#1-特点-2" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>数据全部放在内存中</strong>，5.1 后，可将非索引数据存放到磁盘上。</li>
-<li><strong>主键查找速度极快</strong></li>
-<li>通过增加 NDB 数据存储节点，可以线性提高数据性能。是高可用、高性能集群系统</li>
-<li><strong>查询速度慢</strong>。由于 NDB 存储引擎连接操作在数据库层完成，导致需要巨大网络开销。</li>
-</ol>
-<h2 id="4-Memory-存储引擎"><a href="#4-Memory-存储引擎" class="headerlink" title="4. Memory 存储引擎"></a>4. Memory 存储引擎</h2><h3 id="1-特点-3"><a href="#1-特点-3" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>数据存放在内存中</strong></li>
-<li><strong>默认使用哈希索引</strong></li>
-<li><strong>只支持表锁，并发性能差</strong></li>
-<li><strong>不支持 TEXT 和 BLOBl 乐行</strong></li>
-<li><strong>浪费内存，存储 varchar 是按照 char 的方式存储。</strong></li>
-</ol>
-<p><strong>​</strong></p>
-<h2 id="5-存储引擎的比较"><a href="#5-存储引擎的比较" class="headerlink" title="5. 存储引擎的比较"></a>5. 存储引擎的比较</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613196777-e8e4aa9e-8031-41f7-9c6b-2759e7734602.png#clientId=u0834a0c7-dbbe-4&amp;from=paste&amp;height=288&amp;id=ub63fdd4b&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=576&amp;originWidth=858&amp;originalType=binary&amp;ratio=1&amp;size=96128&amp;status=done&amp;style=none&amp;taskId=u8a3c4e80-50ac-4e4b-94fd-03638655320&amp;width=429" alt="image.png"></p>
-<h1 id="4-连接-MySQL"><a href="#4-连接-MySQL" class="headerlink" title="4. 连接 MySQL"></a>4. 连接 MySQL</h1><p>本质： MySQL 实例和连接进程的进行通信。<br>进程间的通信方式：TCP/IP 套接字，UNIX 域套接字、管道、命名管道。<br>​</p>
-<p>​</p>
-<h3 id="1-TCP-IP（常用）"><a href="#1-TCP-IP（常用）" class="headerlink" title="1. TCP/IP（常用）"></a>1. TCP/IP（常用）</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613490753-6a0743d1-db16-4a40-867b-8e10c6b131bb.png#clientId=u0834a0c7-dbbe-4&amp;from=paste&amp;height=65&amp;id=u2b227af7&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=130&amp;originWidth=781&amp;originalType=binary&amp;ratio=1&amp;size=12153&amp;status=done&amp;style=none&amp;taskId=ub2eb1b22-c425-4278-a08b-e32c658f8b5&amp;width=390.5" alt="image.png"><br>客户端通过向 MySQL 服务器发送 TCP/IP 连接请求，连接成功后。MySQL 数据库会查权限视图，判断用户的客户端 IP 是否连接到 MySQL 实例。</p>
-<h1 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h1><ol>
-<li>介绍了实例和数据库的区别。实例是操作数据库的对象，数据库是所有数据库类型文件的集合</li>
-<li>MySQL 的体系结构和其中的组件<ol>
-<li>连接池</li>
-<li>管理服务和工具组件</li>
-<li>Sql 接口</li>
-<li>查询和分析器</li>
-<li>优化器</li>
-<li>缓存</li>
-<li>插件式存储引擎</li>
-<li>物理文件</li>
-</ol>
-</li>
-<li>MySQL 主流的存储引擎及其特点<ol>
-<li>InnoDB 支持行锁、事务\外键</li>
-<li>MyISAM 不支持行表锁、事务。支持全文索引</li>
-<li>Memory 支持哈希索引、表锁、不支持 BLOB、TEXT 类型。varchar 定长.</li>
-<li>NDB 数据存放在内存中</li>
-</ol>
-</li>
-</ol>
-<p>​</p>
-<p>​</p>
-</body></html>]]></content>
       <categories>
         <category>数据库</category>
       </categories>

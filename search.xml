@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Mysql-更新语句的执行</title>
-    <url>/2022/11/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
+    <url>/2022/09/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-更新语句执行流程"><a href="#1-更新语句执行流程" class="headerlink" title="1. 更新语句执行流程"></a>1. 更新语句执行流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630974533552-29681b12-3ee4-4012-ae23-882ab740984d.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=337&amp;id=u6f547220&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=674&amp;originWidth=928&amp;originalType=binary&amp;ratio=1&amp;size=239274&amp;status=done&amp;style=none&amp;taskId=u902b2c56-0159-4ac1-9ecc-7c0453d9054&amp;width=464" alt="image.png"></p>
 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">mysql&gt; update T <span class="built_in">set</span> c=c+1 <span class="built_in">where</span> ID=2;</span><br></pre></td></tr></tbody></table></figure>
 
@@ -85,7 +85,7 @@
   </entry>
   <entry>
     <title>Mysql-事务隔离</title>
-    <url>/2022/11/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
+    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
 <li><strong>原子性</strong></li>
 <li><strong>持久性</strong></li>
@@ -140,25 +140,25 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql-行锁</title>
-    <url>/2022/11/09/4!%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=286&amp;id=u7fa963ac&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=572&amp;originWidth=848&amp;originalType=binary&amp;ratio=1&amp;size=173484&amp;status=done&amp;style=none&amp;taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&amp;width=424" alt="image.png"></p>
+    <title>Mysql-索引</title>
+    <url>/2022/09/09/4!%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=286&amp;id=u7fa963ac&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=572&amp;originWidth=848&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=173484&amp;status=done&amp;style=none&amp;taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&amp;title=&amp;width=424" alt="image.png"></p>
 <p>通过 hash 算法将 key 换算成确定的位置，然后把 value 放入到这个数组的位置。如果数组已经存在值，<br>则通过拉链法，拉出一条链表。<br>​</p>
 <p>​</p>
 <p>优点：等值查询的情况下查询效率高<br>缺点：范围查询效率低下<br>​</p>
-<h3 id="2-有序数组"><a href="#2-有序数组" class="headerlink" title="2. 有序数组"></a>2. 有序数组</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014718687-07087e14-d4f9-4401-9bbd-bb4dd3a0bce5.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=219&amp;id=u6b2951af&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=437&amp;originWidth=898&amp;originalType=binary&amp;ratio=1&amp;size=108398&amp;status=done&amp;style=none&amp;taskId=uf49d5f91-1a3a-48ac-aca3-80d6aec3ace&amp;width=449" alt="image.png"><br>​</p>
+<h3 id="2-有序数组"><a href="#2-有序数组" class="headerlink" title="2. 有序数组"></a>2. 有序数组</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014718687-07087e14-d4f9-4401-9bbd-bb4dd3a0bce5.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=219&amp;id=u6b2951af&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=437&amp;originWidth=898&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=108398&amp;status=done&amp;style=none&amp;taskId=uf49d5f91-1a3a-48ac-aca3-80d6aec3ace&amp;title=&amp;width=449" alt="image.png"><br>​</p>
 <p>​</p>
 <p>​</p>
 <p>优点：等值和范围查询效率高<br>缺点：插入、删除数据效率低下<br>​</p>
 <p>​</p>
 <p>场景：只适用于静态存储引擎<br>​</p>
 <p>​</p>
-<h3 id="3-二叉搜索树"><a href="#3-二叉搜索树" class="headerlink" title="3. 二叉搜索树"></a>3. 二叉搜索树</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014893629-805c3a90-3ccf-4fff-98f4-51ec1671c6df.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=306&amp;id=u38010e60&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=612&amp;originWidth=865&amp;originalType=binary&amp;ratio=1&amp;size=178178&amp;status=done&amp;style=none&amp;taskId=u5614456c-9189-45ca-bfb2-5fbf49f84fc&amp;width=432.5" alt="image.png"></p>
+<h3 id="3-二叉搜索树"><a href="#3-二叉搜索树" class="headerlink" title="3. 二叉搜索树"></a>3. 二叉搜索树</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014893629-805c3a90-3ccf-4fff-98f4-51ec1671c6df.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=306&amp;id=u38010e60&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=612&amp;originWidth=865&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=178178&amp;status=done&amp;style=none&amp;taskId=u5614456c-9189-45ca-bfb2-5fbf49f84fc&amp;title=&amp;width=432.5" alt="image.png"></p>
 <p>缺点：数据量大的情况下，导致树很高，需要进行多次磁盘读取数据，比较浪费时间。<br>​</p>
 <p>​</p>
 <p>​</p>
 <p>​</p>
-<h2 id="2-InnoDB-索引模型"><a href="#2-InnoDB-索引模型" class="headerlink" title="2. InnoDB 索引模型"></a>2. InnoDB 索引模型</h2><p>B+树<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631015176574-c34b7b27-c5cc-4295-8de1-bdb466fe3700.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=226&amp;id=ud6c87e87&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=451&amp;originWidth=847&amp;originalType=binary&amp;ratio=1&amp;size=121005&amp;status=done&amp;style=none&amp;taskId=ue3c7c791-9710-400e-b106-8559a26769a&amp;width=423.5" alt="image.png"></p>
+<h2 id="2-InnoDB-索引模型"><a href="#2-InnoDB-索引模型" class="headerlink" title="2. InnoDB 索引模型"></a>2. InnoDB 索引模型</h2><p>B+树<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631015176574-c34b7b27-c5cc-4295-8de1-bdb466fe3700.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=226&amp;id=ud6c87e87&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=451&amp;originWidth=847&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=121005&amp;status=done&amp;style=none&amp;taskId=ue3c7c791-9710-400e-b106-8559a26769a&amp;title=&amp;width=423.5" alt="image.png"></p>
 <h2 id="3-主键索引和非主键索引"><a href="#3-主键索引和非主键索引" class="headerlink" title="3. 主键索引和非主键索引"></a>3. 主键索引和非主键索引</h2><p><strong>InnoDB 里面主键索引也被称为聚簇索引</strong><br>​</p>
 <p>非主键索引的叶子节点存储的是主键的值<br>​</p>
 <p>主键索引和非主键索引的区别</p>
@@ -175,7 +175,7 @@
 <p>同理页合并是两个数据页中的数据太少了，合并到一个数据页中。</p>
 <p>​</p>
 <p>​</p>
-<h2 id="5-索引覆盖"><a href="#5-索引覆盖" class="headerlink" title="5. 索引覆盖"></a>5. 索引覆盖</h2><h3 id="1-回表"><a href="#1-回表" class="headerlink" title="1. 回表"></a>1. 回表</h3><p>select * from T where k between 3 and 5<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016152383-0a030960-b98c-4af0-8eb5-c3e571988bc0.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=203&amp;id=QPjkB&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=406&amp;originWidth=847&amp;originalType=binary&amp;ratio=1&amp;size=119807&amp;status=done&amp;style=none&amp;taskId=uc4420736-4496-455c-a039-deaab42dce4&amp;width=423.5" alt="image.png"><br>执行流程</p>
+<h2 id="5-索引覆盖"><a href="#5-索引覆盖" class="headerlink" title="5. 索引覆盖"></a>5. 索引覆盖</h2><h3 id="1-回表"><a href="#1-回表" class="headerlink" title="1. 回表"></a>1. 回表</h3><p>select * from T where k between 3 and 5<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016152383-0a030960-b98c-4af0-8eb5-c3e571988bc0.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=203&amp;id=QPjkB&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=406&amp;originWidth=847&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=119807&amp;status=done&amp;style=none&amp;taskId=uc4420736-4496-455c-a039-deaab42dce4&amp;title=&amp;width=423.5" alt="image.png"><br>执行流程</p>
 <ol>
 <li>在 k 索引树上找到 k=3 的记录，取得 ID = 300；</li>
 <li>再到 ID 索引树查到 ID=300 对应的 R3；</li>
@@ -196,7 +196,7 @@
 <p>​</p>
 <h2 id="6-最左前缀原则"><a href="#6-最左前缀原则" class="headerlink" title="6. 最左前缀原则"></a>6. 最左前缀原则</h2><figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line">CREATE TABLE `tuser` (</span><br><span class="line">  `id` int(<span class="number">11</span>) NOT NULL,</span><br><span class="line">  `id_card` varchar(<span class="number">32</span>) DEFAULT NULL,</span><br><span class="line">  `name` varchar(<span class="number">32</span>) DEFAULT NULL,</span><br><span class="line">  `age` int(<span class="number">11</span>) DEFAULT NULL,</span><br><span class="line">  `ismale` tinyint(<span class="number">1</span>) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `id_card` (`id_card`),</span><br><span class="line">  KEY `name_age` (`name`,`age`)</span><br><span class="line">) ENGINE=InnoDB</span><br></pre></td></tr></tbody></table></figure>
 
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016490840-0e048d5d-77e7-4191-83e7-026d3c1e3e6e.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=243&amp;id=u0182df12&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=486&amp;originWidth=916&amp;originalType=binary&amp;ratio=1&amp;size=185361&amp;status=done&amp;style=none&amp;taskId=ubb2ba15c-29fb-469e-bca4-35d9ccce47c&amp;width=458" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016490840-0e048d5d-77e7-4191-83e7-026d3c1e3e6e.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=243&amp;id=u0182df12&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=486&amp;originWidth=916&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=185361&amp;status=done&amp;style=none&amp;taskId=ubb2ba15c-29fb-469e-bca4-35d9ccce47c&amp;title=&amp;width=458" alt="image.png"></p>
 <p>如果你要查的是所有名字第一个字是“张”的人，你的 SQL 语句的条件是”where name like ‘张 %’”。这时，你也能够用上这个索引，查找到第一个符合条件的记录是 ID3，然后向后遍历，直到不满足条件为止。<br><strong>​</strong></p>
 <p><strong>联合索引以第一个索引为基准进行排序，然后通过第一个索引的值来进行查询</strong><br><a href="https://www.cnblogs.com/ljl150/p/12934071.html">最左前缀原则</a><br><strong>​</strong></p>
 <p><strong>​</strong></p>
@@ -204,8 +204,8 @@
 <h2 id="7-索引下推"><a href="#7-索引下推" class="headerlink" title="7. 索引下推"></a>7. 索引下推</h2><p>Mysql5.6 引入索引下推，是在最左前缀的条件小，过滤调不不符合条件的记录减少回表的次数<br>​</p>
 <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">mysql&gt; select * from tuser where name like '张 %' and age=<span class="number">10</span> and ismale=<span class="number">1</span>;</span><br></pre></td></tr></tbody></table></figure>
 
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018210889-220345e3-dae5-4eb8-9170-5537631d52ef.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=194&amp;id=u671fa958&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=388&amp;originWidth=859&amp;originalType=binary&amp;ratio=1&amp;size=183225&amp;status=done&amp;style=none&amp;taskId=u26fcfa9c-8351-4a80-bb20-4dd098a028b&amp;width=429.5" alt="image.png"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018215910-da87dcc1-a41f-46ae-b73b-cecf9db4cf0f.png#clientId=uf02e59f4-5d80-4&amp;from=paste&amp;height=198&amp;id=ue03b52df&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=395&amp;originWidth=869&amp;originalType=binary&amp;ratio=1&amp;size=189030&amp;status=done&amp;style=none&amp;taskId=u0df9d68d-5a7b-4383-babc-d022de12965&amp;width=434.5" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018210889-220345e3-dae5-4eb8-9170-5537631d52ef.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=194&amp;id=u671fa958&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=388&amp;originWidth=859&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=183225&amp;status=done&amp;style=none&amp;taskId=u26fcfa9c-8351-4a80-bb20-4dd098a028b&amp;title=&amp;width=429.5" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018215910-da87dcc1-a41f-46ae-b73b-cecf9db4cf0f.png#clientId=uf02e59f4-5d80-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=198&amp;id=ue03b52df&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=395&amp;originWidth=869&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=189030&amp;status=done&amp;style=none&amp;taskId=u0df9d68d-5a7b-4383-babc-d022de12965&amp;title=&amp;width=434.5" alt="image.png"></p>
 <h2 id="8-小结"><a href="#8-小结" class="headerlink" title="8. 小结"></a>8. 小结</h2><ol>
 <li>索引的常见模型<ol>
 <li>哈希表 （不支持范围查询）</li>
@@ -238,7 +238,7 @@
   </entry>
   <entry>
     <title>Mysql-锁</title>
-    <url>/2021/11/10/5!%E9%94%81/</url>
+    <url>/2021/09/10/5!%E9%94%81/</url>
     <content><![CDATA[<html><head></head><body><h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
 <ol>
 <li><strong>全局锁</strong></li>
@@ -311,7 +311,7 @@
   </entry>
   <entry>
     <title>Mysql-行锁</title>
-    <url>/2022/11/11/6!%E8%A1%8C%E9%94%81/</url>
+    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
     <content><![CDATA[<html><head></head><body><p>​</p>
 <h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&amp;from=paste&amp;height=284&amp;id=tMiKr&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=568&amp;originWidth=857&amp;originalType=binary&amp;ratio=1&amp;size=76026&amp;status=done&amp;style=none&amp;taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&amp;width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
 <p><strong>​</strong></p>
@@ -595,7 +595,7 @@
   </entry>
   <entry>
     <title>Mysql技术内幕-第一章</title>
-    <url>/2022/01/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
+    <url>/2021/12/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
     <content><![CDATA[<html><head></head><body><h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id="​"><a href="#​" class="headerlink" title="​"></a>​</h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>​</p>
 <ol>
 <li>数据库**： **操作系统或者是内存中数据库类型文件的集合。</li>

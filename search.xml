@@ -1,150 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Mysql-索引</title>
-    <url>/2022/09/09/4!%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#averageHue=%23dce4d1&clientId=uf02e59f4-5d80-4&from=paste&height=286&id=u7fa963ac&name=image.png&originHeight=572&originWidth=848&originalType=binary&ratio=1&rotation=0&showTitle=false&size=173484&status=done&style=none&taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&title=&width=424" alt="image.png"></p>
-<p>通过 hash 算法将 key 换算成确定的位置，然后把 value 放入到这个数组的位置。如果数组已经存在值，<br>则通过拉链法，拉出一条链表。</p>
-<p>优点：等值查询的情况下查询效率高<br>缺点：范围查询效率低下</p>
-<h3 id="2-有序数组"><a href="#2-有序数组" class="headerlink" title="2. 有序数组"></a>2. 有序数组</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014718687-07087e14-d4f9-4401-9bbd-bb4dd3a0bce5.png#averageHue=%23e4e9da&clientId=uf02e59f4-5d80-4&from=paste&height=219&id=u6b2951af&name=image.png&originHeight=437&originWidth=898&originalType=binary&ratio=1&rotation=0&showTitle=false&size=108398&status=done&style=none&taskId=uf49d5f91-1a3a-48ac-aca3-80d6aec3ace&title=&width=449" alt="image.png"></p>
-<p>优点：等值和范围查询效率高<br>缺点：插入、删除数据效率低下</p>
-<p>场景：只适用于静态存储引擎</p>
-<h3 id="3-二叉搜索树"><a href="#3-二叉搜索树" class="headerlink" title="3. 二叉搜索树"></a>3. 二叉搜索树</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014893629-805c3a90-3ccf-4fff-98f4-51ec1671c6df.png#averageHue=%23e8ebdf&clientId=uf02e59f4-5d80-4&from=paste&height=306&id=u38010e60&name=image.png&originHeight=612&originWidth=865&originalType=binary&ratio=1&rotation=0&showTitle=false&size=178178&status=done&style=none&taskId=u5614456c-9189-45ca-bfb2-5fbf49f84fc&title=&width=432.5" alt="image.png"></p>
-<p>缺点：数据量大的情况下，导致树很高，需要进行多次磁盘读取数据，比较浪费时间。</p>
-<h2 id="2-InnoDB-索引模型"><a href="#2-InnoDB-索引模型" class="headerlink" title="2. InnoDB 索引模型"></a>2. InnoDB 索引模型</h2><p>B+树<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631015176574-c34b7b27-c5cc-4295-8de1-bdb466fe3700.png#averageHue=%23eaede2&clientId=uf02e59f4-5d80-4&from=paste&height=226&id=ud6c87e87&name=image.png&originHeight=451&originWidth=847&originalType=binary&ratio=1&rotation=0&showTitle=false&size=121005&status=done&style=none&taskId=ue3c7c791-9710-400e-b106-8559a26769a&title=&width=423.5" alt="image.png"></p>
-<h2 id="3-主键索引和非主键索引"><a href="#3-主键索引和非主键索引" class="headerlink" title="3. 主键索引和非主键索引"></a>3. 主键索引和非主键索引</h2><p><strong>InnoDB 里面主键索引也被称为聚簇索引</strong></p>
-<p>非主键索引的叶子节点存储的是主键的值</p>
-<p>主键索引和非主键索引的区别</p>
-<ol>
-<li>主键查询： 只需要查询主键索引的 B+树,查询出对应的数据</li>
-<li>非主键索引：查询非主键索引的树，获得对应的主键值，然后通过主键值查询主键索引的 B+树</li>
-</ol>
-<h2 id="4-索引维护"><a href="#4-索引维护" class="headerlink" title="4. 索引维护"></a>4. 索引维护</h2><p>概念： 当数据页中数据存储满了，会生成一个新的数据页，然后原有数据也中的部分数据会移到新的数据也中。这种过程叫做页分裂。</p>
-<p>同理页合并是两个数据页中的数据太少了，合并到一个数据页中。</p>
-<h2 id="5-索引覆盖"><a href="#5-索引覆盖" class="headerlink" title="5. 索引覆盖"></a>5. 索引覆盖</h2><h3 id="1-回表"><a href="#1-回表" class="headerlink" title="1. 回表"></a>1. 回表</h3><p>select * from T where k between 3 and 5<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016152383-0a030960-b98c-4af0-8eb5-c3e571988bc0.png#averageHue=%23e9ece0&clientId=uf02e59f4-5d80-4&from=paste&height=203&id=QPjkB&name=image.png&originHeight=406&originWidth=847&originalType=binary&ratio=1&rotation=0&showTitle=false&size=119807&status=done&style=none&taskId=uc4420736-4496-455c-a039-deaab42dce4&title=&width=423.5" alt="image.png"><br>执行流程</p>
-<ol>
-<li>在 k 索引树上找到 k=3 的记录，取得 ID = 300；</li>
-<li>再到 ID 索引树查到 ID=300 对应的 R3；</li>
-<li>在 k 索引树取下一个值 k=5，取得 ID=500；</li>
-<li>再回到 ID 索引树查到 ID=500 对应的 R4；</li>
-<li>在 k 索引树取下一个值 k=6，不满足条件，循环结束</li>
-</ol>
-<p><strong>回表：非主键搜索完后，回到主键索引树进行搜索的过程</strong>。（步骤 2、4）</p>
-<h3 id="2-索引覆盖"><a href="#2-索引覆盖" class="headerlink" title="2. 索引覆盖"></a>2. 索引覆盖</h3><p>select ID from T where k between 3 and 5</p>
-<p>对于上述通过非主键索引查询主键索引信息，由于非主键索引存放了主键的信息。<br>导致我们不需要进行回表。<strong>由于索引 k 的值覆盖了查询的字段，我们称之为覆盖索引</strong></p>
-<p><strong>优点：减少树的搜索次数，提升查询效率</strong></p>
-<h2 id="6-最左前缀原则"><a href="#6-最左前缀原则" class="headerlink" title="6. 最左前缀原则"></a>6. 最左前缀原则</h2><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `tuser` (</span><br><span class="line">  `id` int(<span class="number">11</span>) NOT NULL,</span><br><span class="line">  `id_card` varchar(<span class="number">32</span>) DEFAULT NULL,</span><br><span class="line">  `name` varchar(<span class="number">32</span>) DEFAULT NULL,</span><br><span class="line">  `age` int(<span class="number">11</span>) DEFAULT NULL,</span><br><span class="line">  `ismale` tinyint(<span class="number">1</span>) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `id_card` (`id_card`),</span><br><span class="line">  KEY `name_age` (`name`,`age`)</span><br><span class="line">) ENGINE=InnoDB</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016490840-0e048d5d-77e7-4191-83e7-026d3c1e3e6e.png#averageHue=%23eef0e6&clientId=uf02e59f4-5d80-4&from=paste&height=243&id=u0182df12&name=image.png&originHeight=486&originWidth=916&originalType=binary&ratio=1&rotation=0&showTitle=false&size=185361&status=done&style=none&taskId=ubb2ba15c-29fb-469e-bca4-35d9ccce47c&title=&width=458" alt="image.png"></p>
-<p>如果你要查的是所有名字第一个字是“张”的人，你的 SQL 语句的条件是”where name like ‘张 %’”。这时，你也能够用上这个索引，查找到第一个符合条件的记录是 ID3，然后向后遍历，直到不满足条件为止。</p>
-<p><strong>联合索引以第一个索引为基准进行排序，然后通过第一个索引的值来进行查询</strong><br><a href="https://www.cnblogs.com/ljl150/p/12934071.html">最左前缀原则</a></p>
-<h2 id="7-索引下推"><a href="#7-索引下推" class="headerlink" title="7. 索引下推"></a>7. 索引下推</h2><p>Mysql5.6 引入索引下推，是在最左前缀的条件小，过滤调不不符合条件的记录减少回表的次数</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">mysql&gt; select * from tuser where name like &#x27;张 %&#x27; and age=<span class="number">10</span> and ismale=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018210889-220345e3-dae5-4eb8-9170-5537631d52ef.png#averageHue=%23f1f1eb&clientId=uf02e59f4-5d80-4&from=paste&height=194&id=u671fa958&name=image.png&originHeight=388&originWidth=859&originalType=binary&ratio=1&rotation=0&showTitle=false&size=183225&status=done&style=none&taskId=u26fcfa9c-8351-4a80-bb20-4dd098a028b&title=&width=429.5" alt="image.png"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018215910-da87dcc1-a41f-46ae-b73b-cecf9db4cf0f.png#averageHue=%23f1f1eb&clientId=uf02e59f4-5d80-4&from=paste&height=198&id=ue03b52df&name=image.png&originHeight=395&originWidth=869&originalType=binary&ratio=1&rotation=0&showTitle=false&size=189030&status=done&style=none&taskId=u0df9d68d-5a7b-4383-babc-d022de12965&title=&width=434.5" alt="image.png"></p>
-<h2 id="8-小结"><a href="#8-小结" class="headerlink" title="8. 小结"></a>8. 小结</h2><ol>
-<li>索引的常见模型<ol>
-<li>哈希表 （不支持范围查询）</li>
-<li>有序数组（插入删除效率低）</li>
-<li>二叉搜索树（数据量大，导致树的高度很高，需要进行多次磁盘读取）</li>
-</ol>
-</li>
-<li>InnoDB 索引模型<ol>
-<li>B+树支持范围查询，树的高度不会太高</li>
-<li>查找数据消耗磁盘读取的时间相同</li>
-</ol>
-</li>
-<li>主键索引和非主键索引<ol>
-<li>在 InnoDB 主键索引存储索引行对应的数据</li>
-<li>非主键索引存储的是主键索引的值，需要通过回表的方式，去查询一遍主键索引</li>
-</ol>
-</li>
-<li>索引覆盖：通过非主键索引查询主键索引的值，导致不需要回到主键索引树再次进行查询的过程。</li>
-<li>最左前缀原则</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
-        <tag>数据库</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql-更新语句的执行</title>
-    <url>/2022/09/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
-    <content><![CDATA[<h2 id="1-更新语句执行流程"><a href="#1-更新语句执行流程" class="headerlink" title="1. 更新语句执行流程"></a>1. 更新语句执行流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630974533552-29681b12-3ee4-4012-ae23-882ab740984d.png#clientId=uf02e59f4-5d80-4&from=paste&height=337&id=u6f547220&name=image.png&originHeight=674&originWidth=928&originalType=binary&ratio=1&size=239274&status=done&style=none&taskId=u902b2c56-0159-4ac1-9ecc-7c0453d9054&width=464" alt="image.png"></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; update T <span class="built_in">set</span> c=c+1 <span class="built_in">where</span> ID=2;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>客户端通过连接器连接 MySQL 服务器</li>
-<li>将缓存中相关表的结果清空</li>
-<li>分析器通过词法和语法分析判断是更新语句</li>
-<li>优化器通过索引，决定使用 ID 的索引</li>
-<li>执行器执行更新语句</li>
-<li>进行 redo log 和 bin log 的修改</li>
-</ol>
-<h2 id="2-Redo-log-引擎日志"><a href="#2-Redo-log-引擎日志" class="headerlink" title="2.Redo log(引擎日志)"></a>2.Redo log(引擎日志)</h2><p>情景老板记账：先把借帐和还账记录写在黑板上，空闲时，再把黑板上账的写入到账本中。</p>
-<p>作用： 用作数据库写入将数据磁盘的缓存，防止每次更新都要将数据写进磁盘，提高了更新效率。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630975170760-0904cfb2-ee0b-4650-a584-bb831be94070.png#clientId=uf02e59f4-5d80-4&from=paste&height=328&id=u5e5e1dba&name=image.png&originHeight=655&originWidth=943&originalType=binary&ratio=1&size=104067&status=done&style=none&taskId=u353c490e-0715-407a-9113-50af777809c&width=471.5" alt="image.png"></p>
-<h3 id="1-WAL-Write-Ahead-Logging"><a href="#1-WAL-Write-Ahead-Logging" class="headerlink" title="1. WAL (Write-Ahead Logging)"></a>1. WAL (Write-Ahead Logging)</h3><p><strong>先写日志，再写磁盘</strong>。<br>InnoDB 引擎会把记录写道 redo log 中，并更新内存。然后更新就算完成。引擎会在空闲时间操作记录<br>写入磁盘。<br>如果 redo log 写满了，会把一部分记录更新到磁盘中。<br>通过 write pos 和 check point 两个指针来判断日志是否写满</p>
-<h3 id="2-crash-safe"><a href="#2-crash-safe" class="headerlink" title="2. crash-safe"></a>2. crash-safe</h3><p>当数据库发生异常时，可以通过 redo log 可以获取到之前的提交记录。<br>通过提交记录可以将未同步到数据库中数据同步到数据库中。</p>
-<p><strong>redo log 存储的是物理变更日志，用于记录磁盘中指定地方的数值修改记录。</strong></p>
-<h3 id="3-特点"><a href="#3-特点" class="headerlink" title="3. 特点"></a>3. 特点</h3><ol>
-<li> 存储的物理日志（记录的是数据页上数据的更改）</li>
-<li> 先写日志，后写磁盘</li>
-<li> 可以 crash safe 进行数据的修复</li>
-<li> InnoDB 引擎层日志</li>
-<li> 空间有限会用完，通过队列的实现循环写</li>
-</ol>
-<h2 id="3-binlog（Server-层日志）"><a href="#3-binlog（Server-层日志）" class="headerlink" title="3. binlog（Server 层日志）"></a>3. binlog（Server 层日志）</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li>服务层日志</li>
-<li>存储的内容是逻辑日志（记录的是语句的原始逻辑）</li>
-<li>空间无限，通过新增文件实现追加写</li>
-</ol>
-<h2 id="4-执行流程"><a href="#4-执行流程" class="headerlink" title="4. 执行流程"></a>4. 执行流程</h2><ol>
-<li>执行引擎先找到 ID=2 的这一行数据，如果内存中存在直接返回给执行器，否则从磁盘读入内存然后返回给执行器</li>
-<li>把值加上 1，然后调用引擎接口写入数据</li>
-<li>引擎会将新数据更新到内存中，同时更新到 redo log 中。redo log 处于 prepare 状态，告诉执行器完成了，可以提交事务了。</li>
-<li>执行器生成更新操作的 bin log,并把 bin log 写入磁盘</li>
-<li>执行器调用引擎的事务接口，将写入的 redo log 改成 commit 状态</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634976756709-8dbcb97a-235f-4b93-a181-f46a29389d94.png#clientId=u359acdfd-faff-4&from=paste&height=525&id=u4d800135&name=image.png&originHeight=1050&originWidth=686&originalType=binary&ratio=1&size=168644&status=done&style=none&taskId=u39624d17-5f0a-4d9a-931c-683c5152009&width=343" alt="image.png"></p>
-<h2 id="5-两阶段提交"><a href="#5-两阶段提交" class="headerlink" title="5. 两阶段提交"></a>5. 两阶段提交</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988222445-a6208d34-24c4-4e8d-89b2-8952bbb46186.png#clientId=uf02e59f4-5d80-4&from=paste&height=198&id=u6943ccfd&name=image.png&originHeight=396&originWidth=651&originalType=binary&ratio=1&size=113756&status=done&style=none&taskId=udaf78fe9-6800-4ea4-af49-47d717da835&width=325.5" alt="image.png"></p>
-<p><strong>原因</strong></p>
-<ol>
-<li>如果发生 crash 导致系统崩溃的话，如果顺序不一致，可能导致之后无法通过 binlog 恢复到任一时刻的数据</li>
-<li>可能导致 binlog 和 redo log 的数据不一致导致数据冲突。</li>
-</ol>
-<h2 id="6-两种日志的不同点"><a href="#6-两种日志的不同点" class="headerlink" title="6. 两种日志的不同点"></a>6. 两种日志的不同点</h2><ol>
-<li>redo log 是 InnoDB 引擎特有的，binlog 是 MySQL 的 Server 层实现的</li>
-<li>redo log 是物理日志，记录的是 <strong>在某个数据页上做了修改</strong>，binlog 是逻辑日志记录的是语句逻辑 <strong>给 ID=2 的数据进行加 1</strong></li>
-<li>redo log 是循环写，空间大小固定。bin log 是追加写，当 bin log 文件到达一定大小后会切换到下一个，不会覆盖以前的日志</li>
-</ol>
-<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><ol>
-<li>更新语句的执行流程</li>
-<li>Redo log 的作用是用来存储 MySQL 产生更新语句的物理日志。通过 WAL 技术先将日志写入 队列中然偶后通过指定条件写入磁盘中</li>
-<li>bin log 的作用和特点</li>
-<li>两种日志的不同点</li>
-<li>两阶段提交的作用<ol>
-<li>保证数据库的数据不冲突</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
-        <tag>数据库</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>了解Mysql查询语句执行流程</title>
     <url>/2022/01/11/1!%E4%BA%86%E8%A7%A3Mysql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</url>
     <content><![CDATA[<p><strong>MySQL 逻辑架构图</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1629176680362-2a25040b-16f9-402a-895d-3c6fdfd78a1f.png#clientId=u444c9418-ad4f-4&from=paste&height=335&id=bsas8&name=image.png&originHeight=670&originWidth=898&originalType=binary&ratio=1&size=243581&status=done&style=none&taskId=u046362f2-96e4-4be8-9205-33faa94f32d&width=449" alt="image.png"></p>
@@ -217,48 +73,69 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>数据库</tag>
+        <tag>Mysql</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
   <entry>
-    <title>Mysql-事务隔离</title>
-    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
-    <content><![CDATA[<h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
-<li><strong>原子性</strong></li>
-<li><strong>持久性</strong></li>
-<li><strong>隔离性</strong></li>
-<li><strong>一致性</strong></li>
-</ol>
-<h3 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2. 事务隔离级别"></a>2. 事务隔离级别</h3><ol>
-<li><strong>读已提交（事务未提交时，变更能被其它事务看到）</strong></li>
-<li><strong>读未提交（事务提交后，其它事务才能看到变更）</strong></li>
-<li><strong>可重复读（一个事务执行过程中，总是跟启动时看到的数据是一致的。未提交的变更对其它事务不可见）</strong></li>
-<li><strong>串行化（同一行记录写会加写锁，读会读锁。当出现读写锁冲突时，后访问的事务，必须等前一个事务完成，才能执行）</strong></li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988923063-4d56a761-7637-488b-951d-c443de806cb1.png#clientId=uf02e59f4-5d80-4&from=paste&height=381&id=uf414196c&name=image.png&originHeight=762&originWidth=788&originalType=binary&ratio=1&size=201874&status=done&style=none&taskId=u19543944-dee4-4fbf-bf51-efae564dfae&width=394" alt="image.png"></p>
-<p>v1=v2=1,v3=2<br>四种事务得到的结果</p>
+    <title>Mysql-更新语句的执行</title>
+    <url>/2022/09/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
+    <content><![CDATA[<h2 id="1-更新语句执行流程"><a href="#1-更新语句执行流程" class="headerlink" title="1. 更新语句执行流程"></a>1. 更新语句执行流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630974533552-29681b12-3ee4-4012-ae23-882ab740984d.png#clientId=uf02e59f4-5d80-4&from=paste&height=337&id=u6f547220&name=image.png&originHeight=674&originWidth=928&originalType=binary&ratio=1&size=239274&status=done&style=none&taskId=u902b2c56-0159-4ac1-9ecc-7c0453d9054&width=464" alt="image.png"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; update T <span class="built_in">set</span> c=c+1 <span class="built_in">where</span> ID=2;</span><br></pre></td></tr></table></figure>
+
 <ol>
-<li>读未提交： v1、v2、v3=2</li>
-<li>读已提交: v1=1 ，v2、v3=2</li>
-<li>可重复读：v1=v2=1，v3=2</li>
-<li>可串行化 ： v1=v2=1,v3=2</li>
+<li>客户端通过连接器连接 MySQL 服务器</li>
+<li>将缓存中相关表的结果清空</li>
+<li>分析器通过词法和语法分析判断是更新语句</li>
+<li>优化器通过索引，决定使用 ID 的索引</li>
+<li>执行器执行更新语句</li>
+<li>进行 redo log 和 bin log 的修改</li>
 </ol>
-<h2 id="2-事务隔离的实现"><a href="#2-事务隔离的实现" class="headerlink" title="2. 事务隔离的实现"></a>2. 事务隔离的实现</h2><p>当一个值从 1 按顺序变成 2，3，3 那么他的日志里面就会有类似的回滚段记录<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631013980123-b4f659d1-a49a-4d6f-bffa-5c049fb7a4b5.png#clientId=uf02e59f4-5d80-4&from=paste&height=259&id=u4bd92b33&name=image.png&originHeight=517&originWidth=906&originalType=binary&ratio=1&size=104426&status=done&style=none&taskId=ub4313c28-1bd9-45bf-a56d-abe4cf1987a&width=453" alt="image.png"><br>如图事务 A、B、C 修改记录导致一个字段对应多个值。</p>
-<p>通过 MVCC 来实现一个数据的多个版本，通过 undo log 实现数据版本的回滚<br>通过 MVCC 和 undo log 来实现事务的隔离<br>具体可以参考</p>
-<p><a href="https://www.yuque.com/sanxingalaxys9/gwxct1/lq01qk?view=doc_embed">Mysql 实战 45 讲</a></p>
-<p>当回滚段日志过长时，系统会自动清除。</p>
-<h2 id="3-事务的启动方式"><a href="#3-事务的启动方式" class="headerlink" title="3. 事务的启动方式"></a>3. 事务的启动方式</h2><ol>
-<li>set autocommit=0 关闭自动提交，只要执行 select 语句自动开启事务</li>
-<li>begin 或是 start transaction</li>
+<h2 id="2-Redo-log-引擎日志"><a href="#2-Redo-log-引擎日志" class="headerlink" title="2.Redo log(引擎日志)"></a>2.Redo log(引擎日志)</h2><p>情景老板记账：先把借帐和还账记录写在黑板上，空闲时，再把黑板上账的写入到账本中。</p>
+<p>作用： 用作数据库写入将数据磁盘的缓存，防止每次更新都要将数据写进磁盘，提高了更新效率。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630975170760-0904cfb2-ee0b-4650-a584-bb831be94070.png#clientId=uf02e59f4-5d80-4&from=paste&height=328&id=u5e5e1dba&name=image.png&originHeight=655&originWidth=943&originalType=binary&ratio=1&size=104067&status=done&style=none&taskId=u353c490e-0715-407a-9113-50af777809c&width=471.5" alt="image.png"></p>
+<h3 id="1-WAL-Write-Ahead-Logging"><a href="#1-WAL-Write-Ahead-Logging" class="headerlink" title="1. WAL (Write-Ahead Logging)"></a>1. WAL (Write-Ahead Logging)</h3><p><strong>先写日志，再写磁盘</strong>。<br>InnoDB 引擎会把记录写道 redo log 中，并更新内存。然后更新就算完成。引擎会在空闲时间操作记录<br>写入磁盘。<br>如果 redo log 写满了，会把一部分记录更新到磁盘中。<br>通过 write pos 和 check point 两个指针来判断日志是否写满</p>
+<h3 id="2-crash-safe"><a href="#2-crash-safe" class="headerlink" title="2. crash-safe"></a>2. crash-safe</h3><p>当数据库发生异常时，可以通过 redo log 可以获取到之前的提交记录。<br>通过提交记录可以将未同步到数据库中数据同步到数据库中。</p>
+<p><strong>redo log 存储的是物理变更日志，用于记录磁盘中指定地方的数值修改记录。</strong></p>
+<h3 id="3-特点"><a href="#3-特点" class="headerlink" title="3. 特点"></a>3. 特点</h3><ol>
+<li> 存储的物理日志（记录的是数据页上数据的更改）</li>
+<li> 先写日志，后写磁盘</li>
+<li> 可以 crash safe 进行数据的修复</li>
+<li> InnoDB 引擎层日志</li>
+<li> 空间有限会用完，通过队列的实现循环写</li>
 </ol>
-<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
-<li>四大特性和隔离级别</li>
-<li>事务隔离的实现（通过 MVCC 和 undo log)</li>
-<li>事务的启动方式<ol>
-<li>自动启动 select 语句执行时自动启动</li>
-<li>手动启动 begin、 start transaction</li>
+<h2 id="3-binlog（Server-层日志）"><a href="#3-binlog（Server-层日志）" class="headerlink" title="3. binlog（Server 层日志）"></a>3. binlog（Server 层日志）</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li>服务层日志</li>
+<li>存储的内容是逻辑日志（记录的是语句的原始逻辑）</li>
+<li>空间无限，通过新增文件实现追加写</li>
+</ol>
+<h2 id="4-执行流程"><a href="#4-执行流程" class="headerlink" title="4. 执行流程"></a>4. 执行流程</h2><ol>
+<li>执行引擎先找到 ID=2 的这一行数据，如果内存中存在直接返回给执行器，否则从磁盘读入内存然后返回给执行器</li>
+<li>把值加上 1，然后调用引擎接口写入数据</li>
+<li>引擎会将新数据更新到内存中，同时更新到 redo log 中。redo log 处于 prepare 状态，告诉执行器完成了，可以提交事务了。</li>
+<li>执行器生成更新操作的 bin log,并把 bin log 写入磁盘</li>
+<li>执行器调用引擎的事务接口，将写入的 redo log 改成 commit 状态</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634976756709-8dbcb97a-235f-4b93-a181-f46a29389d94.png#clientId=u359acdfd-faff-4&from=paste&height=525&id=u4d800135&name=image.png&originHeight=1050&originWidth=686&originalType=binary&ratio=1&size=168644&status=done&style=none&taskId=u39624d17-5f0a-4d9a-931c-683c5152009&width=343" alt="image.png"></p>
+<h2 id="5-两阶段提交"><a href="#5-两阶段提交" class="headerlink" title="5. 两阶段提交"></a>5. 两阶段提交</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988222445-a6208d34-24c4-4e8d-89b2-8952bbb46186.png#clientId=uf02e59f4-5d80-4&from=paste&height=198&id=u6943ccfd&name=image.png&originHeight=396&originWidth=651&originalType=binary&ratio=1&size=113756&status=done&style=none&taskId=udaf78fe9-6800-4ea4-af49-47d717da835&width=325.5" alt="image.png"></p>
+<p><strong>原因</strong></p>
+<ol>
+<li>如果发生 crash 导致系统崩溃的话，如果顺序不一致，可能导致之后无法通过 binlog 恢复到任一时刻的数据</li>
+<li>可能导致 binlog 和 redo log 的数据不一致导致数据冲突。</li>
+</ol>
+<h2 id="6-两种日志的不同点"><a href="#6-两种日志的不同点" class="headerlink" title="6. 两种日志的不同点"></a>6. 两种日志的不同点</h2><ol>
+<li>redo log 是 InnoDB 引擎特有的，binlog 是 MySQL 的 Server 层实现的</li>
+<li>redo log 是物理日志，记录的是 <strong>在某个数据页上做了修改</strong>，binlog 是逻辑日志记录的是语句逻辑 <strong>给 ID=2 的数据进行加 1</strong></li>
+<li>redo log 是循环写，空间大小固定。bin log 是追加写，当 bin log 文件到达一定大小后会切换到下一个，不会覆盖以前的日志</li>
+</ol>
+<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><ol>
+<li>更新语句的执行流程</li>
+<li>Redo log 的作用是用来存储 MySQL 产生更新语句的物理日志。通过 WAL 技术先将日志写入 队列中然偶后通过指定条件写入磁盘中</li>
+<li>bin log 的作用和特点</li>
+<li>两种日志的不同点</li>
+<li>两阶段提交的作用<ol>
+<li>保证数据库的数据不冲突</li>
 </ol>
 </li>
 </ol>
@@ -267,52 +144,81 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>数据库</tag>
+        <tag>Mysql</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
   <entry>
-    <title>Mysql-行锁</title>
-    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
-    <content><![CDATA[<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&from=paste&height=284&id=tMiKr&name=image.png&originHeight=568&originWidth=857&originalType=binary&ratio=1&size=76026&status=done&style=none&taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
-<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong></p>
-<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
+    <title>Mysql-索引</title>
+    <url>/2022/09/09/4!%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#averageHue=%23dce4d1&clientId=uf02e59f4-5d80-4&from=paste&height=286&id=u7fa963ac&name=image.png&originHeight=572&originWidth=848&originalType=binary&ratio=1&rotation=0&showTitle=false&size=173484&status=done&style=none&taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&title=&width=424" alt="image.png"></p>
+<p>通过 hash 算法将 key 换算成确定的位置，然后把 value 放入到这个数组的位置。如果数组已经存在值，<br>则通过拉链法，拉出一条链表。</p>
+<p>优点：等值查询的情况下查询效率高<br>缺点：范围查询效率低下</p>
+<h3 id="2-有序数组"><a href="#2-有序数组" class="headerlink" title="2. 有序数组"></a>2. 有序数组</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014718687-07087e14-d4f9-4401-9bbd-bb4dd3a0bce5.png#averageHue=%23e4e9da&clientId=uf02e59f4-5d80-4&from=paste&height=219&id=u6b2951af&name=image.png&originHeight=437&originWidth=898&originalType=binary&ratio=1&rotation=0&showTitle=false&size=108398&status=done&style=none&taskId=uf49d5f91-1a3a-48ac-aca3-80d6aec3ace&title=&width=449" alt="image.png"></p>
+<p>优点：等值和范围查询效率高<br>缺点：插入、删除数据效率低下</p>
+<p>场景：只适用于静态存储引擎</p>
+<h3 id="3-二叉搜索树"><a href="#3-二叉搜索树" class="headerlink" title="3. 二叉搜索树"></a>3. 二叉搜索树</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014893629-805c3a90-3ccf-4fff-98f4-51ec1671c6df.png#averageHue=%23e8ebdf&clientId=uf02e59f4-5d80-4&from=paste&height=306&id=u38010e60&name=image.png&originHeight=612&originWidth=865&originalType=binary&ratio=1&rotation=0&showTitle=false&size=178178&status=done&style=none&taskId=u5614456c-9189-45ca-bfb2-5fbf49f84fc&title=&width=432.5" alt="image.png"></p>
+<p>缺点：数据量大的情况下，导致树很高，需要进行多次磁盘读取数据，比较浪费时间。</p>
+<h2 id="2-InnoDB-索引模型"><a href="#2-InnoDB-索引模型" class="headerlink" title="2. InnoDB 索引模型"></a>2. InnoDB 索引模型</h2><p>B+树<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631015176574-c34b7b27-c5cc-4295-8de1-bdb466fe3700.png#averageHue=%23eaede2&clientId=uf02e59f4-5d80-4&from=paste&height=226&id=ud6c87e87&name=image.png&originHeight=451&originWidth=847&originalType=binary&ratio=1&rotation=0&showTitle=false&size=121005&status=done&style=none&taskId=ue3c7c791-9710-400e-b106-8559a26769a&title=&width=423.5" alt="image.png"></p>
+<h2 id="3-主键索引和非主键索引"><a href="#3-主键索引和非主键索引" class="headerlink" title="3. 主键索引和非主键索引"></a>3. 主键索引和非主键索引</h2><p><strong>InnoDB 里面主键索引也被称为聚簇索引</strong></p>
+<p>非主键索引的叶子节点存储的是主键的值</p>
+<p>主键索引和非主键索引的区别</p>
 <ol>
-<li>从顾客 A 账户余额中扣除电影票价；</li>
-<li>给影院 B 的账户余额增加这张电影票价；</li>
-<li>记录一条交易日志。</li>
+<li>主键查询： 只需要查询主键索引的 B+树,查询出对应的数据</li>
+<li>非主键索引：查询非主键索引的树，获得对应的主键值，然后通过主键值查询主键索引的 B+树</li>
 </ol>
-<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。</p>
-<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&from=paste&height=281&id=uf1f2e0cc&name=image.png&originHeight=561&originWidth=871&originalType=binary&ratio=1&size=90990&status=done&style=none&taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。</p>
-<p>解决方法</p>
-<ul>
-<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
-<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
-</ul>
-<p>死锁检测的缺点：</p>
+<h2 id="4-索引维护"><a href="#4-索引维护" class="headerlink" title="4. 索引维护"></a>4. 索引维护</h2><p>概念： 当数据页中数据存储满了，会生成一个新的数据页，然后原有数据也中的部分数据会移到新的数据也中。这种过程叫做页分裂。</p>
+<p>同理页合并是两个数据页中的数据太少了，合并到一个数据页中。</p>
+<h2 id="5-索引覆盖"><a href="#5-索引覆盖" class="headerlink" title="5. 索引覆盖"></a>5. 索引覆盖</h2><h3 id="1-回表"><a href="#1-回表" class="headerlink" title="1. 回表"></a>1. 回表</h3><p>select * from T where k between 3 and 5<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016152383-0a030960-b98c-4af0-8eb5-c3e571988bc0.png#averageHue=%23e9ece0&clientId=uf02e59f4-5d80-4&from=paste&height=203&id=QPjkB&name=image.png&originHeight=406&originWidth=847&originalType=binary&ratio=1&rotation=0&showTitle=false&size=119807&status=done&style=none&taskId=uc4420736-4496-455c-a039-deaab42dce4&title=&width=423.5" alt="image.png"><br>执行流程</p>
 <ol>
-<li>确保业务不会出现死锁，关闭死锁检测</li>
-<li>控制并发度</li>
+<li>在 k 索引树上找到 k=3 的记录，取得 ID = 300；</li>
+<li>再到 ID 索引树查到 ID=300 对应的 R3；</li>
+<li>在 k 索引树取下一个值 k=5，取得 ID=500；</li>
+<li>再回到 ID 索引树查到 ID=500 对应的 R4；</li>
+<li>在 k 索引树取下一个值 k=6，不满足条件，循环结束</li>
 </ol>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
-<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
-<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
-<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
+<p><strong>回表：非主键搜索完后，回到主键索引树进行搜索的过程</strong>。（步骤 2、4）</p>
+<h3 id="2-索引覆盖"><a href="#2-索引覆盖" class="headerlink" title="2. 索引覆盖"></a>2. 索引覆盖</h3><p>select ID from T where k between 3 and 5</p>
+<p>对于上述通过非主键索引查询主键索引信息，由于非主键索引存放了主键的信息。<br>导致我们不需要进行回表。<strong>由于索引 k 的值覆盖了查询的字段，我们称之为覆盖索引</strong></p>
+<p><strong>优点：减少树的搜索次数，提升查询效率</strong></p>
+<h2 id="6-最左前缀原则"><a href="#6-最左前缀原则" class="headerlink" title="6. 最左前缀原则"></a>6. 最左前缀原则</h2><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `tuser` (</span><br><span class="line">  `id` int(<span class="number">11</span>) NOT NULL,</span><br><span class="line">  `id_card` varchar(<span class="number">32</span>) DEFAULT NULL,</span><br><span class="line">  `name` varchar(<span class="number">32</span>) DEFAULT NULL,</span><br><span class="line">  `age` int(<span class="number">11</span>) DEFAULT NULL,</span><br><span class="line">  `ismale` tinyint(<span class="number">1</span>) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `id_card` (`id_card`),</span><br><span class="line">  KEY `name_age` (`name`,`age`)</span><br><span class="line">) ENGINE=InnoDB</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631016490840-0e048d5d-77e7-4191-83e7-026d3c1e3e6e.png#averageHue=%23eef0e6&clientId=uf02e59f4-5d80-4&from=paste&height=243&id=u0182df12&name=image.png&originHeight=486&originWidth=916&originalType=binary&ratio=1&rotation=0&showTitle=false&size=185361&status=done&style=none&taskId=ubb2ba15c-29fb-469e-bca4-35d9ccce47c&title=&width=458" alt="image.png"></p>
+<p>如果你要查的是所有名字第一个字是“张”的人，你的 SQL 语句的条件是”where name like ‘张 %’”。这时，你也能够用上这个索引，查找到第一个符合条件的记录是 ID3，然后向后遍历，直到不满足条件为止。</p>
+<p><strong>联合索引以第一个索引为基准进行排序，然后通过第一个索引的值来进行查询</strong><br><a href="https://www.cnblogs.com/ljl150/p/12934071.html">最左前缀原则</a></p>
+<h2 id="7-索引下推"><a href="#7-索引下推" class="headerlink" title="7. 索引下推"></a>7. 索引下推</h2><p>Mysql5.6 引入索引下推，是在最左前缀的条件小，过滤调不不符合条件的记录减少回表的次数</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">mysql&gt; select * from tuser where name like &#x27;张 %&#x27; and age=<span class="number">10</span> and ismale=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018210889-220345e3-dae5-4eb8-9170-5537631d52ef.png#averageHue=%23f1f1eb&clientId=uf02e59f4-5d80-4&from=paste&height=194&id=u671fa958&name=image.png&originHeight=388&originWidth=859&originalType=binary&ratio=1&rotation=0&showTitle=false&size=183225&status=done&style=none&taskId=u26fcfa9c-8351-4a80-bb20-4dd098a028b&title=&width=429.5" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018215910-da87dcc1-a41f-46ae-b73b-cecf9db4cf0f.png#averageHue=%23f1f1eb&clientId=uf02e59f4-5d80-4&from=paste&height=198&id=ue03b52df&name=image.png&originHeight=395&originWidth=869&originalType=binary&ratio=1&rotation=0&showTitle=false&size=189030&status=done&style=none&taskId=u0df9d68d-5a7b-4383-babc-d022de12965&title=&width=434.5" alt="image.png"></p>
+<h2 id="8-小结"><a href="#8-小结" class="headerlink" title="8. 小结"></a>8. 小结</h2><ol>
+<li>索引的常见模型<ol>
+<li>哈希表 （不支持范围查询）</li>
+<li>有序数组（插入删除效率低）</li>
+<li>二叉搜索树（数据量大，导致树的高度很高，需要进行多次磁盘读取）</li>
 </ol>
-<ul>
-<li>第一种，直接执行 delete from T limit 10000;</li>
-<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
-<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
-</ul>
-<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
+</li>
+<li>InnoDB 索引模型<ol>
+<li>B+树支持范围查询，树的高度不会太高</li>
+<li>查找数据消耗磁盘读取的时间相同</li>
+</ol>
+</li>
+<li>主键索引和非主键索引<ol>
+<li>在 InnoDB 主键索引存储索引行对应的数据</li>
+<li>非主键索引存储的是主键索引的值，需要通过回表的方式，去查询一遍主键索引</li>
+</ol>
+</li>
+<li>索引覆盖：通过非主键索引查询主键索引的值，导致不需要回到主键索引树再次进行查询的过程。</li>
+<li>最左前缀原则</li>
+</ol>
 ]]></content>
       <categories>
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>数据库</tag>
+        <tag>Mysql</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -366,8 +272,58 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql-事务隔离</title>
+    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
+    <content><![CDATA[<h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
+<li><strong>原子性</strong></li>
+<li><strong>持久性</strong></li>
+<li><strong>隔离性</strong></li>
+<li><strong>一致性</strong></li>
+</ol>
+<h3 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2. 事务隔离级别"></a>2. 事务隔离级别</h3><ol>
+<li><strong>读已提交（事务未提交时，变更能被其它事务看到）</strong></li>
+<li><strong>读未提交（事务提交后，其它事务才能看到变更）</strong></li>
+<li><strong>可重复读（一个事务执行过程中，总是跟启动时看到的数据是一致的。未提交的变更对其它事务不可见）</strong></li>
+<li><strong>串行化（同一行记录写会加写锁，读会读锁。当出现读写锁冲突时，后访问的事务，必须等前一个事务完成，才能执行）</strong></li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988923063-4d56a761-7637-488b-951d-c443de806cb1.png#clientId=uf02e59f4-5d80-4&from=paste&height=381&id=uf414196c&name=image.png&originHeight=762&originWidth=788&originalType=binary&ratio=1&size=201874&status=done&style=none&taskId=u19543944-dee4-4fbf-bf51-efae564dfae&width=394" alt="image.png"></p>
+<p>v1=v2=1,v3=2<br>四种事务得到的结果</p>
+<ol>
+<li>读未提交： v1、v2、v3=2</li>
+<li>读已提交: v1=1 ，v2、v3=2</li>
+<li>可重复读：v1=v2=1，v3=2</li>
+<li>可串行化 ： v1=v2=1,v3=2</li>
+</ol>
+<h2 id="2-事务隔离的实现"><a href="#2-事务隔离的实现" class="headerlink" title="2. 事务隔离的实现"></a>2. 事务隔离的实现</h2><p>当一个值从 1 按顺序变成 2，3，3 那么他的日志里面就会有类似的回滚段记录<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631013980123-b4f659d1-a49a-4d6f-bffa-5c049fb7a4b5.png#clientId=uf02e59f4-5d80-4&from=paste&height=259&id=u4bd92b33&name=image.png&originHeight=517&originWidth=906&originalType=binary&ratio=1&size=104426&status=done&style=none&taskId=ub4313c28-1bd9-45bf-a56d-abe4cf1987a&width=453" alt="image.png"><br>如图事务 A、B、C 修改记录导致一个字段对应多个值。</p>
+<p>通过 MVCC 来实现一个数据的多个版本，通过 undo log 实现数据版本的回滚<br>通过 MVCC 和 undo log 来实现事务的隔离<br>具体可以参考</p>
+<p><a href="https://www.yuque.com/sanxingalaxys9/gwxct1/lq01qk?view=doc_embed">Mysql 实战 45 讲</a></p>
+<p>当回滚段日志过长时，系统会自动清除。</p>
+<h2 id="3-事务的启动方式"><a href="#3-事务的启动方式" class="headerlink" title="3. 事务的启动方式"></a>3. 事务的启动方式</h2><ol>
+<li>set autocommit=0 关闭自动提交，只要执行 select 语句自动开启事务</li>
+<li>begin 或是 start transaction</li>
+</ol>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
+<li>四大特性和隔离级别</li>
+<li>事务隔离的实现（通过 MVCC 和 undo log)</li>
+<li>事务的启动方式<ol>
+<li>自动启动 select 语句执行时自动启动</li>
+<li>手动启动 begin、 start transaction</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -414,145 +370,47 @@
       </tags>
   </entry>
   <entry>
-    <title>Java8新特性</title>
-    <url>/2022/12/22/Java8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<h1 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h1><p>本质:<strong>作为函数式接口的实例</strong></p>
-<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>-&gt;:lambda 操作符()<br>-&gt;右边:lambda 形参列表(抽象方法的形参列表)<br>-&gt;左边:lambda 体(抽象方法的方法体)</p>
-<h2 id="使用格式"><a href="#使用格式" class="headerlink" title="使用格式"></a>使用格式</h2><p>lambda 表达式六种使用情况：</p>
+    <title>Mysql-行锁</title>
+    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
+    <content><![CDATA[<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&from=paste&height=284&id=tMiKr&name=image.png&originHeight=568&originWidth=857&originalType=binary&ratio=1&size=76026&status=done&style=none&taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
+<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong></p>
+<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
 <ol>
-<li>形参类型可以省略，如果参数只有一个，可省小括号</li>
-<li>方法体只有一条语句，可省略大括号（语句为 return 语句时，可省略 return 和大括号关键字）</li>
+<li>从顾客 A 账户余额中扣除电影票价；</li>
+<li>给影院 B 的账户余额增加这张电影票价；</li>
+<li>记录一条交易日志。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//语法格式一：无参、无返回值</span></span><br><span class="line">Runnable runnable = () -&gt; System.out.println(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="comment">//语法格式二：有一个参数，无返回值</span></span><br><span class="line">Consumer&lt;String&gt; s1 = (String s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s1.accept(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式三：数据类型可以省略，编译器可以推断得出（类型推断）</span></span><br><span class="line"></span><br><span class="line">Consumer&lt;String&gt; s2 = (s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s2.accept(<span class="string">&quot;23&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式四：只需要一个参数，小括号可以省略</span></span><br><span class="line">Consumer&lt;String&gt; s3 = s -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s3.accept(<span class="string">&quot;34&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式五：多个参数，多个执行语句有返回值</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator = (o1, o2) -&gt; &#123;</span><br><span class="line">	System.out.println(o1);</span><br><span class="line">	System.out.println(o2);</span><br><span class="line">	<span class="keyword">return</span> o1.compareTo(o2);</span><br><span class="line">&#125;;</span><br><span class="line">comparator.compare(<span class="number">12</span>, <span class="number">23</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式六：只有一条语句，有return时可省略return和大括号</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator2 = (o1, o2) -&gt;</span><br><span class="line">	o1.compareTo(o2);</span><br><span class="line">comparator2.compare(<span class="number">12</span>, <span class="number">11</span>);</span><br></pre></td></tr></table></figure>
-
-<h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>常见函数式接口<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673745172306-3b63b6bc-50cb-4737-8d11-1b0da86c581b.png#averageHue=%23acc3dc&clientId=u8f721beb-0d6e-4&from=paste&height=295&id=u6d80b2ac&name=image.png&originHeight=406&originWidth=730&originalType=binary&ratio=1&rotation=0&showTitle=false&size=227263&status=done&style=none&taskId=u10ae1ea7-5e55-4697-a6ef-8b4ed4d345a&title=&width=530.9090909090909" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673746698011-93399e69-4051-4e9e-980d-242231d6293a.png#averageHue=%23abc2da&clientId=u8f721beb-0d6e-4&from=paste&height=319&id=uc3a49648&name=image.png&originHeight=439&originWidth=795&originalType=binary&ratio=1&rotation=0&showTitle=false&size=339302&status=done&style=none&taskId=u5d3ec6b0-1f83-4949-a764-168add16050&title=&width=578.1818181818181" alt="image.png"></p>
-<h1 id="方法引用和构造器引用"><a href="#方法引用和构造器引用" class="headerlink" title="方法引用和构造器引用"></a>方法引用和构造器引用</h1><p>方法引用的三种情况<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673752145970-95aa0b7b-73d4-4671-bba9-f7025a871460.png#averageHue=%23f8eeee&clientId=u8f721beb-0d6e-4&from=paste&height=188&id=u57044aa7&name=image.png&originHeight=258&originWidth=690&originalType=binary&ratio=1&rotation=0&showTitle=false&size=52351&status=done&style=none&taskId=u19462865-98c4-4f79-a557-f56bf79fffa&title=&width=501.8181818181818" alt="image.png"></p>
-<p>引用要求：<br>抽象方法和方法体内部的调用方法</p>
+<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。</p>
+<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&from=paste&height=281&id=uf1f2e0cc&name=image.png&originHeight=561&originWidth=871&originalType=binary&ratio=1&size=90990&status=done&style=none&taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。</p>
+<p>解决方法</p>
+<ul>
+<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
+<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
+</ul>
+<p>死锁检测的缺点：</p>
 <ol>
-<li>返回值相同</li>
-<li>形参列表相同</li>
+<li>确保业务不会出现死锁，关闭死锁检测</li>
+<li>控制并发度</li>
 </ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753293813-92c153ff-48d8-4749-8a96-ef934d2fe7d3.png#averageHue=%23fbfaf9&clientId=u8f721beb-0d6e-4&from=paste&height=265&id=uf319f803&name=image.png&originHeight=364&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26402&status=done&style=none&taskId=u0885957a-eab3-4985-9488-4f086d041b3&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753305266-4eb3eae6-95f5-48bf-9d81-08589c0af10e.png#averageHue=%23d8b483&clientId=u8f721beb-0d6e-4&from=paste&height=227&id=uaaa5f71e&name=image.png&originHeight=312&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=28735&status=done&style=none&taskId=u137e57b3-03ca-47bc-8fab-0424e8ea06b&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753324728-02575316-cbd9-4423-b3f3-1a0a95110d6a.png#averageHue=%23ccad7d&clientId=u8f721beb-0d6e-4&from=paste&height=184&id=ua09f1405&name=image.png&originHeight=253&originWidth=797&originalType=binary&ratio=1&rotation=0&showTitle=false&size=13585&status=done&style=none&taskId=u07b32fef-b99f-402a-996d-ae684f884ca&title=&width=579.6363636363636" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753338098-2e6ffcc1-5afa-4a7a-b78d-0e3b07005804.png#averageHue=%23d8b482&clientId=u8f721beb-0d6e-4&from=paste&height=201&id=ud37dd75d&name=image.png&originHeight=276&originWidth=802&originalType=binary&ratio=1&rotation=0&showTitle=false&size=18244&status=done&style=none&taskId=u3bbd999b-0b0a-424b-8095-950a237cdec&title=&width=583.2727272727273" alt="image.png"></p>
-<h1 id="Stream-API"><a href="#Stream-API" class="headerlink" title="Stream API"></a>Stream API</h1><p>用于操作数据源（集合、数组）</p>
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
-<li>不存储元素</li>
-<li>不该元数据</li>
-<li>操作延迟执行</li>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
+<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
+<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
+<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
 </ol>
-<h2 id="Stream-操作三步"><a href="#Stream-操作三步" class="headerlink" title="Stream 操作三步"></a>Stream 操作三步</h2><ol>
-<li>创建 Stream</li>
-<li>中间操作</li>
-<li>终止操作</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753653838-0fa643de-e8ee-4ac3-acdf-c2392b26d708.png#averageHue=%23f5f8f5&clientId=u8f721beb-0d6e-4&from=paste&height=283&id=u1e2e9088&name=image.png&originHeight=389&originWidth=861&originalType=binary&ratio=1&rotation=0&showTitle=false&size=170203&status=done&style=none&taskId=ue9418081-bdff-4503-a5e5-c55781a9d6e&title=&width=626.1818181818181" alt="image.png"></p>
+<ul>
+<li>第一种，直接执行 delete from T limit 10000;</li>
+<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
+<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
+</ul>
+<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
 ]]></content>
       <categories>
-        <category>Java</category>
+        <category>数据库</category>
       </categories>
       <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java日期常用类</title>
-    <url>/2021/12/24/Java%E6%97%A5%E6%9C%9F%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="SimpleDateFormate-类（日期格式化类）"><a href="#SimpleDateFormate-类（日期格式化类）" class="headerlink" title="SimpleDateFormate 类（日期格式化类）"></a>SimpleDateFormate 类（日期格式化类）</h1><p>Date 类大部分被废弃（不利于国际化），用日期格式化类来格式化日期<br>作用：格式化日期</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 1. SimpleDateFormat的两种操作</span></span><br><span class="line"><span class="comment">* 格式化：日期---》字符串</span></span><br><span class="line"><span class="comment">* 解析：字符串---》日期</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*2. SimpleDateFormat的实例化</span></span><br><span class="line"><span class="comment">* 常用带格式的实例化，进行初始化</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd hh:mm:ss&quot;</span>);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 3. 日期&gt;&gt;&gt;字符串</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">String format = dateFormat.format(<span class="keyword">new</span> Date());</span><br><span class="line">System.out.println(format);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 4. 字符串》》》日期</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">Date parse = dateFormat.parse(<span class="string">&quot;2019-09-01 12:22:23&quot;</span>);</span><br><span class="line">System.out.println(parse);</span><br></pre></td></tr></table></figure>
-
-<h2 id="日期常用格式化模式："><a href="#日期常用格式化模式：" class="headerlink" title="日期常用格式化模式："></a>日期常用格式化模式：</h2><table>
-<thead>
-<tr>
-<th>格式</th>
-<th>结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>“yyyy.MM.dd G ‘at’ HH:mm:ss z”</td>
-<td>2001.07.04 AD at 12:08:56 PDT</td>
-</tr>
-<tr>
-<td>“EEE, MMM d, ‘’yy”</td>
-<td>Wed, Jul 4, ‘01</td>
-</tr>
-<tr>
-<td>“h:mm a”</td>
-<td>12:08 PM</td>
-</tr>
-<tr>
-<td>“hh ‘o’’clock’ a, zzzz”</td>
-<td>12 o’clock PM, Pacific Daylight Time</td>
-</tr>
-<tr>
-<td>“K:mm a, z”</td>
-<td>0:08 PM, PDT</td>
-</tr>
-<tr>
-<td>“yyyyy.MMMMM.dd GGG hh:mm aaa”</td>
-<td>02001.July.04 AD 12:08 PM</td>
-</tr>
-<tr>
-<td>“EEE, d MMM yyyy HH:mm:ss Z”</td>
-<td>Wed, 4 Jul 2001 12:08:56 -0700</td>
-</tr>
-<tr>
-<td>“yyMMddHHmmssZ”</td>
-<td>010704120856-0700</td>
-</tr>
-<tr>
-<td>“yyyy-MM-dd’T’HH:mm:ss.SSSZ”</td>
-<td>2001-07-04T12:08:56.235-0700</td>
-</tr>
-<tr>
-<td>“yyyy-MM-dd’T’HH:mm:ss.SSSXXX”</td>
-<td>2001-07-04T12:08:56.235-07:00</td>
-</tr>
-<tr>
-<td>“YYYY-‘W’ww-u”</td>
-<td>2001-W27-3</td>
-</tr>
-</tbody></table>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673443767764-17cc56c0-b738-4c9e-9dcd-27916a963cec.png#averageHue=%23ecedf6&clientId=uf1ec7314-8eba-4&from=paste&height=416&id=u32126510&name=image.png&originHeight=458&originWidth=712&originalType=binary&ratio=1&rotation=0&showTitle=false&size=93016&status=done&style=none&taskId=u874297db-ba95-4b76-b814-2cc4c6c8be0&title=&width=647.2727132434691" alt="image.png"></p>
-<h1 id="两个-Date-类的使用"><a href="#两个-Date-类的使用" class="headerlink" title="两个 Date 类的使用"></a>两个 Date 类的使用</h1><p>三天打鱼两天晒网练习题<br>从 1990-01-01 到任意日期需要打多少天鱼和晒多少天网？</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countDays</span><span class="params">()</span> <span class="keyword">throws</span> ParseException </span>&#123;</span><br><span class="line">       String dateStr1 = <span class="string">&quot;1990-01-01&quot;</span>;</span><br><span class="line">       String dateStr2 = <span class="string">&quot;1990-01-07&quot;</span>;</span><br><span class="line">       SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">       Date date1 = dateFormat.parse(dateStr1);</span><br><span class="line">       Date date2 = dateFormat.parse(dateStr2);</span><br><span class="line">       <span class="keyword">long</span> dayNums = (date2.getTime() - date1.getTime()) / (<span class="number">1000</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>);</span><br><span class="line">       <span class="keyword">long</span> times = dayNums / <span class="number">5</span>;</span><br><span class="line">       <span class="keyword">long</span> leftDays = dayNums % <span class="number">5</span>;</span><br><span class="line">       <span class="keyword">long</span> fishDays = times * <span class="number">3</span>;</span><br><span class="line">       <span class="keyword">long</span> netDays = (times * <span class="number">2</span>);</span><br><span class="line">       <span class="keyword">if</span> (leftDays &gt; <span class="number">3</span>) &#123;</span><br><span class="line">           fishDays += <span class="number">3</span>;</span><br><span class="line">           netDays += leftDays - <span class="number">3</span>;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           fishDays += leftDays;</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println(<span class="string">&quot;打鱼总共：&quot;</span>+fishDays+<span class="string">&quot;  晒网：&quot;</span>+netDays);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="JDK-的-Date-类和-Calendar-类的问题"><a href="#JDK-的-Date-类和-Calendar-类的问题" class="headerlink" title="JDK 的 Date 类和 Calendar 类的问题"></a>JDK 的 Date 类和 Calendar 类的问题</h2><p>可变性：日期和时间的类应该不可变<br>偏移性：Date 中的年份从 1990 开始计算，月份从 0 开始<br>格式化:Calendar 不能格式化<br>线程不安全</p>
-<h1 id="JDK8-的新增日期-API"><a href="#JDK8-的新增日期-API" class="headerlink" title="JDK8 的新增日期 API"></a>JDK8 的新增日期 API</h1><h2 id="LocalDate、LocalTIme、LocalDateTime-类"><a href="#LocalDate、LocalTIme、LocalDateTime-类" class="headerlink" title="LocalDate、LocalTIme、LocalDateTime 类"></a>LocalDate、LocalTIme、LocalDateTime 类</h2><h3 id="常用-API"><a href="#常用-API" class="headerlink" title="常用 API"></a>常用 API</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673440907621-943d6b4b-f4e3-472a-b2a0-104d704ca4f6.png#averageHue=%239fbfdd&clientId=u7e4d65e6-72a0-4&from=paste&height=519&id=u4b9288b6&name=image.png&originHeight=571&originWidth=981&originalType=binary&ratio=1&rotation=0&showTitle=false&size=467639&status=done&style=none&taskId=u97a3d506-fc5d-4be2-ae3f-fd6105d41ee&title=&width=891.8181624885437" alt="image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Local时间、日期类的两种实例化方式</span></span><br><span class="line"><span class="comment">* now（）获取当前日期、时间</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">LocalDate localDate = LocalDate.now();</span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line">LocalTime localTime = LocalTime.now();</span><br><span class="line"></span><br><span class="line">System.out.println(localDate);</span><br><span class="line">System.out.println(localDateTime);</span><br><span class="line">System.out.println(localTime);</span><br><span class="line">System.out.println(<span class="string">&quot;-------------------&quot;</span>);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* of()获取指定日期、时间</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">LocalDate localDate1 = LocalDate.of(<span class="number">2000</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">LocalTime localTime1 = LocalTime.of(<span class="number">23</span>, <span class="number">59</span>);</span><br><span class="line">LocalDateTime localDateTime1 = LocalDateTime.of(localDate1, localTime1);</span><br><span class="line">System.out.println(localDate1);</span><br><span class="line">System.out.println(localTime1);</span><br><span class="line">System.out.println(localDateTime1);</span><br></pre></td></tr></table></figure>
-
-<h2 id="Instant-类"><a href="#Instant-类" class="headerlink" title="Instant 类"></a>Instant 类</h2><p>**记录从 1970 年到指定时间经历的毫秒数 **</p>
-<h3 id="常用-API-1"><a href="#常用-API-1" class="headerlink" title="常用 API"></a>常用 API</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673441764498-e4a790ac-4d62-40e3-a99b-3f0800149c52.png#averageHue=%2399bdde&clientId=u7e4d65e6-72a0-4&from=paste&height=334&id=ue3d1ddba&name=image.png&originHeight=367&originWidth=932&originalType=binary&ratio=1&rotation=0&showTitle=false&size=182766&status=done&style=none&taskId=uec9131cb-61aa-42f2-a9e6-cdc8b71fc21&title=&width=847.2727089085859" alt="image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Instant类的使用</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">Instant instant = Instant.now();</span><br><span class="line"><span class="comment">//获取本初子午线的时间</span></span><br><span class="line">System.out.println(instant);</span><br><span class="line"><span class="comment">//偏移指定时间</span></span><br><span class="line">OffsetDateTime offsetDateTime = instant.atOffset(ZoneOffset.ofHours(<span class="number">8</span>));</span><br><span class="line">System.out.println(offsetDateTime);</span><br></pre></td></tr></table></figure>
-
-<h2 id="DateTimeFormatter-日期时间格式化类"><a href="#DateTimeFormatter-日期时间格式化类" class="headerlink" title="DateTimeFormatter 日期时间格式化类"></a>DateTimeFormatter 日期时间格式化类</h2><h3 id="常用-API-2"><a href="#常用-API-2" class="headerlink" title="常用 API"></a>常用 API</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673443905190-115a91c7-cde8-4966-92a0-f620b5d9cd43.png#averageHue=%23a1c47d&clientId=uf1ec7314-8eba-4&from=paste&height=488&id=ud19e2c42&name=image.png&originHeight=537&originWidth=1367&originalType=binary&ratio=1&rotation=0&showTitle=false&size=160763&status=done&style=none&taskId=u044dced3-8f8a-473b-99e2-faf170f4484&title=&width=1242.727245791885" alt="image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 方式一：预定义的标准格式。如：ISO_LOCAL_DATE_TIME;ISO_LOCAL_DATE;ISO_LOCAL_TIME</span></span><br><span class="line">DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;</span><br><span class="line"><span class="comment">//格式化:日期--&gt;字符串</span></span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line">String str1 = formatter.format(localDateTime);</span><br><span class="line">System.out.println(localDateTime);</span><br><span class="line">System.out.println(str1);<span class="comment">//2019-02-18T15:42:18.797</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解析：字符串 --&gt;日期</span></span><br><span class="line">TemporalAccessor parse = formatter.parse(<span class="string">&quot;2019-02-18T15:42:18.797&quot;</span>);</span><br><span class="line">System.out.println(parse);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        方式二：</span></span><br><span class="line"><span class="comment">//        本地化相关的格式。如：ofLocalizedDateTime()</span></span><br><span class="line"><span class="comment">//        FormatStyle.LONG / FormatStyle.MEDIUM / FormatStyle.SHORT :适用于LocalDateTime</span></span><br><span class="line">DateTimeFormatter formatter1 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);</span><br><span class="line"><span class="comment">//格式化</span></span><br><span class="line">String str2 = formatter1.format(localDateTime);</span><br><span class="line">System.out.println(str2);<span class="comment">//2019年2月18日 下午03时47分16秒</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//      本地化相关的格式。如：ofLocalizedDate()</span></span><br><span class="line"><span class="comment">//      FormatStyle.FULL / FormatStyle.LONG / FormatStyle.MEDIUM / FormatStyle.SHORT : 适用于LocalDate</span></span><br><span class="line">DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);</span><br><span class="line"><span class="comment">//格式化</span></span><br><span class="line">String str3 = formatter2.format(LocalDate.now());</span><br><span class="line">System.out.println(str3);<span class="comment">//2019-2-18</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//       重点： 方式三：自定义的格式。如：ofPattern(“yyyy-MM-dd hh:mm:ss”)</span></span><br><span class="line">DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd hh:mm:ss&quot;</span>);</span><br><span class="line"><span class="comment">//格式化</span></span><br><span class="line">String str4 = formatter3.format(LocalDateTime.now());</span><br><span class="line">System.out.println(str4);<span class="comment">//2019-02-18 03:52:09</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解析</span></span><br><span class="line">TemporalAccessor accessor = formatter3.parse(<span class="string">&quot;2019-02-18 03:52:09&quot;</span>);</span><br><span class="line">System.out.println(accessor);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="日期-API"><a href="#日期-API" class="headerlink" title="日期 API"></a>日期 API</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673444174224-bcd7dbe4-a174-4e80-a872-6365b7e2c2d4.png#averageHue=%23f4efec&clientId=uf1ec7314-8eba-4&from=paste&height=536&id=uea191531&name=image.png&originHeight=590&originWidth=1358&originalType=binary&ratio=1&rotation=0&showTitle=false&size=278476&status=done&style=none&taskId=u1e30879c-00f4-4be6-8fd4-3ebffaf2666&title=&width=1234.545427787403" alt="image.png"></p>
-<p>日期时间类转换<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673444196839-36dae3ab-6baf-4120-b929-d6aabcdcf8f3.png#averageHue=%239fc2e4&clientId=uf1ec7314-8eba-4&from=paste&height=550&id=u5b531afe&name=image.png&originHeight=605&originWidth=1399&originalType=binary&ratio=1&rotation=0&showTitle=false&size=125305&status=done&style=none&taskId=u59e6169b-e114-4d5b-bc65-57f578e3a8e&title=&width=1271.8181542522657" alt="image.png"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode-11-盛水最多的容器</title>
-    <url>/2021/07/23/LeetCode-11-%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><img src="https://img-blog.csdnimg.cn/0344e196bab241ed866b13e6c08896fb.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=pQeNT&originHeight=689&originWidth=827&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/container-with-most-water/">题目链接</a></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这题其实就是要求那两个点的面积最大。有两种解题思路。</p>
-<h2 id="1-暴力破解"><a href="#1-暴力破解" class="headerlink" title="1. 暴力破解"></a>1. 暴力破解</h2><p>通过两层循环遍历任意两点的所有组合情况，然后求出两点的面积值，然后取最大值。<br>这种方法是最容易想到的。但是当我们使用这种方法提交上去时，会出现超时错误。不要问我为什么！！！懂得都懂。所以我们要通过一种要想出一种时间复杂度更低的方法。</p>
-<h2 id="2-双指针法"><a href="#2-双指针法" class="headerlink" title="2.双指针法"></a>2.双指针法</h2><p>首先双层循环时肯定不行的，所以我们就来试试单层循环。单层循环我们要获取最大的面积我们首先要确定如何遍历。这点很关键!!!我们不能再向之前双层循环从头遍历到尾。单层循环我们需要通过从两头开始遍历。那这就产生了一种限制。我们每次往中间移的话长度都是再变小！！！然后我们又不希望要获取面积的慢慢随着长度的变小而变小，所以我们需要让我们的高度变高。而高度是由较小的高度来决定，所以我们要让高度变大，只需要让高度较小的一番往中间移。当两条线重合或者超过的时候就遍历完了。</p>
-<h1 id="二、方法代码"><a href="#二、方法代码" class="headerlink" title="二、方法代码"></a>二、方法代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//暴力破解</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxArea = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; height.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; height.length; j++) &#123;</span><br><span class="line">        <span class="keyword">int</span> largeHeight = height[i] &gt; height[j] ? height[j] : height[i];</span><br><span class="line">        <span class="keyword">int</span> area = largeHeight * (j - i);</span><br><span class="line">        System.out.println();</span><br><span class="line">        <span class="keyword">if</span> (area &gt; maxArea) &#123;</span><br><span class="line">          maxArea = area;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maxArea;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">///双指针法</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxArea = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = height.length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (; i &lt; j; ) &#123;</span><br><span class="line">      <span class="keyword">int</span> area;</span><br><span class="line">      <span class="keyword">if</span> (height[i] &lt;= height[j]) &#123;</span><br><span class="line">        area = height[i] * (j - i);</span><br><span class="line">        i++;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        area = height[j] * (j - i);</span><br><span class="line">        j--;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (maxArea &lt; area) &#123;</span><br><span class="line">        maxArea = area;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maxArea;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这题的暴力破解法其实很多人应该都可以想得到，比较难想到得是第二种，这里很巧妙的利用随着直线不断往中间靠拢，长度在不断的减小，而我们不想让面积随着长度得较小而较小，所以就需要高度不断增加，所以我们每次都要移动长度较小的一方，已达到长度得增加，从而可能产生面积得增长。</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
       </tags>
   </entry>
   <entry>
@@ -873,6 +731,148 @@
       </tags>
   </entry>
   <entry>
+    <title>Java日期常用类</title>
+    <url>/2021/12/24/Java%E6%97%A5%E6%9C%9F%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="SimpleDateFormate-类（日期格式化类）"><a href="#SimpleDateFormate-类（日期格式化类）" class="headerlink" title="SimpleDateFormate 类（日期格式化类）"></a>SimpleDateFormate 类（日期格式化类）</h1><p>Date 类大部分被废弃（不利于国际化），用日期格式化类来格式化日期<br>作用：格式化日期</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 1. SimpleDateFormat的两种操作</span></span><br><span class="line"><span class="comment">* 格式化：日期---》字符串</span></span><br><span class="line"><span class="comment">* 解析：字符串---》日期</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*2. SimpleDateFormat的实例化</span></span><br><span class="line"><span class="comment">* 常用带格式的实例化，进行初始化</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd hh:mm:ss&quot;</span>);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 3. 日期&gt;&gt;&gt;字符串</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">String format = dateFormat.format(<span class="keyword">new</span> Date());</span><br><span class="line">System.out.println(format);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 4. 字符串》》》日期</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">Date parse = dateFormat.parse(<span class="string">&quot;2019-09-01 12:22:23&quot;</span>);</span><br><span class="line">System.out.println(parse);</span><br></pre></td></tr></table></figure>
+
+<h2 id="日期常用格式化模式："><a href="#日期常用格式化模式：" class="headerlink" title="日期常用格式化模式："></a>日期常用格式化模式：</h2><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“yyyy.MM.dd G ‘at’ HH:mm:ss z”</td>
+<td>2001.07.04 AD at 12:08:56 PDT</td>
+</tr>
+<tr>
+<td>“EEE, MMM d, ‘’yy”</td>
+<td>Wed, Jul 4, ‘01</td>
+</tr>
+<tr>
+<td>“h:mm a”</td>
+<td>12:08 PM</td>
+</tr>
+<tr>
+<td>“hh ‘o’’clock’ a, zzzz”</td>
+<td>12 o’clock PM, Pacific Daylight Time</td>
+</tr>
+<tr>
+<td>“K:mm a, z”</td>
+<td>0:08 PM, PDT</td>
+</tr>
+<tr>
+<td>“yyyyy.MMMMM.dd GGG hh:mm aaa”</td>
+<td>02001.July.04 AD 12:08 PM</td>
+</tr>
+<tr>
+<td>“EEE, d MMM yyyy HH:mm:ss Z”</td>
+<td>Wed, 4 Jul 2001 12:08:56 -0700</td>
+</tr>
+<tr>
+<td>“yyMMddHHmmssZ”</td>
+<td>010704120856-0700</td>
+</tr>
+<tr>
+<td>“yyyy-MM-dd’T’HH:mm:ss.SSSZ”</td>
+<td>2001-07-04T12:08:56.235-0700</td>
+</tr>
+<tr>
+<td>“yyyy-MM-dd’T’HH:mm:ss.SSSXXX”</td>
+<td>2001-07-04T12:08:56.235-07:00</td>
+</tr>
+<tr>
+<td>“YYYY-‘W’ww-u”</td>
+<td>2001-W27-3</td>
+</tr>
+</tbody></table>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673443767764-17cc56c0-b738-4c9e-9dcd-27916a963cec.png#averageHue=%23ecedf6&clientId=uf1ec7314-8eba-4&from=paste&height=416&id=u32126510&name=image.png&originHeight=458&originWidth=712&originalType=binary&ratio=1&rotation=0&showTitle=false&size=93016&status=done&style=none&taskId=u874297db-ba95-4b76-b814-2cc4c6c8be0&title=&width=647.2727132434691" alt="image.png"></p>
+<h1 id="两个-Date-类的使用"><a href="#两个-Date-类的使用" class="headerlink" title="两个 Date 类的使用"></a>两个 Date 类的使用</h1><p>三天打鱼两天晒网练习题<br>从 1990-01-01 到任意日期需要打多少天鱼和晒多少天网？</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countDays</span><span class="params">()</span> <span class="keyword">throws</span> ParseException </span>&#123;</span><br><span class="line">       String dateStr1 = <span class="string">&quot;1990-01-01&quot;</span>;</span><br><span class="line">       String dateStr2 = <span class="string">&quot;1990-01-07&quot;</span>;</span><br><span class="line">       SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">       Date date1 = dateFormat.parse(dateStr1);</span><br><span class="line">       Date date2 = dateFormat.parse(dateStr2);</span><br><span class="line">       <span class="keyword">long</span> dayNums = (date2.getTime() - date1.getTime()) / (<span class="number">1000</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>);</span><br><span class="line">       <span class="keyword">long</span> times = dayNums / <span class="number">5</span>;</span><br><span class="line">       <span class="keyword">long</span> leftDays = dayNums % <span class="number">5</span>;</span><br><span class="line">       <span class="keyword">long</span> fishDays = times * <span class="number">3</span>;</span><br><span class="line">       <span class="keyword">long</span> netDays = (times * <span class="number">2</span>);</span><br><span class="line">       <span class="keyword">if</span> (leftDays &gt; <span class="number">3</span>) &#123;</span><br><span class="line">           fishDays += <span class="number">3</span>;</span><br><span class="line">           netDays += leftDays - <span class="number">3</span>;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           fishDays += leftDays;</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println(<span class="string">&quot;打鱼总共：&quot;</span>+fishDays+<span class="string">&quot;  晒网：&quot;</span>+netDays);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JDK-的-Date-类和-Calendar-类的问题"><a href="#JDK-的-Date-类和-Calendar-类的问题" class="headerlink" title="JDK 的 Date 类和 Calendar 类的问题"></a>JDK 的 Date 类和 Calendar 类的问题</h2><p>可变性：日期和时间的类应该不可变<br>偏移性：Date 中的年份从 1990 开始计算，月份从 0 开始<br>格式化:Calendar 不能格式化<br>线程不安全</p>
+<h1 id="JDK8-的新增日期-API"><a href="#JDK8-的新增日期-API" class="headerlink" title="JDK8 的新增日期 API"></a>JDK8 的新增日期 API</h1><h2 id="LocalDate、LocalTIme、LocalDateTime-类"><a href="#LocalDate、LocalTIme、LocalDateTime-类" class="headerlink" title="LocalDate、LocalTIme、LocalDateTime 类"></a>LocalDate、LocalTIme、LocalDateTime 类</h2><h3 id="常用-API"><a href="#常用-API" class="headerlink" title="常用 API"></a>常用 API</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673440907621-943d6b4b-f4e3-472a-b2a0-104d704ca4f6.png#averageHue=%239fbfdd&clientId=u7e4d65e6-72a0-4&from=paste&height=519&id=u4b9288b6&name=image.png&originHeight=571&originWidth=981&originalType=binary&ratio=1&rotation=0&showTitle=false&size=467639&status=done&style=none&taskId=u97a3d506-fc5d-4be2-ae3f-fd6105d41ee&title=&width=891.8181624885437" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Local时间、日期类的两种实例化方式</span></span><br><span class="line"><span class="comment">* now（）获取当前日期、时间</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">LocalDate localDate = LocalDate.now();</span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line">LocalTime localTime = LocalTime.now();</span><br><span class="line"></span><br><span class="line">System.out.println(localDate);</span><br><span class="line">System.out.println(localDateTime);</span><br><span class="line">System.out.println(localTime);</span><br><span class="line">System.out.println(<span class="string">&quot;-------------------&quot;</span>);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* of()获取指定日期、时间</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">LocalDate localDate1 = LocalDate.of(<span class="number">2000</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">LocalTime localTime1 = LocalTime.of(<span class="number">23</span>, <span class="number">59</span>);</span><br><span class="line">LocalDateTime localDateTime1 = LocalDateTime.of(localDate1, localTime1);</span><br><span class="line">System.out.println(localDate1);</span><br><span class="line">System.out.println(localTime1);</span><br><span class="line">System.out.println(localDateTime1);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Instant-类"><a href="#Instant-类" class="headerlink" title="Instant 类"></a>Instant 类</h2><p>**记录从 1970 年到指定时间经历的毫秒数 **</p>
+<h3 id="常用-API-1"><a href="#常用-API-1" class="headerlink" title="常用 API"></a>常用 API</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673441764498-e4a790ac-4d62-40e3-a99b-3f0800149c52.png#averageHue=%2399bdde&clientId=u7e4d65e6-72a0-4&from=paste&height=334&id=ue3d1ddba&name=image.png&originHeight=367&originWidth=932&originalType=binary&ratio=1&rotation=0&showTitle=false&size=182766&status=done&style=none&taskId=uec9131cb-61aa-42f2-a9e6-cdc8b71fc21&title=&width=847.2727089085859" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Instant类的使用</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">Instant instant = Instant.now();</span><br><span class="line"><span class="comment">//获取本初子午线的时间</span></span><br><span class="line">System.out.println(instant);</span><br><span class="line"><span class="comment">//偏移指定时间</span></span><br><span class="line">OffsetDateTime offsetDateTime = instant.atOffset(ZoneOffset.ofHours(<span class="number">8</span>));</span><br><span class="line">System.out.println(offsetDateTime);</span><br></pre></td></tr></table></figure>
+
+<h2 id="DateTimeFormatter-日期时间格式化类"><a href="#DateTimeFormatter-日期时间格式化类" class="headerlink" title="DateTimeFormatter 日期时间格式化类"></a>DateTimeFormatter 日期时间格式化类</h2><h3 id="常用-API-2"><a href="#常用-API-2" class="headerlink" title="常用 API"></a>常用 API</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673443905190-115a91c7-cde8-4966-92a0-f620b5d9cd43.png#averageHue=%23a1c47d&clientId=uf1ec7314-8eba-4&from=paste&height=488&id=ud19e2c42&name=image.png&originHeight=537&originWidth=1367&originalType=binary&ratio=1&rotation=0&showTitle=false&size=160763&status=done&style=none&taskId=u044dced3-8f8a-473b-99e2-faf170f4484&title=&width=1242.727245791885" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 方式一：预定义的标准格式。如：ISO_LOCAL_DATE_TIME;ISO_LOCAL_DATE;ISO_LOCAL_TIME</span></span><br><span class="line">DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;</span><br><span class="line"><span class="comment">//格式化:日期--&gt;字符串</span></span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line">String str1 = formatter.format(localDateTime);</span><br><span class="line">System.out.println(localDateTime);</span><br><span class="line">System.out.println(str1);<span class="comment">//2019-02-18T15:42:18.797</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解析：字符串 --&gt;日期</span></span><br><span class="line">TemporalAccessor parse = formatter.parse(<span class="string">&quot;2019-02-18T15:42:18.797&quot;</span>);</span><br><span class="line">System.out.println(parse);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        方式二：</span></span><br><span class="line"><span class="comment">//        本地化相关的格式。如：ofLocalizedDateTime()</span></span><br><span class="line"><span class="comment">//        FormatStyle.LONG / FormatStyle.MEDIUM / FormatStyle.SHORT :适用于LocalDateTime</span></span><br><span class="line">DateTimeFormatter formatter1 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);</span><br><span class="line"><span class="comment">//格式化</span></span><br><span class="line">String str2 = formatter1.format(localDateTime);</span><br><span class="line">System.out.println(str2);<span class="comment">//2019年2月18日 下午03时47分16秒</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//      本地化相关的格式。如：ofLocalizedDate()</span></span><br><span class="line"><span class="comment">//      FormatStyle.FULL / FormatStyle.LONG / FormatStyle.MEDIUM / FormatStyle.SHORT : 适用于LocalDate</span></span><br><span class="line">DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);</span><br><span class="line"><span class="comment">//格式化</span></span><br><span class="line">String str3 = formatter2.format(LocalDate.now());</span><br><span class="line">System.out.println(str3);<span class="comment">//2019-2-18</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//       重点： 方式三：自定义的格式。如：ofPattern(“yyyy-MM-dd hh:mm:ss”)</span></span><br><span class="line">DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd hh:mm:ss&quot;</span>);</span><br><span class="line"><span class="comment">//格式化</span></span><br><span class="line">String str4 = formatter3.format(LocalDateTime.now());</span><br><span class="line">System.out.println(str4);<span class="comment">//2019-02-18 03:52:09</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解析</span></span><br><span class="line">TemporalAccessor accessor = formatter3.parse(<span class="string">&quot;2019-02-18 03:52:09&quot;</span>);</span><br><span class="line">System.out.println(accessor);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="日期-API"><a href="#日期-API" class="headerlink" title="日期 API"></a>日期 API</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673444174224-bcd7dbe4-a174-4e80-a872-6365b7e2c2d4.png#averageHue=%23f4efec&clientId=uf1ec7314-8eba-4&from=paste&height=536&id=uea191531&name=image.png&originHeight=590&originWidth=1358&originalType=binary&ratio=1&rotation=0&showTitle=false&size=278476&status=done&style=none&taskId=u1e30879c-00f4-4be6-8fd4-3ebffaf2666&title=&width=1234.545427787403" alt="image.png"></p>
+<p>日期时间类转换<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673444196839-36dae3ab-6baf-4120-b929-d6aabcdcf8f3.png#averageHue=%239fc2e4&clientId=uf1ec7314-8eba-4&from=paste&height=550&id=u5b531afe&name=image.png&originHeight=605&originWidth=1399&originalType=binary&ratio=1&rotation=0&showTitle=false&size=125305&status=done&style=none&taskId=u59e6169b-e114-4d5b-bc65-57f578e3a8e&title=&width=1271.8181542522657" alt="image.png"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java8新特性</title>
+    <url>/2022/12/22/Java8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h1><p>本质:<strong>作为函数式接口的实例</strong></p>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>-&gt;:lambda 操作符()<br>-&gt;右边:lambda 形参列表(抽象方法的形参列表)<br>-&gt;左边:lambda 体(抽象方法的方法体)</p>
+<h2 id="使用格式"><a href="#使用格式" class="headerlink" title="使用格式"></a>使用格式</h2><p>lambda 表达式六种使用情况：</p>
+<ol>
+<li>形参类型可以省略，如果参数只有一个，可省小括号</li>
+<li>方法体只有一条语句，可省略大括号（语句为 return 语句时，可省略 return 和大括号关键字）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//语法格式一：无参、无返回值</span></span><br><span class="line">Runnable runnable = () -&gt; System.out.println(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="comment">//语法格式二：有一个参数，无返回值</span></span><br><span class="line">Consumer&lt;String&gt; s1 = (String s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s1.accept(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式三：数据类型可以省略，编译器可以推断得出（类型推断）</span></span><br><span class="line"></span><br><span class="line">Consumer&lt;String&gt; s2 = (s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s2.accept(<span class="string">&quot;23&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式四：只需要一个参数，小括号可以省略</span></span><br><span class="line">Consumer&lt;String&gt; s3 = s -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s3.accept(<span class="string">&quot;34&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式五：多个参数，多个执行语句有返回值</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator = (o1, o2) -&gt; &#123;</span><br><span class="line">	System.out.println(o1);</span><br><span class="line">	System.out.println(o2);</span><br><span class="line">	<span class="keyword">return</span> o1.compareTo(o2);</span><br><span class="line">&#125;;</span><br><span class="line">comparator.compare(<span class="number">12</span>, <span class="number">23</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式六：只有一条语句，有return时可省略return和大括号</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator2 = (o1, o2) -&gt;</span><br><span class="line">	o1.compareTo(o2);</span><br><span class="line">comparator2.compare(<span class="number">12</span>, <span class="number">11</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>常见函数式接口<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673745172306-3b63b6bc-50cb-4737-8d11-1b0da86c581b.png#averageHue=%23acc3dc&clientId=u8f721beb-0d6e-4&from=paste&height=295&id=u6d80b2ac&name=image.png&originHeight=406&originWidth=730&originalType=binary&ratio=1&rotation=0&showTitle=false&size=227263&status=done&style=none&taskId=u10ae1ea7-5e55-4697-a6ef-8b4ed4d345a&title=&width=530.9090909090909" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673746698011-93399e69-4051-4e9e-980d-242231d6293a.png#averageHue=%23abc2da&clientId=u8f721beb-0d6e-4&from=paste&height=319&id=uc3a49648&name=image.png&originHeight=439&originWidth=795&originalType=binary&ratio=1&rotation=0&showTitle=false&size=339302&status=done&style=none&taskId=u5d3ec6b0-1f83-4949-a764-168add16050&title=&width=578.1818181818181" alt="image.png"></p>
+<h1 id="方法引用和构造器引用"><a href="#方法引用和构造器引用" class="headerlink" title="方法引用和构造器引用"></a>方法引用和构造器引用</h1><p>方法引用的三种情况<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673752145970-95aa0b7b-73d4-4671-bba9-f7025a871460.png#averageHue=%23f8eeee&clientId=u8f721beb-0d6e-4&from=paste&height=188&id=u57044aa7&name=image.png&originHeight=258&originWidth=690&originalType=binary&ratio=1&rotation=0&showTitle=false&size=52351&status=done&style=none&taskId=u19462865-98c4-4f79-a557-f56bf79fffa&title=&width=501.8181818181818" alt="image.png"></p>
+<p>引用要求：<br>抽象方法和方法体内部的调用方法</p>
+<ol>
+<li>返回值相同</li>
+<li>形参列表相同</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753293813-92c153ff-48d8-4749-8a96-ef934d2fe7d3.png#averageHue=%23fbfaf9&clientId=u8f721beb-0d6e-4&from=paste&height=265&id=uf319f803&name=image.png&originHeight=364&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26402&status=done&style=none&taskId=u0885957a-eab3-4985-9488-4f086d041b3&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753305266-4eb3eae6-95f5-48bf-9d81-08589c0af10e.png#averageHue=%23d8b483&clientId=u8f721beb-0d6e-4&from=paste&height=227&id=uaaa5f71e&name=image.png&originHeight=312&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=28735&status=done&style=none&taskId=u137e57b3-03ca-47bc-8fab-0424e8ea06b&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753324728-02575316-cbd9-4423-b3f3-1a0a95110d6a.png#averageHue=%23ccad7d&clientId=u8f721beb-0d6e-4&from=paste&height=184&id=ua09f1405&name=image.png&originHeight=253&originWidth=797&originalType=binary&ratio=1&rotation=0&showTitle=false&size=13585&status=done&style=none&taskId=u07b32fef-b99f-402a-996d-ae684f884ca&title=&width=579.6363636363636" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753338098-2e6ffcc1-5afa-4a7a-b78d-0e3b07005804.png#averageHue=%23d8b482&clientId=u8f721beb-0d6e-4&from=paste&height=201&id=ud37dd75d&name=image.png&originHeight=276&originWidth=802&originalType=binary&ratio=1&rotation=0&showTitle=false&size=18244&status=done&style=none&taskId=u3bbd999b-0b0a-424b-8095-950a237cdec&title=&width=583.2727272727273" alt="image.png"></p>
+<h1 id="Stream-API"><a href="#Stream-API" class="headerlink" title="Stream API"></a>Stream API</h1><p>用于操作数据源（集合、数组）</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li>不存储元素</li>
+<li>不该元数据</li>
+<li>操作延迟执行</li>
+</ol>
+<h2 id="Stream-操作三步"><a href="#Stream-操作三步" class="headerlink" title="Stream 操作三步"></a>Stream 操作三步</h2><ol>
+<li>创建 Stream</li>
+<li>中间操作</li>
+<li>终止操作</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753653838-0fa643de-e8ee-4ac3-acdf-c2392b26d708.png#averageHue=%23f5f8f5&clientId=u8f721beb-0d6e-4&from=paste&height=283&id=u1e2e9088&name=image.png&originHeight=389&originWidth=861&originalType=binary&ratio=1&rotation=0&showTitle=false&size=170203&status=done&style=none&taskId=ue9418081-bdff-4503-a5e5-c55781a9d6e&title=&width=626.1818181818181" alt="image.png"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode-11-盛水最多的容器</title>
+    <url>/2021/07/23/LeetCode-11-%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><img src="https://img-blog.csdnimg.cn/0344e196bab241ed866b13e6c08896fb.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=pQeNT&originHeight=689&originWidth=827&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/container-with-most-water/">题目链接</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这题其实就是要求那两个点的面积最大。有两种解题思路。</p>
+<h2 id="1-暴力破解"><a href="#1-暴力破解" class="headerlink" title="1. 暴力破解"></a>1. 暴力破解</h2><p>通过两层循环遍历任意两点的所有组合情况，然后求出两点的面积值，然后取最大值。<br>这种方法是最容易想到的。但是当我们使用这种方法提交上去时，会出现超时错误。不要问我为什么！！！懂得都懂。所以我们要通过一种要想出一种时间复杂度更低的方法。</p>
+<h2 id="2-双指针法"><a href="#2-双指针法" class="headerlink" title="2.双指针法"></a>2.双指针法</h2><p>首先双层循环时肯定不行的，所以我们就来试试单层循环。单层循环我们要获取最大的面积我们首先要确定如何遍历。这点很关键!!!我们不能再向之前双层循环从头遍历到尾。单层循环我们需要通过从两头开始遍历。那这就产生了一种限制。我们每次往中间移的话长度都是再变小！！！然后我们又不希望要获取面积的慢慢随着长度的变小而变小，所以我们需要让我们的高度变高。而高度是由较小的高度来决定，所以我们要让高度变大，只需要让高度较小的一番往中间移。当两条线重合或者超过的时候就遍历完了。</p>
+<h1 id="二、方法代码"><a href="#二、方法代码" class="headerlink" title="二、方法代码"></a>二、方法代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//暴力破解</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxArea = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; height.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; height.length; j++) &#123;</span><br><span class="line">        <span class="keyword">int</span> largeHeight = height[i] &gt; height[j] ? height[j] : height[i];</span><br><span class="line">        <span class="keyword">int</span> area = largeHeight * (j - i);</span><br><span class="line">        System.out.println();</span><br><span class="line">        <span class="keyword">if</span> (area &gt; maxArea) &#123;</span><br><span class="line">          maxArea = area;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maxArea;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">///双指针法</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxArea = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = height.length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (; i &lt; j; ) &#123;</span><br><span class="line">      <span class="keyword">int</span> area;</span><br><span class="line">      <span class="keyword">if</span> (height[i] &lt;= height[j]) &#123;</span><br><span class="line">        area = height[i] * (j - i);</span><br><span class="line">        i++;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        area = height[j] * (j - i);</span><br><span class="line">        j--;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (maxArea &lt; area) &#123;</span><br><span class="line">        maxArea = area;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maxArea;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这题的暴力破解法其实很多人应该都可以想得到，比较难想到得是第二种，这里很巧妙的利用随着直线不断往中间靠拢，长度在不断的减小，而我们不想让面积随着长度得较小而较小，所以就需要高度不断增加，所以我们每次都要移动长度较小的一方，已达到长度得增加，从而可能产生面积得增长。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode-求二叉树的最大深度</title>
     <url>/2021/01/04/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
     <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=VYwer&originHeight=520&originWidth=740&originalType=binary&ratio=1&status=done&style=none"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
@@ -923,43 +923,6 @@
 <h2 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2.暴力破解"></a>2.暴力破解</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">       ArrayList&lt;Integer&gt; xArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">do</span>&#123;</span><br><span class="line">       xArray.add(x%<span class="number">2</span>);</span><br><span class="line">       x=x/<span class="number">2</span>;</span><br><span class="line">     &#125;<span class="keyword">while</span>(x!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">       ArrayList&lt;Integer&gt; yArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">do</span>&#123;</span><br><span class="line">       yArray.add(y%<span class="number">2</span>);</span><br><span class="line">       y=y/<span class="number">2</span>;</span><br><span class="line">     &#125;<span class="keyword">while</span>(y!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> distance=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">//当y的二进制更长时</span></span><br><span class="line">       <span class="keyword">if</span>(yArray.size()&gt;=xArray.size())&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;yArray.size();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j&lt;xArray.size())&#123;</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j))&#123;</span><br><span class="line">                       distance++;</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(yArray.get(j)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        distance++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;<span class="comment">//x的二进制更长</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;xArray.size();j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(j&lt;yArray.size())&#123;</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j))&#123;</span><br><span class="line">                       distance++;</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(xArray.get(j)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        distance++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> distance;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我一开始使用的暴力破解法。但觉得暴力破解法太麻烦了。所以就去看了官方的解题教程，发现位运算这一方法更为简单和高效。</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode之合并二叉树</title>
-    <url>/2020/12/19/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=ZaF2E&originHeight=739&originWidth=698&originalType=binary&ratio=1&status=done&style=none"></p>
-<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
-<h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
-<li> 判断当前两颗树的节点全为空，如果为空则返回空。</li>
-<li> 反之有以下三种</li>
-</ol>
-<ul>
-<li>可能两个节点都不为空</li>
-<li>左节点为空，右节点不为空</li>
-<li>右节点为空，左节点不为空</li>
-</ul>
-<ol start="3">
-<li> 采取以下措施</li>
-</ol>
-<ul>
-<li>当为第一种情况时 ,创建一个新的节点，节点值为左右节点值的和,之后遍历左右节点</li>
-<li>当为第二种情况时 ,创建一个新的节点，节点值为右节点值,之后遍历右节点.</li>
-<li>当为第三种情况时 ,创建一个新的节点，节点值为左节点值,之后遍历左节点。</li>
-</ul>
-<ol start="4">
-<li> 返回创建的新的节点。</li>
-</ol>
-<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">mergeTrees</span><span class="params">(TreeNode t1, TreeNode t2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(t1==<span class="keyword">null</span>&amp;&amp;t2==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            TreeNode t3;</span><br><span class="line">            <span class="keyword">if</span>(t1!=<span class="keyword">null</span>&amp;&amp;t2!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val+t2.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,t2.right);</span><br><span class="line">                t3.left=mergeTrees(t1.left,t2.left);</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t1!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,<span class="keyword">null</span>);</span><br><span class="line">                t3.left=mergeTrees(t1.left,<span class="keyword">null</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t2.val);</span><br><span class="line">                t3.right=mergeTrees(<span class="keyword">null</span>,t2.right);</span><br><span class="line">                t3.left=mergeTrees(<span class="keyword">null</span>,t2.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> t3;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>以目前我做的与树相关的题目来说。所需要做的事基本上就是一件事：<strong>遍历</strong>。而树的遍历一般可以通过递归的方式来进行一些简单的遍历。遍历一般分为三种：前序遍历、中序遍历、后序遍历。前序、中序、后序的名字是按照遍历中父节点，相对于左右子节点中的顺序。如果父节点，在其子父节点中最后一个遍历，称之为后序遍历。其他的遍历顺序可由以上类推。</p>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -1117,9 +1080,46 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>数据库</tag>
+        <tag>Mysql</tag>
         <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode之合并二叉树</title>
+    <url>/2020/12/19/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=ZaF2E&originHeight=739&originWidth=698&originalType=binary&ratio=1&status=done&style=none"></p>
+<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
+<h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
+<li> 判断当前两颗树的节点全为空，如果为空则返回空。</li>
+<li> 反之有以下三种</li>
+</ol>
+<ul>
+<li>可能两个节点都不为空</li>
+<li>左节点为空，右节点不为空</li>
+<li>右节点为空，左节点不为空</li>
+</ul>
+<ol start="3">
+<li> 采取以下措施</li>
+</ol>
+<ul>
+<li>当为第一种情况时 ,创建一个新的节点，节点值为左右节点值的和,之后遍历左右节点</li>
+<li>当为第二种情况时 ,创建一个新的节点，节点值为右节点值,之后遍历右节点.</li>
+<li>当为第三种情况时 ,创建一个新的节点，节点值为左节点值,之后遍历左节点。</li>
+</ul>
+<ol start="4">
+<li> 返回创建的新的节点。</li>
+</ol>
+<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">mergeTrees</span><span class="params">(TreeNode t1, TreeNode t2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(t1==<span class="keyword">null</span>&amp;&amp;t2==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            TreeNode t3;</span><br><span class="line">            <span class="keyword">if</span>(t1!=<span class="keyword">null</span>&amp;&amp;t2!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val+t2.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,t2.right);</span><br><span class="line">                t3.left=mergeTrees(t1.left,t2.left);</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t1!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,<span class="keyword">null</span>);</span><br><span class="line">                t3.left=mergeTrees(t1.left,<span class="keyword">null</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t2.val);</span><br><span class="line">                t3.right=mergeTrees(<span class="keyword">null</span>,t2.right);</span><br><span class="line">                t3.left=mergeTrees(<span class="keyword">null</span>,t2.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> t3;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>以目前我做的与树相关的题目来说。所需要做的事基本上就是一件事：<strong>遍历</strong>。而树的遍历一般可以通过递归的方式来进行一些简单的遍历。遍历一般分为三种：前序遍历、中序遍历、后序遍历。前序、中序、后序的名字是按照遍历中父节点，相对于左右子节点中的顺序。如果父节点，在其子父节点中最后一个遍历，称之为后序遍历。其他的遍历顺序可由以上类推。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
       </tags>
   </entry>
   <entry>
@@ -1298,8 +1298,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>数据库</tag>
+        <tag>Mysql</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>

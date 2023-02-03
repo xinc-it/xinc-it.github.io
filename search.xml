@@ -987,26 +987,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
-    <url>/2021/05/13/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
-<h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><h2 id="1-表单登录页面"><a href="#1-表单登录页面" class="headerlink" title="1. 表单登录页面"></a>1. 表单登录页面</h2><p><img src="https://img-blog.csdnimg.cn/20210513173942750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=vD5Kl&originHeight=213&originWidth=806&originalType=binary&ratio=1&status=done&style=none"></p>
-<h2 id="2-配置类"><a href="#2-配置类" class="headerlink" title="2. 配置类"></a>2. 配置类</h2><p><img src="https://img-blog.csdnimg.cn/20210513173201531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=jxOTr&originHeight=285&originWidth=983&originalType=binary&ratio=1&status=done&style=none"></p>
-<h2 id="3-loadUserByUsername-方法"><a href="#3-loadUserByUsername-方法" class="headerlink" title="3. loadUserByUsername 方法"></a>3. loadUserByUsername 方法</h2><p><img src="https://img-blog.csdnimg.cn/20210513173433199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=msIDN&originHeight=219&originWidth=1217&originalType=binary&ratio=1&status=done&style=none"></p>
-<h4 id="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。"><a href="#所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。" class="headerlink" title="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。"></a>所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。</h4><p><img src="https://img-blog.csdnimg.cn/20210513173819188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=CEEDw&originHeight=259&originWidth=902&originalType=binary&ratio=1&status=done&style=none"><br><img src="https://img-blog.csdnimg.cn/20210513173839414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=n9Noa&originHeight=227&originWidth=1798&originalType=binary&ratio=1&status=done&style=none"></p>
-<h1 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h1><p>因此判断是 loginProcessUrl 方法的问题。进入 loginProcessUrl 方法内部发现。关键信息<br><img src="https://img-blog.csdnimg.cn/20210513174339209.png#id=h0HbJ&originHeight=117&originWidth=1070&originalType=binary&ratio=1&status=done&style=none"><br>登录表单申请方式必须为 post 才行，springsecurity 才会进行登录认证。</p>
-<hr>
-<h1 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h1><h2 id="将登录表单中提交方法更改为-post-方式即可"><a href="#将登录表单中提交方法更改为-post-方式即可" class="headerlink" title="将登录表单中提交方法更改为 post 方式即可"></a>将登录表单中提交方法更改为 post 方式即可</h2>]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>SpringSecurity</tag>
-        <tag>开发问题</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>String及其工具类</title>
     <url>/2021/12/24/String%E5%8F%8A%E5%85%B6%E5%B7%A5%E5%85%B7%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="String-类"><a href="#String-类" class="headerlink" title="String 类"></a>String 类</h1><h2 id="String-字符串特性"><a href="#String-字符串特性" class="headerlink" title="String 字符串特性"></a>String 字符串特性</h2><ol>
@@ -1050,6 +1030,26 @@
       </categories>
       <tags>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
+    <url>/2021/05/13/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
+<h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><h2 id="1-表单登录页面"><a href="#1-表单登录页面" class="headerlink" title="1. 表单登录页面"></a>1. 表单登录页面</h2><p><img src="https://img-blog.csdnimg.cn/20210513173942750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=vD5Kl&originHeight=213&originWidth=806&originalType=binary&ratio=1&status=done&style=none"></p>
+<h2 id="2-配置类"><a href="#2-配置类" class="headerlink" title="2. 配置类"></a>2. 配置类</h2><p><img src="https://img-blog.csdnimg.cn/20210513173201531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=jxOTr&originHeight=285&originWidth=983&originalType=binary&ratio=1&status=done&style=none"></p>
+<h2 id="3-loadUserByUsername-方法"><a href="#3-loadUserByUsername-方法" class="headerlink" title="3. loadUserByUsername 方法"></a>3. loadUserByUsername 方法</h2><p><img src="https://img-blog.csdnimg.cn/20210513173433199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=msIDN&originHeight=219&originWidth=1217&originalType=binary&ratio=1&status=done&style=none"></p>
+<h4 id="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。"><a href="#所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印-loadUserByUsername-方法中的日志。" class="headerlink" title="所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。"></a>所有都配置好了，但是进行登录认证的时候还是认证失败跳回登录页。并且控制台未打印 loadUserByUsername 方法中的日志。</h4><p><img src="https://img-blog.csdnimg.cn/20210513173819188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=CEEDw&originHeight=259&originWidth=902&originalType=binary&ratio=1&status=done&style=none"><br><img src="https://img-blog.csdnimg.cn/20210513173839414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=n9Noa&originHeight=227&originWidth=1798&originalType=binary&ratio=1&status=done&style=none"></p>
+<h1 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h1><p>因此判断是 loginProcessUrl 方法的问题。进入 loginProcessUrl 方法内部发现。关键信息<br><img src="https://img-blog.csdnimg.cn/20210513174339209.png#id=h0HbJ&originHeight=117&originWidth=1070&originalType=binary&ratio=1&status=done&style=none"><br>登录表单申请方式必须为 post 才行，springsecurity 才会进行登录认证。</p>
+<hr>
+<h1 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h1><h2 id="将登录表单中提交方法更改为-post-方式即可"><a href="#将登录表单中提交方法更改为-post-方式即可" class="headerlink" title="将登录表单中提交方法更改为 post 方式即可"></a>将登录表单中提交方法更改为 post 方式即可</h2>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>SpringSecurity</tag>
+        <tag>开发问题</tag>
       </tags>
   </entry>
   <entry>

@@ -150,6 +150,111 @@
       </tags>
   </entry>
   <entry>
+    <title>Mysql-事务隔离</title>
+    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
+    <content><![CDATA[<h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
+<li><strong>原子性</strong></li>
+<li><strong>持久性</strong></li>
+<li><strong>隔离性</strong></li>
+<li><strong>一致性</strong></li>
+</ol>
+<h3 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2. 事务隔离级别"></a>2. 事务隔离级别</h3><ol>
+<li><strong>读已提交（事务未提交时，变更能被其它事务看到）</strong></li>
+<li><strong>读未提交（事务提交后，其它事务才能看到变更）</strong></li>
+<li><strong>可重复读（一个事务执行过程中，总是跟启动时看到的数据是一致的。未提交的变更对其它事务不可见）</strong></li>
+<li><strong>串行化（同一行记录写会加写锁，读会读锁。当出现读写锁冲突时，后访问的事务，必须等前一个事务完成，才能执行）</strong></li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988923063-4d56a761-7637-488b-951d-c443de806cb1.png#clientId=uf02e59f4-5d80-4&from=paste&height=381&id=uf414196c&name=image.png&originHeight=762&originWidth=788&originalType=binary&ratio=1&size=201874&status=done&style=none&taskId=u19543944-dee4-4fbf-bf51-efae564dfae&width=394" alt="image.png"></p>
+<p>v1=v2=1,v3=2<br>四种事务得到的结果</p>
+<ol>
+<li>读未提交： v1、v2、v3=2</li>
+<li>读已提交: v1=1 ，v2、v3=2</li>
+<li>可重复读：v1=v2=1，v3=2</li>
+<li>可串行化 ： v1=v2=1,v3=2</li>
+</ol>
+<h2 id="2-事务隔离的实现"><a href="#2-事务隔离的实现" class="headerlink" title="2. 事务隔离的实现"></a>2. 事务隔离的实现</h2><p>当一个值从 1 按顺序变成 2，3，3 那么他的日志里面就会有类似的回滚段记录<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631013980123-b4f659d1-a49a-4d6f-bffa-5c049fb7a4b5.png#clientId=uf02e59f4-5d80-4&from=paste&height=259&id=u4bd92b33&name=image.png&originHeight=517&originWidth=906&originalType=binary&ratio=1&size=104426&status=done&style=none&taskId=ub4313c28-1bd9-45bf-a56d-abe4cf1987a&width=453" alt="image.png"><br>如图事务 A、B、C 修改记录导致一个字段对应多个值。</p>
+<p>通过 MVCC 来实现一个数据的多个版本，通过 undo log 实现数据版本的回滚<br>通过 MVCC 和 undo log 来实现事务的隔离<br>具体可以参考</p>
+<p><a href="https://www.yuque.com/sanxingalaxys9/gwxct1/lq01qk?view=doc_embed">Mysql 实战 45 讲</a></p>
+<p>当回滚段日志过长时，系统会自动清除。</p>
+<h2 id="3-事务的启动方式"><a href="#3-事务的启动方式" class="headerlink" title="3. 事务的启动方式"></a>3. 事务的启动方式</h2><ol>
+<li>set autocommit=0 关闭自动提交，只要执行 select 语句自动开启事务</li>
+<li>begin 或是 start transaction</li>
+</ol>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
+<li>四大特性和隔离级别</li>
+<li>事务隔离的实现（通过 MVCC 和 undo log)</li>
+<li>事务的启动方式<ol>
+<li>自动启动 select 语句执行时自动启动</li>
+<li>手动启动 begin、 start transaction</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql-锁</title>
+    <url>/2021/09/10/5!%E9%94%81/</url>
+    <content><![CDATA[<h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
+<ol>
+<li><strong>全局锁</strong></li>
+<li><strong>表级锁</strong></li>
+<li><strong>行锁</strong></li>
+</ol>
+<h2 id="2-全局锁"><a href="#2-全局锁" class="headerlink" title="2. 全局锁"></a>2. 全局锁</h2><p>全局读锁命令<br><strong>全局锁就是对整个数据库实例加锁，Mysql 提供了一个加全局读锁的命令。可以让整个数据库处于只读状态。</strong><br>导致数据的增删改、建表修改表语句、事务的提交语句失效。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Flush tables with read lock</span><br></pre></td></tr></table></figure>
+
+<p>场景：<strong>全库的逻辑备份(也可以开启可重复读事务级别来进行备份)</strong><br>另一种方式是使用 mysqldump 工具使用参数-single-transaction 进行数据库备份。前提：数据库中所有的表支持可重复读。</p>
+<p>场景：用户买课和买课后的余额。不加锁导致两个表的数据前后不一致。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018821575-900c6793-130c-47c3-8b6c-b3533bf27c70.png#clientId=uf02e59f4-5d80-4&from=paste&height=271&id=u5e04065e&name=image.png&originHeight=542&originWidth=882&originalType=binary&ratio=1&size=204494&status=done&style=none&taskId=uadb7ab82-ba93-48d1-a88f-e117005dcaf&width=441" alt="image.png"></p>
+<h2 id="3-表级锁"><a href="#3-表级锁" class="headerlink" title="3. 表级锁"></a>3. 表级锁</h2><ol>
+<li>两种表锁</li>
+</ol>
+<ul>
+<li>表锁</li>
+<li>元数据锁</li>
+</ul>
+<ol start="2">
+<li>表锁</li>
+</ol>
+<p>作用：<strong>锁定表只能进行读或读和写操作。不允许操作其他表。（处理并发的常用方式）</strong></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">lock tables t1 read, t2 write;</span><br></pre></td></tr></table></figure>
+
+<p>只能对 t1 表进行读，t2 表进行读和写。直到执行<strong>unlock tables</strong>之前不允许对其他表进行读写操作。</p>
+<ol start="3">
+<li>MDL ( meatadata lock)</li>
+</ol>
+<p>作用：保证读写的正确性。防止 DDL(加字段等修改表结构的操作)和 DML 冲突（增删改数据）<br>特点： 自动加上，不需要使用 sql 语句。在对表进行数据的增删改查操作时加读锁。修改表结构时，加写锁。</p>
+<p>读读锁共存、读写锁、写写锁互斥。</p>
+<p><strong>示例</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634388295266-c5897d57-05ac-4ac9-b910-e2d9950d6f1e.png#clientId=ubaf7a982-8eca-4&from=paste&height=261&id=u0e8aeaeb&name=image.png&originHeight=521&originWidth=834&originalType=binary&ratio=1&size=78640&status=done&style=none&taskId=u2b78eb8a-f57d-433e-935f-d586ac65ede&width=417" alt="image.png"></p>
+<p>在多个事务开启且未结束的过程中给某个表添加个字段导致读写锁冲突。</p>
+<p>解决方法<br>在 information_schema 库中 innodb_trx 表中查询出正在执行事务，可以暂停表变更事务、或者是长事务。</p>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
+<li><p>全局锁主要是用来逻辑备份，有两种方式一种是通过命令 flush tables with read lock;。另一种需要支持库中所有的表支持可重复读事务，使用 mysqldump -single-transaction 进行备份。</p>
+</li>
+<li><p>表锁通过 sql 语句限制指定表只能进行读、读/写操作,且不允许对其他表操作在解锁前。</p>
+</li>
+<li><p>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql-索引</title>
     <url>/2022/09/09/4!%E7%B4%A2%E5%BC%95/</url>
     <content><![CDATA[<h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#averageHue=%23dce4d1&clientId=uf02e59f4-5d80-4&from=paste&height=286&id=u7fa963ac&name=image.png&originHeight=572&originWidth=848&originalType=binary&ratio=1&rotation=0&showTitle=false&size=173484&status=done&style=none&taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&title=&width=424" alt="image.png"></p>
@@ -223,100 +328,39 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql-锁</title>
-    <url>/2021/09/10/5!%E9%94%81/</url>
-    <content><![CDATA[<h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
+    <title>Mysql-行锁</title>
+    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
+    <content><![CDATA[<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&from=paste&height=284&id=tMiKr&name=image.png&originHeight=568&originWidth=857&originalType=binary&ratio=1&size=76026&status=done&style=none&taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
+<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong></p>
+<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
 <ol>
-<li><strong>全局锁</strong></li>
-<li><strong>表级锁</strong></li>
-<li><strong>行锁</strong></li>
+<li>从顾客 A 账户余额中扣除电影票价；</li>
+<li>给影院 B 的账户余额增加这张电影票价；</li>
+<li>记录一条交易日志。</li>
 </ol>
-<h2 id="2-全局锁"><a href="#2-全局锁" class="headerlink" title="2. 全局锁"></a>2. 全局锁</h2><p>全局读锁命令<br><strong>全局锁就是对整个数据库实例加锁，Mysql 提供了一个加全局读锁的命令。可以让整个数据库处于只读状态。</strong><br>导致数据的增删改、建表修改表语句、事务的提交语句失效。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Flush tables with read lock</span><br></pre></td></tr></table></figure>
-
-<p>场景：<strong>全库的逻辑备份(也可以开启可重复读事务级别来进行备份)</strong><br>另一种方式是使用 mysqldump 工具使用参数-single-transaction 进行数据库备份。前提：数据库中所有的表支持可重复读。</p>
-<p>场景：用户买课和买课后的余额。不加锁导致两个表的数据前后不一致。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018821575-900c6793-130c-47c3-8b6c-b3533bf27c70.png#clientId=uf02e59f4-5d80-4&from=paste&height=271&id=u5e04065e&name=image.png&originHeight=542&originWidth=882&originalType=binary&ratio=1&size=204494&status=done&style=none&taskId=uadb7ab82-ba93-48d1-a88f-e117005dcaf&width=441" alt="image.png"></p>
-<h2 id="3-表级锁"><a href="#3-表级锁" class="headerlink" title="3. 表级锁"></a>3. 表级锁</h2><ol>
-<li>两种表锁</li>
+<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。</p>
+<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&from=paste&height=281&id=uf1f2e0cc&name=image.png&originHeight=561&originWidth=871&originalType=binary&ratio=1&size=90990&status=done&style=none&taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。</p>
+<p>解决方法</p>
+<ul>
+<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
+<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
+</ul>
+<p>死锁检测的缺点：</p>
+<ol>
+<li>确保业务不会出现死锁，关闭死锁检测</li>
+<li>控制并发度</li>
+</ol>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
+<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
+<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
+<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
 </ol>
 <ul>
-<li>表锁</li>
-<li>元数据锁</li>
+<li>第一种，直接执行 delete from T limit 10000;</li>
+<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
+<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
 </ul>
-<ol start="2">
-<li>表锁</li>
-</ol>
-<p>作用：<strong>锁定表只能进行读或读和写操作。不允许操作其他表。（处理并发的常用方式）</strong></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">lock tables t1 read, t2 write;</span><br></pre></td></tr></table></figure>
-
-<p>只能对 t1 表进行读，t2 表进行读和写。直到执行<strong>unlock tables</strong>之前不允许对其他表进行读写操作。</p>
-<ol start="3">
-<li>MDL ( meatadata lock)</li>
-</ol>
-<p>作用：保证读写的正确性。防止 DDL(加字段等修改表结构的操作)和 DML 冲突（增删改数据）<br>特点： 自动加上，不需要使用 sql 语句。在对表进行数据的增删改查操作时加读锁。修改表结构时，加写锁。</p>
-<p>读读锁共存、读写锁、写写锁互斥。</p>
-<p><strong>示例</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634388295266-c5897d57-05ac-4ac9-b910-e2d9950d6f1e.png#clientId=ubaf7a982-8eca-4&from=paste&height=261&id=u0e8aeaeb&name=image.png&originHeight=521&originWidth=834&originalType=binary&ratio=1&size=78640&status=done&style=none&taskId=u2b78eb8a-f57d-433e-935f-d586ac65ede&width=417" alt="image.png"></p>
-<p>在多个事务开启且未结束的过程中给某个表添加个字段导致读写锁冲突。</p>
-<p>解决方法<br>在 information_schema 库中 innodb_trx 表中查询出正在执行事务，可以暂停表变更事务、或者是长事务。</p>
-<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
-<li><p>全局锁主要是用来逻辑备份，有两种方式一种是通过命令 flush tables with read lock;。另一种需要支持库中所有的表支持可重复读事务，使用 mysqldump -single-transaction 进行备份。</p>
-</li>
-<li><p>表锁通过 sql 语句限制指定表只能进行读、读/写操作,且不允许对其他表操作在解锁前。</p>
-</li>
-<li><p>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql-事务隔离</title>
-    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
-    <content><![CDATA[<h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
-<li><strong>原子性</strong></li>
-<li><strong>持久性</strong></li>
-<li><strong>隔离性</strong></li>
-<li><strong>一致性</strong></li>
-</ol>
-<h3 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2. 事务隔离级别"></a>2. 事务隔离级别</h3><ol>
-<li><strong>读已提交（事务未提交时，变更能被其它事务看到）</strong></li>
-<li><strong>读未提交（事务提交后，其它事务才能看到变更）</strong></li>
-<li><strong>可重复读（一个事务执行过程中，总是跟启动时看到的数据是一致的。未提交的变更对其它事务不可见）</strong></li>
-<li><strong>串行化（同一行记录写会加写锁，读会读锁。当出现读写锁冲突时，后访问的事务，必须等前一个事务完成，才能执行）</strong></li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988923063-4d56a761-7637-488b-951d-c443de806cb1.png#clientId=uf02e59f4-5d80-4&from=paste&height=381&id=uf414196c&name=image.png&originHeight=762&originWidth=788&originalType=binary&ratio=1&size=201874&status=done&style=none&taskId=u19543944-dee4-4fbf-bf51-efae564dfae&width=394" alt="image.png"></p>
-<p>v1=v2=1,v3=2<br>四种事务得到的结果</p>
-<ol>
-<li>读未提交： v1、v2、v3=2</li>
-<li>读已提交: v1=1 ，v2、v3=2</li>
-<li>可重复读：v1=v2=1，v3=2</li>
-<li>可串行化 ： v1=v2=1,v3=2</li>
-</ol>
-<h2 id="2-事务隔离的实现"><a href="#2-事务隔离的实现" class="headerlink" title="2. 事务隔离的实现"></a>2. 事务隔离的实现</h2><p>当一个值从 1 按顺序变成 2，3，3 那么他的日志里面就会有类似的回滚段记录<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631013980123-b4f659d1-a49a-4d6f-bffa-5c049fb7a4b5.png#clientId=uf02e59f4-5d80-4&from=paste&height=259&id=u4bd92b33&name=image.png&originHeight=517&originWidth=906&originalType=binary&ratio=1&size=104426&status=done&style=none&taskId=ub4313c28-1bd9-45bf-a56d-abe4cf1987a&width=453" alt="image.png"><br>如图事务 A、B、C 修改记录导致一个字段对应多个值。</p>
-<p>通过 MVCC 来实现一个数据的多个版本，通过 undo log 实现数据版本的回滚<br>通过 MVCC 和 undo log 来实现事务的隔离<br>具体可以参考</p>
-<p><a href="https://www.yuque.com/sanxingalaxys9/gwxct1/lq01qk?view=doc_embed">Mysql 实战 45 讲</a></p>
-<p>当回滚段日志过长时，系统会自动清除。</p>
-<h2 id="3-事务的启动方式"><a href="#3-事务的启动方式" class="headerlink" title="3. 事务的启动方式"></a>3. 事务的启动方式</h2><ol>
-<li>set autocommit=0 关闭自动提交，只要执行 select 语句自动开启事务</li>
-<li>begin 或是 start transaction</li>
-</ol>
-<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
-<li>四大特性和隔离级别</li>
-<li>事务隔离的实现（通过 MVCC 和 undo log)</li>
-<li>事务的启动方式<ol>
-<li>自动启动 select 语句执行时自动启动</li>
-<li>手动启动 begin、 start transaction</li>
-</ol>
-</li>
-</ol>
+<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
 ]]></content>
       <categories>
         <category>数据库</category>
@@ -370,47 +414,43 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql-行锁</title>
-    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
-    <content><![CDATA[<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&from=paste&height=284&id=tMiKr&name=image.png&originHeight=568&originWidth=857&originalType=binary&ratio=1&size=76026&status=done&style=none&taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
-<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong></p>
-<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
+    <title>Java8新特性</title>
+    <url>/2022/12/22/Java8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h1><p>本质:<strong>作为函数式接口的实例</strong></p>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>-&gt;:lambda 操作符()<br>-&gt;右边:lambda 形参列表(抽象方法的形参列表)<br>-&gt;左边:lambda 体(抽象方法的方法体)</p>
+<h2 id="使用格式"><a href="#使用格式" class="headerlink" title="使用格式"></a>使用格式</h2><p>lambda 表达式六种使用情况：</p>
 <ol>
-<li>从顾客 A 账户余额中扣除电影票价；</li>
-<li>给影院 B 的账户余额增加这张电影票价；</li>
-<li>记录一条交易日志。</li>
+<li>形参类型可以省略，如果参数只有一个，可省小括号</li>
+<li>方法体只有一条语句，可省略大括号（语句为 return 语句时，可省略 return 和大括号关键字）</li>
 </ol>
-<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。</p>
-<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&from=paste&height=281&id=uf1f2e0cc&name=image.png&originHeight=561&originWidth=871&originalType=binary&ratio=1&size=90990&status=done&style=none&taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。</p>
-<p>解决方法</p>
-<ul>
-<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
-<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
-</ul>
-<p>死锁检测的缺点：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//语法格式一：无参、无返回值</span></span><br><span class="line">Runnable runnable = () -&gt; System.out.println(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="comment">//语法格式二：有一个参数，无返回值</span></span><br><span class="line">Consumer&lt;String&gt; s1 = (String s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s1.accept(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式三：数据类型可以省略，编译器可以推断得出（类型推断）</span></span><br><span class="line"></span><br><span class="line">Consumer&lt;String&gt; s2 = (s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s2.accept(<span class="string">&quot;23&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式四：只需要一个参数，小括号可以省略</span></span><br><span class="line">Consumer&lt;String&gt; s3 = s -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s3.accept(<span class="string">&quot;34&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式五：多个参数，多个执行语句有返回值</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator = (o1, o2) -&gt; &#123;</span><br><span class="line">	System.out.println(o1);</span><br><span class="line">	System.out.println(o2);</span><br><span class="line">	<span class="keyword">return</span> o1.compareTo(o2);</span><br><span class="line">&#125;;</span><br><span class="line">comparator.compare(<span class="number">12</span>, <span class="number">23</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式六：只有一条语句，有return时可省略return和大括号</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator2 = (o1, o2) -&gt;</span><br><span class="line">	o1.compareTo(o2);</span><br><span class="line">comparator2.compare(<span class="number">12</span>, <span class="number">11</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>常见函数式接口<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673745172306-3b63b6bc-50cb-4737-8d11-1b0da86c581b.png#averageHue=%23acc3dc&clientId=u8f721beb-0d6e-4&from=paste&height=295&id=u6d80b2ac&name=image.png&originHeight=406&originWidth=730&originalType=binary&ratio=1&rotation=0&showTitle=false&size=227263&status=done&style=none&taskId=u10ae1ea7-5e55-4697-a6ef-8b4ed4d345a&title=&width=530.9090909090909" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673746698011-93399e69-4051-4e9e-980d-242231d6293a.png#averageHue=%23abc2da&clientId=u8f721beb-0d6e-4&from=paste&height=319&id=uc3a49648&name=image.png&originHeight=439&originWidth=795&originalType=binary&ratio=1&rotation=0&showTitle=false&size=339302&status=done&style=none&taskId=u5d3ec6b0-1f83-4949-a764-168add16050&title=&width=578.1818181818181" alt="image.png"></p>
+<h1 id="方法引用和构造器引用"><a href="#方法引用和构造器引用" class="headerlink" title="方法引用和构造器引用"></a>方法引用和构造器引用</h1><p>方法引用的三种情况<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673752145970-95aa0b7b-73d4-4671-bba9-f7025a871460.png#averageHue=%23f8eeee&clientId=u8f721beb-0d6e-4&from=paste&height=188&id=u57044aa7&name=image.png&originHeight=258&originWidth=690&originalType=binary&ratio=1&rotation=0&showTitle=false&size=52351&status=done&style=none&taskId=u19462865-98c4-4f79-a557-f56bf79fffa&title=&width=501.8181818181818" alt="image.png"></p>
+<p>引用要求：<br>抽象方法和方法体内部的调用方法</p>
 <ol>
-<li>确保业务不会出现死锁，关闭死锁检测</li>
-<li>控制并发度</li>
+<li>返回值相同</li>
+<li>形参列表相同</li>
 </ol>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
-<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
-<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
-<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753293813-92c153ff-48d8-4749-8a96-ef934d2fe7d3.png#averageHue=%23fbfaf9&clientId=u8f721beb-0d6e-4&from=paste&height=265&id=uf319f803&name=image.png&originHeight=364&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26402&status=done&style=none&taskId=u0885957a-eab3-4985-9488-4f086d041b3&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753305266-4eb3eae6-95f5-48bf-9d81-08589c0af10e.png#averageHue=%23d8b483&clientId=u8f721beb-0d6e-4&from=paste&height=227&id=uaaa5f71e&name=image.png&originHeight=312&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=28735&status=done&style=none&taskId=u137e57b3-03ca-47bc-8fab-0424e8ea06b&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753324728-02575316-cbd9-4423-b3f3-1a0a95110d6a.png#averageHue=%23ccad7d&clientId=u8f721beb-0d6e-4&from=paste&height=184&id=ua09f1405&name=image.png&originHeight=253&originWidth=797&originalType=binary&ratio=1&rotation=0&showTitle=false&size=13585&status=done&style=none&taskId=u07b32fef-b99f-402a-996d-ae684f884ca&title=&width=579.6363636363636" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753338098-2e6ffcc1-5afa-4a7a-b78d-0e3b07005804.png#averageHue=%23d8b482&clientId=u8f721beb-0d6e-4&from=paste&height=201&id=ud37dd75d&name=image.png&originHeight=276&originWidth=802&originalType=binary&ratio=1&rotation=0&showTitle=false&size=18244&status=done&style=none&taskId=u3bbd999b-0b0a-424b-8095-950a237cdec&title=&width=583.2727272727273" alt="image.png"></p>
+<h1 id="Stream-API"><a href="#Stream-API" class="headerlink" title="Stream API"></a>Stream API</h1><p>用于操作数据源（集合、数组）</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li>不存储元素</li>
+<li>不该元数据</li>
+<li>操作延迟执行</li>
 </ol>
-<ul>
-<li>第一种，直接执行 delete from T limit 10000;</li>
-<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
-<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
-</ul>
-<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
+<h2 id="Stream-操作三步"><a href="#Stream-操作三步" class="headerlink" title="Stream 操作三步"></a>Stream 操作三步</h2><ol>
+<li>创建 Stream</li>
+<li>中间操作</li>
+<li>终止操作</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753653838-0fa643de-e8ee-4ac3-acdf-c2392b26d708.png#averageHue=%23f5f8f5&clientId=u8f721beb-0d6e-4&from=paste&height=283&id=u1e2e9088&name=image.png&originHeight=389&originWidth=861&originalType=binary&ratio=1&rotation=0&showTitle=false&size=170203&status=done&style=none&taskId=ue9418081-bdff-4503-a5e5-c55781a9d6e&title=&width=626.1818181818181" alt="image.png"></p>
 ]]></content>
       <categories>
-        <category>数据库</category>
+        <category>Java</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -814,46 +854,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java8新特性</title>
-    <url>/2022/12/22/Java8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<h1 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h1><p>本质:<strong>作为函数式接口的实例</strong></p>
-<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>-&gt;:lambda 操作符()<br>-&gt;右边:lambda 形参列表(抽象方法的形参列表)<br>-&gt;左边:lambda 体(抽象方法的方法体)</p>
-<h2 id="使用格式"><a href="#使用格式" class="headerlink" title="使用格式"></a>使用格式</h2><p>lambda 表达式六种使用情况：</p>
-<ol>
-<li>形参类型可以省略，如果参数只有一个，可省小括号</li>
-<li>方法体只有一条语句，可省略大括号（语句为 return 语句时，可省略 return 和大括号关键字）</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//语法格式一：无参、无返回值</span></span><br><span class="line">Runnable runnable = () -&gt; System.out.println(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="comment">//语法格式二：有一个参数，无返回值</span></span><br><span class="line">Consumer&lt;String&gt; s1 = (String s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s1.accept(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式三：数据类型可以省略，编译器可以推断得出（类型推断）</span></span><br><span class="line"></span><br><span class="line">Consumer&lt;String&gt; s2 = (s) -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s2.accept(<span class="string">&quot;23&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式四：只需要一个参数，小括号可以省略</span></span><br><span class="line">Consumer&lt;String&gt; s3 = s -&gt; &#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;;</span><br><span class="line">s3.accept(<span class="string">&quot;34&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式五：多个参数，多个执行语句有返回值</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator = (o1, o2) -&gt; &#123;</span><br><span class="line">	System.out.println(o1);</span><br><span class="line">	System.out.println(o2);</span><br><span class="line">	<span class="keyword">return</span> o1.compareTo(o2);</span><br><span class="line">&#125;;</span><br><span class="line">comparator.compare(<span class="number">12</span>, <span class="number">23</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//语法格式六：只有一条语句，有return时可省略return和大括号</span></span><br><span class="line">Comparator&lt;Integer&gt; comparator2 = (o1, o2) -&gt;</span><br><span class="line">	o1.compareTo(o2);</span><br><span class="line">comparator2.compare(<span class="number">12</span>, <span class="number">11</span>);</span><br></pre></td></tr></table></figure>
-
-<h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>常见函数式接口<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673745172306-3b63b6bc-50cb-4737-8d11-1b0da86c581b.png#averageHue=%23acc3dc&clientId=u8f721beb-0d6e-4&from=paste&height=295&id=u6d80b2ac&name=image.png&originHeight=406&originWidth=730&originalType=binary&ratio=1&rotation=0&showTitle=false&size=227263&status=done&style=none&taskId=u10ae1ea7-5e55-4697-a6ef-8b4ed4d345a&title=&width=530.9090909090909" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673746698011-93399e69-4051-4e9e-980d-242231d6293a.png#averageHue=%23abc2da&clientId=u8f721beb-0d6e-4&from=paste&height=319&id=uc3a49648&name=image.png&originHeight=439&originWidth=795&originalType=binary&ratio=1&rotation=0&showTitle=false&size=339302&status=done&style=none&taskId=u5d3ec6b0-1f83-4949-a764-168add16050&title=&width=578.1818181818181" alt="image.png"></p>
-<h1 id="方法引用和构造器引用"><a href="#方法引用和构造器引用" class="headerlink" title="方法引用和构造器引用"></a>方法引用和构造器引用</h1><p>方法引用的三种情况<br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673752145970-95aa0b7b-73d4-4671-bba9-f7025a871460.png#averageHue=%23f8eeee&clientId=u8f721beb-0d6e-4&from=paste&height=188&id=u57044aa7&name=image.png&originHeight=258&originWidth=690&originalType=binary&ratio=1&rotation=0&showTitle=false&size=52351&status=done&style=none&taskId=u19462865-98c4-4f79-a557-f56bf79fffa&title=&width=501.8181818181818" alt="image.png"></p>
-<p>引用要求：<br>抽象方法和方法体内部的调用方法</p>
-<ol>
-<li>返回值相同</li>
-<li>形参列表相同</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753293813-92c153ff-48d8-4749-8a96-ef934d2fe7d3.png#averageHue=%23fbfaf9&clientId=u8f721beb-0d6e-4&from=paste&height=265&id=uf319f803&name=image.png&originHeight=364&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26402&status=done&style=none&taskId=u0885957a-eab3-4985-9488-4f086d041b3&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753305266-4eb3eae6-95f5-48bf-9d81-08589c0af10e.png#averageHue=%23d8b483&clientId=u8f721beb-0d6e-4&from=paste&height=227&id=uaaa5f71e&name=image.png&originHeight=312&originWidth=788&originalType=binary&ratio=1&rotation=0&showTitle=false&size=28735&status=done&style=none&taskId=u137e57b3-03ca-47bc-8fab-0424e8ea06b&title=&width=573.0909090909091" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753324728-02575316-cbd9-4423-b3f3-1a0a95110d6a.png#averageHue=%23ccad7d&clientId=u8f721beb-0d6e-4&from=paste&height=184&id=ua09f1405&name=image.png&originHeight=253&originWidth=797&originalType=binary&ratio=1&rotation=0&showTitle=false&size=13585&status=done&style=none&taskId=u07b32fef-b99f-402a-996d-ae684f884ca&title=&width=579.6363636363636" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753338098-2e6ffcc1-5afa-4a7a-b78d-0e3b07005804.png#averageHue=%23d8b482&clientId=u8f721beb-0d6e-4&from=paste&height=201&id=ud37dd75d&name=image.png&originHeight=276&originWidth=802&originalType=binary&ratio=1&rotation=0&showTitle=false&size=18244&status=done&style=none&taskId=u3bbd999b-0b0a-424b-8095-950a237cdec&title=&width=583.2727272727273" alt="image.png"></p>
-<h1 id="Stream-API"><a href="#Stream-API" class="headerlink" title="Stream API"></a>Stream API</h1><p>用于操作数据源（集合、数组）</p>
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
-<li>不存储元素</li>
-<li>不该元数据</li>
-<li>操作延迟执行</li>
-</ol>
-<h2 id="Stream-操作三步"><a href="#Stream-操作三步" class="headerlink" title="Stream 操作三步"></a>Stream 操作三步</h2><ol>
-<li>创建 Stream</li>
-<li>中间操作</li>
-<li>终止操作</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673753653838-0fa643de-e8ee-4ac3-acdf-c2392b26d708.png#averageHue=%23f5f8f5&clientId=u8f721beb-0d6e-4&from=paste&height=283&id=u1e2e9088&name=image.png&originHeight=389&originWidth=861&originalType=binary&ratio=1&rotation=0&showTitle=false&size=170203&status=done&style=none&taskId=ue9418081-bdff-4503-a5e5-c55781a9d6e&title=&width=626.1818181818181" alt="image.png"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LeetCode-11-盛水最多的容器</title>
     <url>/2021/07/23/LeetCode-11-%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
     <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><img src="https://img-blog.csdnimg.cn/0344e196bab241ed866b13e6c08896fb.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=pQeNT&originHeight=689&originWidth=827&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/container-with-most-water/">题目链接</a></p>
@@ -901,28 +901,52 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode-汉明距离</title>
-    <url>/2021/01/16/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
-    <content><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png#id=rp6JQ&originHeight=609&originWidth=745&originalType=binary&ratio=1&status=done&style=none"></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这里有两种解题思路</p>
-<h2 id="1-位运算法"><a href="#1-位运算法" class="headerlink" title="1. 位运算法"></a>1. 位运算法</h2><p><strong>位运算</strong>如果你不了解的话，可以看下第二种解题思路。但是整体代码有点冗余，而且效率也不高。<br><code>^</code>的运算规则二进制位中各个位上数就是相同为 0，不同为 1。<br><code>&amp;</code>的运算规则是都为 1 时结果为 1，反之全为 0。<br><code>|</code>的运算规则是只要有 1 结果为 1，反之为 0。<br><code>&gt;&gt;</code>当前数二级制向右移一位，同时最高位根据数的正负来补 0 或 1<br><code>&lt;&lt;</code> 当前数二进制向左移一位，同时最低位补 0。</p>
-<p><strong>位运算法</strong></p>
-<ol>
-<li> 将两个数<code>^</code>运算</li>
-<li>判断运算结果中 1 的个数。即为两个数二进制中各个位的值不同的个数<br> 这里有两种计算 1 个数的方法<br> 2.1.1   将运算结果按 2 求余，如果为 1 就个数加 1。反之就忽略<br> 2.1.2 将运算结果右移一位。并重复上述步骤 32 次。<br> 2.2.1 将运算结果和运算结果-1 进行<code>&amp;</code>运算，然后将值返回作为新的运算结果。1 的个数加 1。<br> 2.2.2 直到运算结果为 0 时跳出循环</li>
+    <title>LeetCode之合并二叉树</title>
+    <url>/2020/12/19/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=ZaF2E&originHeight=739&originWidth=698&originalType=binary&ratio=1&status=done&style=none"></p>
+<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
+<h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
+<li> 判断当前两颗树的节点全为空，如果为空则返回空。</li>
+<li> 反之有以下三种</li>
 </ol>
-<h2 id="2-暴力破解法"><a href="#2-暴力破解法" class="headerlink" title="2. 暴力破解法"></a>2. 暴力破解法</h2><ol>
-<li>将上述两个数将其二进制位分别放入到不同的 List 容器中</li>
-<li>判断两个容器的长度，将长度较大的容器作为遍历次数</li>
-<li>获取两个容器中当前索引的值，并判断是否相等，如果不等距离加 1</li>
-<li>如果较小容器遍历完了的话，就判断较大容器中的值是否等于 0。如果不等距离加 1</li>
-<li>最后得到的距离即为结果</li>
+<ul>
+<li>可能两个节点都不为空</li>
+<li>左节点为空，右节点不为空</li>
+<li>右节点为空，左节点不为空</li>
+</ul>
+<ol start="3">
+<li> 采取以下措施</li>
 </ol>
-<h1 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h1><h2 id="1-位运算"><a href="#1-位运算" class="headerlink" title="1.位运算"></a>1.位运算</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> res=x^y;</span><br><span class="line">     <span class="keyword">int</span> times=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">while</span>(res!=<span class="number">0</span>)&#123;</span><br><span class="line">       res=res&amp;(res-<span class="number">1</span>);</span><br><span class="line">       times++;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> times;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当为第一种情况时 ,创建一个新的节点，节点值为左右节点值的和,之后遍历左右节点</li>
+<li>当为第二种情况时 ,创建一个新的节点，节点值为右节点值,之后遍历右节点.</li>
+<li>当为第三种情况时 ,创建一个新的节点，节点值为左节点值,之后遍历左节点。</li>
+</ul>
+<ol start="4">
+<li> 返回创建的新的节点。</li>
+</ol>
+<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">mergeTrees</span><span class="params">(TreeNode t1, TreeNode t2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(t1==<span class="keyword">null</span>&amp;&amp;t2==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            TreeNode t3;</span><br><span class="line">            <span class="keyword">if</span>(t1!=<span class="keyword">null</span>&amp;&amp;t2!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val+t2.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,t2.right);</span><br><span class="line">                t3.left=mergeTrees(t1.left,t2.left);</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t1!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,<span class="keyword">null</span>);</span><br><span class="line">                t3.left=mergeTrees(t1.left,<span class="keyword">null</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t2.val);</span><br><span class="line">                t3.right=mergeTrees(<span class="keyword">null</span>,t2.right);</span><br><span class="line">                t3.left=mergeTrees(<span class="keyword">null</span>,t2.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> t3;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2.暴力破解"></a>2.暴力破解</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">       ArrayList&lt;Integer&gt; xArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">do</span>&#123;</span><br><span class="line">       xArray.add(x%<span class="number">2</span>);</span><br><span class="line">       x=x/<span class="number">2</span>;</span><br><span class="line">     &#125;<span class="keyword">while</span>(x!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">       ArrayList&lt;Integer&gt; yArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">do</span>&#123;</span><br><span class="line">       yArray.add(y%<span class="number">2</span>);</span><br><span class="line">       y=y/<span class="number">2</span>;</span><br><span class="line">     &#125;<span class="keyword">while</span>(y!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> distance=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">//当y的二进制更长时</span></span><br><span class="line">       <span class="keyword">if</span>(yArray.size()&gt;=xArray.size())&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;yArray.size();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j&lt;xArray.size())&#123;</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j))&#123;</span><br><span class="line">                       distance++;</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(yArray.get(j)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        distance++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;<span class="comment">//x的二进制更长</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;xArray.size();j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(j&lt;yArray.size())&#123;</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j))&#123;</span><br><span class="line">                       distance++;</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(xArray.get(j)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        distance++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> distance;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>以目前我做的与树相关的题目来说。所需要做的事基本上就是一件事：<strong>遍历</strong>。而树的遍历一般可以通过递归的方式来进行一些简单的遍历。遍历一般分为三种：前序遍历、中序遍历、后序遍历。前序、中序、后序的名字是按照遍历中父节点，相对于左右子节点中的顺序。如果父节点，在其子父节点中最后一个遍历，称之为后序遍历。其他的遍历顺序可由以上类推。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode递增顺序查找树</title>
+    <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&originHeight=560&originWidth=770&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
+<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></table></figure>
 
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我一开始使用的暴力破解法。但觉得暴力破解法太麻烦了。所以就去看了官方的解题教程，发现位运算这一方法更为简单和高效。</p>
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>)&#123;</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>)&#123;</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -978,15 +1002,28 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode递增顺序查找树</title>
-    <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
-    <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&originHeight=560&originWidth=770&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
-<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></table></figure>
+    <title>LeetCode-汉明距离</title>
+    <url>/2021/01/16/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
+    <content><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png#id=rp6JQ&originHeight=609&originWidth=745&originalType=binary&ratio=1&status=done&style=none"></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这里有两种解题思路</p>
+<h2 id="1-位运算法"><a href="#1-位运算法" class="headerlink" title="1. 位运算法"></a>1. 位运算法</h2><p><strong>位运算</strong>如果你不了解的话，可以看下第二种解题思路。但是整体代码有点冗余，而且效率也不高。<br><code>^</code>的运算规则二进制位中各个位上数就是相同为 0，不同为 1。<br><code>&amp;</code>的运算规则是都为 1 时结果为 1，反之全为 0。<br><code>|</code>的运算规则是只要有 1 结果为 1，反之为 0。<br><code>&gt;&gt;</code>当前数二级制向右移一位，同时最高位根据数的正负来补 0 或 1<br><code>&lt;&lt;</code> 当前数二进制向左移一位，同时最低位补 0。</p>
+<p><strong>位运算法</strong></p>
+<ol>
+<li> 将两个数<code>^</code>运算</li>
+<li>判断运算结果中 1 的个数。即为两个数二进制中各个位的值不同的个数<br> 这里有两种计算 1 个数的方法<br> 2.1.1   将运算结果按 2 求余，如果为 1 就个数加 1。反之就忽略<br> 2.1.2 将运算结果右移一位。并重复上述步骤 32 次。<br> 2.2.1 将运算结果和运算结果-1 进行<code>&amp;</code>运算，然后将值返回作为新的运算结果。1 的个数加 1。<br> 2.2.2 直到运算结果为 0 时跳出循环</li>
+</ol>
+<h2 id="2-暴力破解法"><a href="#2-暴力破解法" class="headerlink" title="2. 暴力破解法"></a>2. 暴力破解法</h2><ol>
+<li>将上述两个数将其二进制位分别放入到不同的 List 容器中</li>
+<li>判断两个容器的长度，将长度较大的容器作为遍历次数</li>
+<li>获取两个容器中当前索引的值，并判断是否相等，如果不等距离加 1</li>
+<li>如果较小容器遍历完了的话，就判断较大容器中的值是否等于 0。如果不等距离加 1</li>
+<li>最后得到的距离即为结果</li>
+</ol>
+<h1 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h1><h2 id="1-位运算"><a href="#1-位运算" class="headerlink" title="1.位运算"></a>1.位运算</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> res=x^y;</span><br><span class="line">     <span class="keyword">int</span> times=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">while</span>(res!=<span class="number">0</span>)&#123;</span><br><span class="line">       res=res&amp;(res-<span class="number">1</span>);</span><br><span class="line">       times++;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> times;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>)&#123;</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>)&#123;</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2.暴力破解"></a>2.暴力破解</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">       ArrayList&lt;Integer&gt; xArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">do</span>&#123;</span><br><span class="line">       xArray.add(x%<span class="number">2</span>);</span><br><span class="line">       x=x/<span class="number">2</span>;</span><br><span class="line">     &#125;<span class="keyword">while</span>(x!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">       ArrayList&lt;Integer&gt; yArray=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">do</span>&#123;</span><br><span class="line">       yArray.add(y%<span class="number">2</span>);</span><br><span class="line">       y=y/<span class="number">2</span>;</span><br><span class="line">     &#125;<span class="keyword">while</span>(y!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> distance=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">//当y的二进制更长时</span></span><br><span class="line">       <span class="keyword">if</span>(yArray.size()&gt;=xArray.size())&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;yArray.size();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j&lt;xArray.size())&#123;</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j))&#123;</span><br><span class="line">                       distance++;</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(yArray.get(j)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        distance++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;<span class="comment">//x的二进制更长</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;xArray.size();j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(j&lt;yArray.size())&#123;</span><br><span class="line">                   <span class="keyword">if</span>(yArray.get(j)!=xArray.get(j))&#123;</span><br><span class="line">                       distance++;</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(xArray.get(j)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        distance++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> distance;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我一开始使用的暴力破解法。但觉得暴力破解法太麻烦了。所以就去看了官方的解题教程，发现位运算这一方法更为简单和高效。</p>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -994,313 +1031,6 @@
       <tags>
         <tag>算法</tag>
         <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql技术内幕-第一章</title>
-    <url>/2021/12/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
-    <content><![CDATA[<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/12394516/1635612909935-781caa54-e671-46b3-b70e-4d4760efdb19.jpeg"></p>
-<h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ol>
-<li><p>数据库**： **操作系统或者是内存中数据库类型文件的集合。</p>
-</li>
-<li><p>实例： 数据库实例是真正操作数据库的对象。通过数据库实例完成对数据库文件的增删改查。</p>
-</li>
-</ol>
-<p>MySQL 是一个单进程多线程的数据库。MySQL 数据库实例在系统上表现的就是一个进程。</p>
-<h1 id="2-MySQL-体系结构"><a href="#2-MySQL-体系结构" class="headerlink" title="2. MySQL 体系结构"></a>2. MySQL 体系结构</h1><h2 id="1-结构图"><a href="#1-结构图" class="headerlink" title="1. 结构图"></a>1. 结构图</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635610498443-00dd90e5-027b-45cc-9abd-453e79201f37.png#averageHue=%23dad9d9&clientId=u65aa59ec-0f7c-4&from=paste&height=297&id=u870f042c&name=image.png&originHeight=593&originWidth=916&originalType=binary&ratio=1&rotation=0&showTitle=false&size=162280&status=done&style=none&taskId=u84e62d2d-ba28-4b0e-b986-287bccf284f&title=&width=458" alt="image.png"></p>
-<h2 id="2-MySQL-组成部分"><a href="#2-MySQL-组成部分" class="headerlink" title="2. MySQL 组成部分"></a>2. MySQL 组成部分</h2><h3 id="1-8-大组成部分"><a href="#1-8-大组成部分" class="headerlink" title="1. 8 大组成部分"></a>1. 8 大组成部分</h3><ol>
-<li>连接池</li>
-<li>管理服务和工具组件</li>
-<li>Sql 接口组件</li>
-<li>查询分析器</li>
-<li>优化器</li>
-<li>缓存</li>
-<li>插件式存储引擎</li>
-<li>物理文件</li>
-</ol>
-<p><strong>存储引擎是基于表的，而不是数据库。</strong></p>
-<h1 id="3-MySQL-存储引擎"><a href="#3-MySQL-存储引擎" class="headerlink" title="3. MySQL 存储引擎"></a>3. MySQL 存储引擎</h1><h2 id="1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎"><a href="#1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎" class="headerlink" title="1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)"></a>1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>行锁设计</strong></li>
-<li><strong>支持外键</strong></li>
-<li><strong>类似于 Oracle 的非锁定读</strong></li>
-</ol>
-<h3 id="2-主要功能"><a href="#2-主要功能" class="headerlink" title="2. 主要功能"></a>2. 主要功能</h3><ol>
-<li>InnoDB 使用<strong>多版本并发控制（MVCC）来实现高并发性。</strong></li>
-<li><strong>实现了 4 种隔离级别</strong>。默认的为 REPEATABLE 级别</li>
-<li>使用<strong>next-key locking 策略来避免幻读现象</strong></li>
-<li>提供了插入缓冲（insert buffer）、二次写、自适应哈希索引、预读等高性能和高可用功能</li>
-<li>数据的存储的采用了<strong>聚集的方式</strong>，表的数据存储按主键的顺序存放。如果没有主键会默认每行生成一个 ROWID 作为主键。</li>
-</ol>
-<h3 id="3-面向对象"><a href="#3-面向对象" class="headerlink" title="3. 面向对象"></a>3. 面向对象</h3><p>设计目标主要面向<strong>在线事务处理应用。</strong></p>
-<h2 id="2-MyISAM-存储引擎（5-58-之前默认存储引擎）"><a href="#2-MyISAM-存储引擎（5-58-之前默认存储引擎）" class="headerlink" title="2. MyISAM 存储引擎（5.58 之前默认存储引擎）"></a>2. MyISAM 存储引擎（5.58 之前默认存储引擎）</h2><h3 id="1-特点-1"><a href="#1-特点-1" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>不支持事务、表锁/行锁</strong></li>
-<li><strong>支持全文索引</strong></li>
-<li><strong>缓冲池只缓存索引文件</strong>，不缓存数据。</li>
-<li>MyISAM 存储引擎表的由 MYD 和 MYI 两种文件存储。MYD 存储数据，MYI 存储索引。</li>
-</ol>
-<h2 id="3-NDB-存储引擎-集群存储引擎"><a href="#3-NDB-存储引擎-集群存储引擎" class="headerlink" title="3. NDB 存储引擎(集群存储引擎)"></a>3. NDB 存储引擎(集群存储引擎)</h2><h3 id="1-特点-2"><a href="#1-特点-2" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>数据全部放在内存中</strong>，5.1 后，可将非索引数据存放到磁盘上。</li>
-<li><strong>主键查找速度极快</strong></li>
-<li>通过增加 NDB 数据存储节点，可以线性提高数据性能。是高可用、高性能集群系统</li>
-<li><strong>查询速度慢</strong>。由于 NDB 存储引擎连接操作在数据库层完成，导致需要巨大网络开销。</li>
-</ol>
-<h2 id="4-Memory-存储引擎"><a href="#4-Memory-存储引擎" class="headerlink" title="4. Memory 存储引擎"></a>4. Memory 存储引擎</h2><h3 id="1-特点-3"><a href="#1-特点-3" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li><strong>数据存放在内存中</strong></li>
-<li><strong>默认使用哈希索引</strong></li>
-<li><strong>只支持表锁，并发性能差</strong></li>
-<li><strong>不支持 TEXT 和 BLOBl 乐行</strong></li>
-<li><strong>浪费内存，存储 varchar 是按照 char 的方式存储。</strong></li>
-</ol>
-<h2 id="5-存储引擎的比较"><a href="#5-存储引擎的比较" class="headerlink" title="5. 存储引擎的比较"></a>5. 存储引擎的比较</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613196777-e8e4aa9e-8031-41f7-9c6b-2759e7734602.png#averageHue=%23d7d7d7&clientId=u0834a0c7-dbbe-4&from=paste&height=288&id=ub63fdd4b&name=image.png&originHeight=576&originWidth=858&originalType=binary&ratio=1&rotation=0&showTitle=false&size=96128&status=done&style=none&taskId=u8a3c4e80-50ac-4e4b-94fd-03638655320&title=&width=429" alt="image.png"></p>
-<h1 id="4-连接-MySQL"><a href="#4-连接-MySQL" class="headerlink" title="4. 连接 MySQL"></a>4. 连接 MySQL</h1><p>本质： MySQL 实例和连接进程的进行通信。<br>进程间的通信方式：TCP/IP 套接字，UNIX 域套接字、管道、命名管道。</p>
-<h3 id="1-TCP-IP（常用）"><a href="#1-TCP-IP（常用）" class="headerlink" title="1. TCP/IP（常用）"></a>1. TCP/IP（常用）</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613490753-6a0743d1-db16-4a40-867b-8e10c6b131bb.png#averageHue=%23f4f4f4&clientId=u0834a0c7-dbbe-4&from=paste&height=65&id=u2b227af7&name=image.png&originHeight=130&originWidth=781&originalType=binary&ratio=1&rotation=0&showTitle=false&size=12153&status=done&style=none&taskId=ub2eb1b22-c425-4278-a08b-e32c658f8b5&title=&width=390.5" alt="image.png"><br>客户端通过向 MySQL 服务器发送 TCP/IP 连接请求，连接成功后。MySQL 数据库会查权限视图，判断用户的客户端 IP 是否连接到 MySQL 实例。</p>
-<h1 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h1><ol>
-<li>介绍了实例和数据库的区别。实例是操作数据库的对象，数据库是所有数据库类型文件的集合</li>
-<li>MySQL 的体系结构和其中的组件<ol>
-<li>连接池</li>
-<li>管理服务和工具组件</li>
-<li>Sql 接口</li>
-<li>查询和分析器</li>
-<li>优化器</li>
-<li>缓存</li>
-<li>插件式存储引擎</li>
-<li>物理文件</li>
-</ol>
-</li>
-<li>MySQL 主流的存储引擎及其特点<ol>
-<li>InnoDB 支持行锁、事务\外键</li>
-<li>MyISAM 不支持行表锁、事务。支持全文索引</li>
-<li>Memory 支持哈希索引、表锁、不支持 BLOB、TEXT 类型。varchar 定长.</li>
-<li>NDB 数据存放在内存中</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode之合并二叉树</title>
-    <url>/2020/12/19/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=ZaF2E&originHeight=739&originWidth=698&originalType=binary&ratio=1&status=done&style=none"></p>
-<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
-<h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
-<li> 判断当前两颗树的节点全为空，如果为空则返回空。</li>
-<li> 反之有以下三种</li>
-</ol>
-<ul>
-<li>可能两个节点都不为空</li>
-<li>左节点为空，右节点不为空</li>
-<li>右节点为空，左节点不为空</li>
-</ul>
-<ol start="3">
-<li> 采取以下措施</li>
-</ol>
-<ul>
-<li>当为第一种情况时 ,创建一个新的节点，节点值为左右节点值的和,之后遍历左右节点</li>
-<li>当为第二种情况时 ,创建一个新的节点，节点值为右节点值,之后遍历右节点.</li>
-<li>当为第三种情况时 ,创建一个新的节点，节点值为左节点值,之后遍历左节点。</li>
-</ul>
-<ol start="4">
-<li> 返回创建的新的节点。</li>
-</ol>
-<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4. 代码"></a>4. 代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">mergeTrees</span><span class="params">(TreeNode t1, TreeNode t2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(t1==<span class="keyword">null</span>&amp;&amp;t2==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            TreeNode t3;</span><br><span class="line">            <span class="keyword">if</span>(t1!=<span class="keyword">null</span>&amp;&amp;t2!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val+t2.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,t2.right);</span><br><span class="line">                t3.left=mergeTrees(t1.left,t2.left);</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t1!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t1.val);</span><br><span class="line">                t3.right=mergeTrees(t1.right,<span class="keyword">null</span>);</span><br><span class="line">                t3.left=mergeTrees(t1.left,<span class="keyword">null</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                t3=<span class="keyword">new</span> TreeNode(t2.val);</span><br><span class="line">                t3.right=mergeTrees(<span class="keyword">null</span>,t2.right);</span><br><span class="line">                t3.left=mergeTrees(<span class="keyword">null</span>,t2.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> t3;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>以目前我做的与树相关的题目来说。所需要做的事基本上就是一件事：<strong>遍历</strong>。而树的遍历一般可以通过递归的方式来进行一些简单的遍历。遍历一般分为三种：前序遍历、中序遍历、后序遍历。前序、中序、后序的名字是按照遍历中父节点，相对于左右子节点中的顺序。如果父节点，在其子父节点中最后一个遍历，称之为后序遍历。其他的遍历顺序可由以上类推。</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql逻辑架构</title>
-    <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png#averageHue=%23f9f6f3&clientId=u39eee028-9d46-4&from=paste&height=664&id=u609f2fe9&name=image.png&originHeight=730&originWidth=980&originalType=binary&ratio=1&rotation=0&showTitle=false&size=181397&status=done&style=none&taskId=u72281ee6-13c7-4efb-9295-bafda71f115&title=&width=890.9090715991568" alt="image.png"></p>
-<h2 id="Mysql-架构"><a href="#Mysql-架构" class="headerlink" title="Mysql 架构"></a>Mysql 架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674177610690-d827ed10-467b-4b9e-a73d-67db0a9ab071.png#averageHue=%23c9c0ae&clientId=u2930fbf9-b22d-4&from=paste&height=455&id=rpgUJ&name=image.png&originHeight=501&originWidth=793&originalType=binary&ratio=1&rotation=0&showTitle=false&size=280500&status=done&style=none&taskId=u85ffcba6-fe08-41cc-9b2e-6d618c27bc3&title=&width=720.9090752838075" alt="image.png"></p>
-<h3 id="1-连接层"><a href="#1-连接层" class="headerlink" title="1. 连接层"></a>1. 连接层</h3><h4 id="1-Connection-pool"><a href="#1-Connection-pool" class="headerlink" title="1. Connection pool"></a>1. Connection pool</h4><p>作用：</p>
-<ol>
-<li>客户端与服务器建立 TCP 连接</li>
-<li>查询用户对应权限，判定用户能够进行哪些操作</li>
-<li>控制连接个数和连接的复用</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674178023914-f758ce45-8f06-4434-862b-4348ec02da7f.png#averageHue=%23e6e4de&clientId=u2930fbf9-b22d-4&from=paste&height=561&id=ua4ae3b11&name=image.png&originHeight=617&originWidth=530&originalType=binary&ratio=1&rotation=0&showTitle=false&size=72581&status=done&style=none&taskId=u35d0e871-73c9-44ff-80db-2e893ec8eea&title=&width=481.8181713750542" alt="image.png"></p>
-<h3 id="2-服务层"><a href="#2-服务层" class="headerlink" title="2. 服务层"></a>2. 服务层</h3><h4 id="1-Sql-接口"><a href="#1-Sql-接口" class="headerlink" title="1. Sql 接口"></a>1. Sql 接口</h4><ol>
-<li>接收 SQL 命令</li>
-<li>返回查询结果</li>
-</ol>
-<h4 id="2-解析器"><a href="#2-解析器" class="headerlink" title="2. 解析器"></a>2. 解析器</h4><ol>
-<li>解析 SQL 语句</li>
-<li>生成解析树</li>
-<li>验证用户权限</li>
-</ol>
-<h4 id="3-优化器"><a href="#3-优化器" class="headerlink" title="3. 优化器"></a>3. 优化器</h4><ol>
-<li>生成执行计划</li>
-<li>明确索引使用</li>
-<li>采用选取-投影-连接进行查询</li>
-</ol>
-<h4 id="4-查询缓存"><a href="#4-查询缓存" class="headerlink" title="4. 查询缓存"></a>4. 查询缓存</h4><ol>
-<li>记录查询结果</li>
-<li>key-value 形式存储</li>
-</ol>
-<h3 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h3><ol>
-<li>数据存储提取</li>
-<li>维护底层数据执行</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql技术内幕-第二章</title>
-    <url>/2022/01/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%BA%8C%E7%AB%A0/</url>
-    <content><![CDATA[<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/12394516/1636370551211-b7e3691e-760d-4777-9125-49a114a0f304.jpeg"></p>
-<h1 id="1-InnoDB-体系架构"><a href="#1-InnoDB-体系架构" class="headerlink" title="1. InnoDB 体系架构"></a>1. InnoDB 体系架构</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635692260786-270228fe-31a7-4258-b9c1-87c52f516e08.png#averageHue=%23f1f1f1&clientId=u2d86973c-b20b-4&from=paste&height=227&id=ua9f959a7&name=image.png&originHeight=454&originWidth=736&originalType=binary&ratio=1&rotation=0&showTitle=false&size=30916&status=done&style=none&taskId=u899d9abe-da7d-4e86-8256-0126b55682e&title=&width=368" alt="image.png"></p>
-<h3 id="1-InnoDB-存储引擎作用"><a href="#1-InnoDB-存储引擎作用" class="headerlink" title="1. InnoDB 存储引擎作用"></a>1. InnoDB 存储引擎作用</h3><ol>
-<li><strong>缓存磁盘上的数据</strong>，方便快速读取。对<strong>磁盘数据修改之前也做缓存。</strong></li>
-<li><strong>redo log 缓冲</strong></li>
-<li>维护进程、线程需要访问的多个内部数据结构</li>
-</ol>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="1-后台线程"><a href="#1-后台线程" class="headerlink" title="1. 后台线程"></a>1. 后台线程</h2><p>InnoDB 存储引擎是多线程模型，负责处理不同的任务</p>
-<h3 id="1-MasterThread"><a href="#1-MasterThread" class="headerlink" title="1. MasterThread"></a>1. MasterThread</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>将数据异步刷新到磁盘。其中包括脏页刷新、合并插入缓冲、UNDO 页回收。</p>
-<h3 id="2-IO-Thread"><a href="#2-IO-Thread" class="headerlink" title="2. IO Thread"></a>2. IO Thread</h3><h4 id="1-作用"><a href="#1-作用" class="headerlink" title="1. 作用"></a>1. 作用</h4><p>InnoDB 使用了大量的<strong>异步 IO</strong> 来处理 IO 请求。作用是<strong>提高数据库的性能</strong>。<br>IO Thread 的作用是负责<strong>IO 请求的回调处理</strong></p>
-<h4 id="2-分类"><a href="#2-分类" class="headerlink" title="2. 分类"></a>2. 分类</h4><p>IOThread 主要分为 4 种</p>
-<ul>
-<li><code>write thread</code>(默认 4 个)</li>
-<li><code>read thread</code>(默认 4 个)</li>
-<li><code>insert buffer thread</code></li>
-<li><code>log io thread </code></li>
-</ul>
-<p>write 和 read Thread 可以通过 <code>innnodb_read_io_threads </code>和<code>innodb_write_io_threads</code>设置线程数</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635693324015-367ec145-45e4-4614-87a4-0c8acb2a6e1e.png#averageHue=%23dedede&clientId=u2d86973c-b20b-4&from=paste&height=101&id=u0203448e&name=image.png&originHeight=201&originWidth=916&originalType=binary&ratio=1&rotation=0&showTitle=false&size=44417&status=done&style=none&taskId=u5737c692-8eaa-4bca-becf-305455ba63f&title=&width=458" alt="image.png"></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">//可以通过该命令查看innodb 中的io Thread</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash">show engine innodb  status ;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635693491056-13f94aba-301d-4a04-a8fa-9002fa135a97.png#averageHue=%23181512&clientId=u2d86973c-b20b-4&from=paste&height=118&id=u0f6a553d&name=image.png&originHeight=235&originWidth=567&originalType=binary&ratio=1&rotation=0&showTitle=false&size=29125&status=done&style=none&taskId=u2646bf68-d485-4625-a513-b5ea7fdc815&title=&width=283.5" alt="image.png"></p>
-<h3 id="3-Purge-Thread"><a href="#3-Purge-Thread" class="headerlink" title="3. Purge Thread"></a>3. Purge Thread</h3><h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><p><strong>作用：回收事务提交后的使用的 undo 页</strong>。<br>分配到独立的线程中进行，减少 Master Thread 工作。同时用户可以也可以通过<code>innnodb_purge_threads</code> 设置线程数，默认为 1.</p>
-<h3 id="4-Page-Cleaner-Thread"><a href="#4-Page-Cleaner-Thread" class="headerlink" title="4. Page Cleaner Thread"></a>4. Page Cleaner Thread</h3><p>作用：脏页刷新操作。<br>从而减少了 Master Thread 工作和查询线程线程的阻塞。提高了 InnoDB 性能。</p>
-<h3 id="5-后台线程作用"><a href="#5-后台线程作用" class="headerlink" title="5. 后台线程作用"></a>5. 后台线程作用</h3><ol>
-<li>刷新内存池中的数据，保证缓存的是最新的数据</li>
-<li>将已修改的数据文件刷新到磁盘中</li>
-<li>保证数据库发生异常恢复正常</li>
-</ol>
-<h2 id="2-内存"><a href="#2-内存" class="headerlink" title="2. 内存"></a>2. 内存</h2><h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><h3 id="1-缓冲池"><a href="#1-缓冲池" class="headerlink" title="1. 缓冲池"></a>1. 缓冲池</h3><h4 id="1-作用-1"><a href="#1-作用-1" class="headerlink" title="1. 作用"></a>1. 作用</h4><p>用来<strong>解决 cpu 速度和磁盘速度之间的鸿沟</strong></p>
-<h4 id="2-执行流程"><a href="#2-执行流程" class="headerlink" title="2. 执行流程"></a>2. 执行流程</h4><p>数据库读取页时，将磁盘读取到的页放在缓冲池中。下一次再次读取该数据页时，直接从池中读取。否则从磁盘上读取。</p>
-<p>数据库修改页操作时，首先修改缓冲池的页，然后通过<code>check point </code>机制将数据页刷新到磁盘中。</p>
-<h4 id="3-缓冲池大小配置"><a href="#3-缓冲池大小配置" class="headerlink" title="3. 缓冲池大小配置"></a>3. 缓冲池大小配置</h4><p>通过 innnodb_buffer_pool_size 来设置缓冲池大小。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635694963515-e0b21fec-317a-400c-ac75-263527738b5a.png#averageHue=%2312100f&clientId=u2d86973c-b20b-4&from=paste&height=74&id=u4b5d0c0c&name=image.png&originHeight=147&originWidth=588&originalType=binary&ratio=1&rotation=0&showTitle=false&size=10538&status=done&style=none&taskId=u89b99578-855f-48e2-a253-4720f96a6fb&title=&width=294" alt="image.png"></p>
-<h4 id="4-存储对象"><a href="#4-存储对象" class="headerlink" title="4. 存储对象"></a>4. 存储对象</h4><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635695049116-4482036d-9fb4-4114-86c0-d6bc26b0bb12.png#averageHue=%23eaeaea&clientId=u2d86973c-b20b-4&from=paste&height=170&id=ua8111efd&name=image.png&originHeight=339&originWidth=782&originalType=binary&ratio=1&rotation=0&showTitle=false&size=36170&status=done&style=none&taskId=ud1cc8c94-5846-4f28-9046-31ccee4f486&title=&width=391" alt="image.png"></p>
-<ol>
-<li>索引页</li>
-<li>数据页</li>
-<li>插入缓冲</li>
-<li>undo 页</li>
-<li>自适应哈希索引</li>
-<li>锁信息</li>
-<li>数据字典信息</li>
-</ol>
-<h3 id="2-缓存算法"><a href="#2-缓存算法" class="headerlink" title="2. 缓存算法"></a>2. 缓存算法</h3><h4 id="1-LRU（最近最少使用淘汰）"><a href="#1-LRU（最近最少使用淘汰）" class="headerlink" title="1. LRU（最近最少使用淘汰）"></a>1. LRU（最近最少使用淘汰）</h4><p>将经常使用的页放在 LRU 列表的最前端，最少使用页放在列表尾端。将新读取的页放到 midpoint 位置（距离尾端的 3/8 出）。可以通过<code>innodb_old_blocks_pct</code>控制插入位置。<br><code>midpoint</code> 之前的 new 列表，之后的为 old 列表。new 列表中数据为活跃的数据。</p>
-<p>为什么不直接把读取的新页放在列表首部？</p>
-<p>部分 sql 操作（索引、数据扫描操作）导致缓冲池中页被刷出，影响缓冲池效率。需要读入大量的数据页，导致许多活跃数据页从列表中移除。<br>innodb 可以通过设置<code>innodb_old_blocks_time</code>来决定新加入的页从 mid 到列表头部需要等待多久。</p>
-<h3 id="3-redo-日志缓冲（-redo-log-buffer）"><a href="#3-redo-日志缓冲（-redo-log-buffer）" class="headerlink" title="3. redo 日志缓冲（ redo log buffer）"></a>3. redo 日志缓冲（ redo log buffer）</h3><p>用于暂时存放 redo log 信息，然后 Innodb 以一定频率刷新到 redo log 文件中。<br>可以通过 <code>innnodb_log_buffer_size</code>设置缓冲大小。</p>
-<p><strong>三种日志刷新到 redo log 文件情况</strong></p>
-<ol>
-<li>Master Thread 每秒刷新</li>
-<li>事务提交时刷新</li>
-<li>日志缓冲空间小于一半</li>
-</ol>
-<h1 id="2-Checkpoint-技术"><a href="#2-Checkpoint-技术" class="headerlink" title="2. Checkpoint 技术"></a>2. Checkpoint 技术</h1><p><strong>解决问题</strong></p>
-<ol>
-<li>缩短数据恢复时间</li>
-<li>缓冲池不够时，将脏页刷新到磁盘</li>
-<li>redo log 日志缓冲不够时，刷新脏页</li>
-</ol>
-<h2 id="1-Check-Point-分类："><a href="#1-Check-Point-分类：" class="headerlink" title="1. Check Point 分类："></a>1. Check Point 分类：</h2><ol>
-<li>Sharp Checkpoint</li>
-<li>Fuzzy Checkpoing</li>
-</ol>
-<h2 id="2-Sharp-Checkpoint"><a href="#2-Sharp-Checkpoint" class="headerlink" title="2. Sharp Checkpoint"></a>2. Sharp Checkpoint</h2><p>默认将<strong>数据库关闭时将所有脏页刷新到磁盘中</strong>，<br>参数是 innodb_fast_shutdown=1.</p>
-<h2 id="3-Fuzzy-Checkpoint"><a href="#3-Fuzzy-Checkpoint" class="headerlink" title="3. Fuzzy Checkpoint"></a>3. Fuzzy Checkpoint</h2><h3 id="1-Master-Thread-checkpoint"><a href="#1-Master-Thread-checkpoint" class="headerlink" title="1. Master Thread checkpoint"></a>1. Master Thread checkpoint</h3><p>每 1 或 10 秒将缓冲池中的部分脏页异步刷新到磁盘</p>
-<h3 id="2-Async-Sync-Flush-checkpoint"><a href="#2-Async-Sync-Flush-checkpoint" class="headerlink" title="2. Async/Sync Flush checkpoint"></a>2. Async/Sync Flush checkpoint</h3><p>在重做日志不可用情况下强制刷新一部分页会磁盘。</p>
-<h1 id="3-InnoDB-关键特性"><a href="#3-InnoDB-关键特性" class="headerlink" title="3. InnoDB 关键特性"></a>3. InnoDB 关键特性</h1><h2 id="1-插入缓冲"><a href="#1-插入缓冲" class="headerlink" title="1. 插入缓冲"></a>1. 插入缓冲</h2><h3 id="1-Insert-Buffer"><a href="#1-Insert-Buffer" class="headerlink" title="1. Insert Buffer"></a>1. Insert Buffer</h3><p>原理： 当对<strong>非聚集索</strong>引进<strong>行插入或更新</strong>操作时，若<strong>索引页在缓冲池</strong>中，则直接<strong>更新索引页</strong>。反之，先<strong>放到 Insert Buffer <strong>中，然后以一定频率将 Insert Buffer 中的数据和辅助索引页进行</strong>merge 操作</strong>。</p>
-<p>前提：<strong>不是唯一索引的辅助索引</strong><br>问题：为什么不能是唯一索引？<br>因为唯一索引在更新时，需要将索引页加载进缓冲池中，判断索引是否唯一。将索引页加入了缓冲池中，就失去了使用 Insert Buffer 的意义。<br>作用：提高插入性能，因为每次插入时不需要立即将数据 merge 到索引页中。</p>
-<p>本质：将非聚集索引的写操作缓冲起来，然后将写操作批量 merge 到索引页中。</p>
-<p>缺点：写密集情况下会暂用大量缓冲池内存<br>可以通过 IBUF_POOL_SIZE_PER_MAX_SIZE 设置 Insert buffer 占缓冲池的比例</p>
-<h3 id="2-change-buffer"><a href="#2-change-buffer" class="headerlink" title="2. change buffer"></a>2. change buffer</h3><p>insert buffer 的升级版，支持 insert 、delete、 update 语句缓冲。通过 Insert Buffer、 Delete Buffer 、Purge Buffer 来实现缓冲。</p>
-<p>Update 语句的实现过程</p>
-<ol>
-<li>数据的记录标记为删除</li>
-<li>数据真正删除</li>
-</ol>
-<p>将数据记录标记位删除通过，通过 Delete Buffer 来实现。然后通过 Purge Buffer 将数据真正删除。</p>
-<h3 id="3-Insert-Buffer-内部实现"><a href="#3-Insert-Buffer-内部实现" class="headerlink" title="3. Insert Buffer 内部实现"></a>3. Insert Buffer 内部实现</h3><p>Insert Buffer 的数据结构是一颗 B+树。<br>非叶节点存放的查询的 search key .<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635779623534-a1a111a7-ba6f-4e06-9b28-2805adb882e1.png#averageHue=%23eeeeee&clientId=u147b5b0d-e61f-4&from=paste&height=51&id=u23ae932e&name=image.png&originHeight=102&originWidth=545&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7625&status=done&style=none&taskId=u8a8fadad-c07e-4ea8-a65f-6252e61e696&title=&width=272.5" alt="image.png"></p>
-<ul>
-<li>space 表示数据插入的表的<strong>表空间 id（用于确定插入数据是哪张表）</strong></li>
-<li>marker 兼容老版本的 Insert Buffer</li>
-<li>offset 数据页在表中的偏移量（位置）（用于确定是辅助索引的哪一页）</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635780351139-02db6f9a-d6eb-43b8-b2c3-006e96cac8da.png#averageHue=%23eeeded&clientId=u147b5b0d-e61f-4&from=paste&height=74&id=u85fb66e2&name=image.png&originHeight=147&originWidth=742&originalType=binary&ratio=1&rotation=0&showTitle=false&size=20005&status=done&style=none&taskId=uf11cb2c4-21ca-4099-a07a-63bd4da678e&title=&width=371" alt="image.png"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635780853424-d8b9a379-1c69-4fdb-bcb0-b7b93b0b0a50.png#averageHue=%23ececec&clientId=u147b5b0d-e61f-4&from=paste&height=86&id=u6590f1f8&name=image.png&originHeight=172&originWidth=968&originalType=binary&ratio=1&rotation=0&showTitle=false&size=15357&status=done&style=none&taskId=ud2fa6c63-6633-4abc-92bb-c812946d476&title=&width=484" alt="image.png"></p>
-<p>metadata 中记录信息插入的顺序以及插入信息的类型</p>
-<p>Insert Buffer 通过 space 和 offset 确定更新数据的表和辅助索引具体页。</p>
-<h3 id="4-Merge-Insert-Buffer"><a href="#4-Merge-Insert-Buffer" class="headerlink" title="4. Merge Insert Buffer"></a>4. Merge Insert Buffer</h3><h5 id="-3"><a href="#-3" class="headerlink" title=""></a></h5><ol>
-<li>辅助索引页读取到缓冲池中</li>
-<li>Insert Buffer Bitmap 页发现辅助索引页无可用空间时。</li>
-<li>Master Thread 定时进行 Merge</li>
-</ol>
-<h3 id="4-命令"><a href="#4-命令" class="headerlink" title="4. 命令"></a>4. 命令</h3><h4 id="1-innodb-change-buffering"><a href="#1-innodb-change-buffering" class="headerlink" title="1. innodb_change_buffering"></a>1. <code>innodb_change_buffering</code></h4><p>作用： 选择开启哪些缓冲，参数为<img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635779173141-60283c22-3b4a-4307-9afb-d2b31f2ecf19.png#averageHue=%23e4e4e4&clientId=u147b5b0d-e61f-4&from=paste&height=21&id=u50f1346f&name=image.png&originHeight=41&originWidth=472&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3875&status=done&style=none&taskId=uf0bc3b34-e529-4b4e-91b5-9d2fc61f89c&title=&width=236" alt="image.png"></p>
-<h4 id="2-innodb-change-buffer-max-size"><a href="#2-innodb-change-buffer-max-size" class="headerlink" title="2. innodb_change_buffer_max_size"></a>2. innodb_change_buffer_max_size</h4><p>作用：控制 change buffer 最大内存使用量<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635779232140-aea89c5b-1c60-420c-ad21-7455d07c85ef.png#averageHue=%23dfdfdf&clientId=u147b5b0d-e61f-4&from=paste&height=23&id=ubfd3b6b4&name=image.png&originHeight=45&originWidth=880&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9395&status=done&style=none&taskId=u5e544fdf-c639-4141-8cea-ffb33be97fc&title=&width=440" alt="image.png"><br><strong>最大值为 50.</strong></p>
-<h2 id="2-两次写"><a href="#2-两次写" class="headerlink" title="2. 两次写"></a>2. 两次写</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1636031467126-3252bdd4-ab40-4f6e-9266-86cd36868636.png#averageHue=%23d3e9eb&clientId=uecbbc78a-62fa-4&from=paste&height=255&id=u11158e89&name=image.png&originHeight=510&originWidth=816&originalType=binary&ratio=1&rotation=0&showTitle=false&size=174039&status=done&style=none&taskId=ueb092f1b-bb82-4392-9efa-7d478b9f7a8&title=&width=408" alt="image.png"></p>
-<h3 id="1-流程"><a href="#1-流程" class="headerlink" title="1. 流程"></a>1. 流程</h3><ol>
-<li>InnoDB 将脏页写到内存中的 Double write buffer 中</li>
-<li>然后 DWB 将数据现在写入磁盘上 DWB</li>
-<li>内存中的 DWB 再将数据刷到磁盘中</li>
-</ol>
-<h3 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h3><p>通过将脏页数据进行缓存，可以保证数据库异常关闭的情况下，脏页数据未完全写入磁盘时，无法通过 redo log 进行数据的恢复。可以通过 DWB 中之前保存的脏页数据，将数据页写入到磁盘中，然后 redo log 根据脏页进行数据的恢复。</p>
-<p><a href="https://developer.aliyun.com/article/743889?spm=a2c6h.14164896.0.0.7d52783blX00fB">double write buffer 深度</a></p>
-<h2 id="3-自适应哈希索引（AHI）"><a href="#3-自适应哈希索引（AHI）" class="headerlink" title="3. 自适应哈希索引（AHI）"></a>3. 自适应哈希索引（AHI）</h2><h3 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>由于哈希是一种时间复杂度为 O(1)的查找方法。可以通过在 B+树种建立哈希索引提高查询速度。</p>
-<p>自适应哈希索引：存储引擎通过监控索引页的查询条件和频率，来选择是否建立哈希索引。<br>原理：通过缓冲池中的页</p>
-<h3 id="2-前提"><a href="#2-前提" class="headerlink" title="2. 前提"></a>2. 前提</h3><ol>
-<li>连续使用的查询条件一样</li>
-<li>查询条件使用了 100 次</li>
-<li>数据页通过该查询条件访问了（页中记录/16）次。</li>
-</ol>
-<h3 id="3-优缺点"><a href="#3-优缺点" class="headerlink" title="3. 优缺点"></a>3. 优缺点</h3><ol>
-<li>提高了读取和写入速度</li>
-<li>只能用来等值查询，不能范围查询</li>
-</ol>
-<h2 id="4-异步-IO"><a href="#4-异步-IO" class="headerlink" title="4. 异步 IO"></a>4. 异步 IO</h2><h3 id="1-作用-2"><a href="#1-作用-2" class="headerlink" title="1. 作用"></a>1. 作用</h3><ol>
-<li>异步执行 IO 操作</li>
-<li>IO 合并</li>
-</ol>
-<h3 id="2-异步-IO-操作"><a href="#2-异步-IO-操作" class="headerlink" title="2. 异步 IO 操作"></a>2. 异步 IO 操作</h3><p>同步 IO: 用户发出 IO 请求后，需要等待 IO 请求完成，才能继续发送下一个 IO 请求。<br>异步 IO: 用户发出 IO 请求后不需要等待 IO 操作完成，可以继续发出 IO 请求。直到所有的 IO 请求发送完后，等待 IO 操作完成。</p>
-<h3 id="3-IO-合并"><a href="#3-IO-合并" class="headerlink" title="3. IO 合并"></a>3. IO 合并</h3><p>AIO:将多个 IO 请求合并为一个 IO 请求。</p>
-<p>例如： 用户需要访问多个连续页时（8,6）、（8,7）、（8,8）可以将多个 IO 操作合并成一个 IO 操作。</p>
-<p>（page,offset）指代某个表的某一页。</p>
-<h2 id="5-刷新临接页"><a href="#5-刷新临接页" class="headerlink" title="5. 刷新临接页"></a>5. 刷新临接页</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1636369637440-accdf8fa-3eba-4dfa-a7bd-ca3a30b7af22.png#averageHue=%2398b5b8&clientId=udb988001-8bfa-4&from=paste&height=285&id=u6fd4ce86&name=image.png&originHeight=569&originWidth=1027&originalType=binary&ratio=1&rotation=0&showTitle=false&size=95537&status=done&style=none&taskId=u91c37abd-0f4c-4431-84d0-0657b3bb723&title=&width=513.5" alt="image.png"></p>
-<p>工作原理：刷新脏页时，会检测所在区的所有分页，然后通过 AIO 一起进行刷新。</p>
-<p>建议机械硬盘开启特性，固态硬盘由于有着高性能的 IO 读写可以关闭。</p>
-<h1 id="-4"><a href="#-4" class="headerlink" title=""></a></h1><h3 id="-5"><a href="#-5" class="headerlink" title=""></a></h3>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
       </tags>
   </entry>
   <entry>
@@ -1502,6 +1232,276 @@
       </tags>
   </entry>
   <entry>
+    <title>Mysql技术内幕-第二章</title>
+    <url>/2022/01/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%BA%8C%E7%AB%A0/</url>
+    <content><![CDATA[<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/12394516/1636370551211-b7e3691e-760d-4777-9125-49a114a0f304.jpeg"></p>
+<h1 id="1-InnoDB-体系架构"><a href="#1-InnoDB-体系架构" class="headerlink" title="1. InnoDB 体系架构"></a>1. InnoDB 体系架构</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635692260786-270228fe-31a7-4258-b9c1-87c52f516e08.png#averageHue=%23f1f1f1&clientId=u2d86973c-b20b-4&from=paste&height=227&id=ua9f959a7&name=image.png&originHeight=454&originWidth=736&originalType=binary&ratio=1&rotation=0&showTitle=false&size=30916&status=done&style=none&taskId=u899d9abe-da7d-4e86-8256-0126b55682e&title=&width=368" alt="image.png"></p>
+<h3 id="1-InnoDB-存储引擎作用"><a href="#1-InnoDB-存储引擎作用" class="headerlink" title="1. InnoDB 存储引擎作用"></a>1. InnoDB 存储引擎作用</h3><ol>
+<li><strong>缓存磁盘上的数据</strong>，方便快速读取。对<strong>磁盘数据修改之前也做缓存。</strong></li>
+<li><strong>redo log 缓冲</strong></li>
+<li>维护进程、线程需要访问的多个内部数据结构</li>
+</ol>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="1-后台线程"><a href="#1-后台线程" class="headerlink" title="1. 后台线程"></a>1. 后台线程</h2><p>InnoDB 存储引擎是多线程模型，负责处理不同的任务</p>
+<h3 id="1-MasterThread"><a href="#1-MasterThread" class="headerlink" title="1. MasterThread"></a>1. MasterThread</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>将数据异步刷新到磁盘。其中包括脏页刷新、合并插入缓冲、UNDO 页回收。</p>
+<h3 id="2-IO-Thread"><a href="#2-IO-Thread" class="headerlink" title="2. IO Thread"></a>2. IO Thread</h3><h4 id="1-作用"><a href="#1-作用" class="headerlink" title="1. 作用"></a>1. 作用</h4><p>InnoDB 使用了大量的<strong>异步 IO</strong> 来处理 IO 请求。作用是<strong>提高数据库的性能</strong>。<br>IO Thread 的作用是负责<strong>IO 请求的回调处理</strong></p>
+<h4 id="2-分类"><a href="#2-分类" class="headerlink" title="2. 分类"></a>2. 分类</h4><p>IOThread 主要分为 4 种</p>
+<ul>
+<li><code>write thread</code>(默认 4 个)</li>
+<li><code>read thread</code>(默认 4 个)</li>
+<li><code>insert buffer thread</code></li>
+<li><code>log io thread </code></li>
+</ul>
+<p>write 和 read Thread 可以通过 <code>innnodb_read_io_threads </code>和<code>innodb_write_io_threads</code>设置线程数</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635693324015-367ec145-45e4-4614-87a4-0c8acb2a6e1e.png#averageHue=%23dedede&clientId=u2d86973c-b20b-4&from=paste&height=101&id=u0203448e&name=image.png&originHeight=201&originWidth=916&originalType=binary&ratio=1&rotation=0&showTitle=false&size=44417&status=done&style=none&taskId=u5737c692-8eaa-4bca-becf-305455ba63f&title=&width=458" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">//可以通过该命令查看innodb 中的io Thread</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash">show engine innodb  status ;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635693491056-13f94aba-301d-4a04-a8fa-9002fa135a97.png#averageHue=%23181512&clientId=u2d86973c-b20b-4&from=paste&height=118&id=u0f6a553d&name=image.png&originHeight=235&originWidth=567&originalType=binary&ratio=1&rotation=0&showTitle=false&size=29125&status=done&style=none&taskId=u2646bf68-d485-4625-a513-b5ea7fdc815&title=&width=283.5" alt="image.png"></p>
+<h3 id="3-Purge-Thread"><a href="#3-Purge-Thread" class="headerlink" title="3. Purge Thread"></a>3. Purge Thread</h3><h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><p><strong>作用：回收事务提交后的使用的 undo 页</strong>。<br>分配到独立的线程中进行，减少 Master Thread 工作。同时用户可以也可以通过<code>innnodb_purge_threads</code> 设置线程数，默认为 1.</p>
+<h3 id="4-Page-Cleaner-Thread"><a href="#4-Page-Cleaner-Thread" class="headerlink" title="4. Page Cleaner Thread"></a>4. Page Cleaner Thread</h3><p>作用：脏页刷新操作。<br>从而减少了 Master Thread 工作和查询线程线程的阻塞。提高了 InnoDB 性能。</p>
+<h3 id="5-后台线程作用"><a href="#5-后台线程作用" class="headerlink" title="5. 后台线程作用"></a>5. 后台线程作用</h3><ol>
+<li>刷新内存池中的数据，保证缓存的是最新的数据</li>
+<li>将已修改的数据文件刷新到磁盘中</li>
+<li>保证数据库发生异常恢复正常</li>
+</ol>
+<h2 id="2-内存"><a href="#2-内存" class="headerlink" title="2. 内存"></a>2. 内存</h2><h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><h3 id="1-缓冲池"><a href="#1-缓冲池" class="headerlink" title="1. 缓冲池"></a>1. 缓冲池</h3><h4 id="1-作用-1"><a href="#1-作用-1" class="headerlink" title="1. 作用"></a>1. 作用</h4><p>用来<strong>解决 cpu 速度和磁盘速度之间的鸿沟</strong></p>
+<h4 id="2-执行流程"><a href="#2-执行流程" class="headerlink" title="2. 执行流程"></a>2. 执行流程</h4><p>数据库读取页时，将磁盘读取到的页放在缓冲池中。下一次再次读取该数据页时，直接从池中读取。否则从磁盘上读取。</p>
+<p>数据库修改页操作时，首先修改缓冲池的页，然后通过<code>check point </code>机制将数据页刷新到磁盘中。</p>
+<h4 id="3-缓冲池大小配置"><a href="#3-缓冲池大小配置" class="headerlink" title="3. 缓冲池大小配置"></a>3. 缓冲池大小配置</h4><p>通过 innnodb_buffer_pool_size 来设置缓冲池大小。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635694963515-e0b21fec-317a-400c-ac75-263527738b5a.png#averageHue=%2312100f&clientId=u2d86973c-b20b-4&from=paste&height=74&id=u4b5d0c0c&name=image.png&originHeight=147&originWidth=588&originalType=binary&ratio=1&rotation=0&showTitle=false&size=10538&status=done&style=none&taskId=u89b99578-855f-48e2-a253-4720f96a6fb&title=&width=294" alt="image.png"></p>
+<h4 id="4-存储对象"><a href="#4-存储对象" class="headerlink" title="4. 存储对象"></a>4. 存储对象</h4><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635695049116-4482036d-9fb4-4114-86c0-d6bc26b0bb12.png#averageHue=%23eaeaea&clientId=u2d86973c-b20b-4&from=paste&height=170&id=ua8111efd&name=image.png&originHeight=339&originWidth=782&originalType=binary&ratio=1&rotation=0&showTitle=false&size=36170&status=done&style=none&taskId=ud1cc8c94-5846-4f28-9046-31ccee4f486&title=&width=391" alt="image.png"></p>
+<ol>
+<li>索引页</li>
+<li>数据页</li>
+<li>插入缓冲</li>
+<li>undo 页</li>
+<li>自适应哈希索引</li>
+<li>锁信息</li>
+<li>数据字典信息</li>
+</ol>
+<h3 id="2-缓存算法"><a href="#2-缓存算法" class="headerlink" title="2. 缓存算法"></a>2. 缓存算法</h3><h4 id="1-LRU（最近最少使用淘汰）"><a href="#1-LRU（最近最少使用淘汰）" class="headerlink" title="1. LRU（最近最少使用淘汰）"></a>1. LRU（最近最少使用淘汰）</h4><p>将经常使用的页放在 LRU 列表的最前端，最少使用页放在列表尾端。将新读取的页放到 midpoint 位置（距离尾端的 3/8 出）。可以通过<code>innodb_old_blocks_pct</code>控制插入位置。<br><code>midpoint</code> 之前的 new 列表，之后的为 old 列表。new 列表中数据为活跃的数据。</p>
+<p>为什么不直接把读取的新页放在列表首部？</p>
+<p>部分 sql 操作（索引、数据扫描操作）导致缓冲池中页被刷出，影响缓冲池效率。需要读入大量的数据页，导致许多活跃数据页从列表中移除。<br>innodb 可以通过设置<code>innodb_old_blocks_time</code>来决定新加入的页从 mid 到列表头部需要等待多久。</p>
+<h3 id="3-redo-日志缓冲（-redo-log-buffer）"><a href="#3-redo-日志缓冲（-redo-log-buffer）" class="headerlink" title="3. redo 日志缓冲（ redo log buffer）"></a>3. redo 日志缓冲（ redo log buffer）</h3><p>用于暂时存放 redo log 信息，然后 Innodb 以一定频率刷新到 redo log 文件中。<br>可以通过 <code>innnodb_log_buffer_size</code>设置缓冲大小。</p>
+<p><strong>三种日志刷新到 redo log 文件情况</strong></p>
+<ol>
+<li>Master Thread 每秒刷新</li>
+<li>事务提交时刷新</li>
+<li>日志缓冲空间小于一半</li>
+</ol>
+<h1 id="2-Checkpoint-技术"><a href="#2-Checkpoint-技术" class="headerlink" title="2. Checkpoint 技术"></a>2. Checkpoint 技术</h1><p><strong>解决问题</strong></p>
+<ol>
+<li>缩短数据恢复时间</li>
+<li>缓冲池不够时，将脏页刷新到磁盘</li>
+<li>redo log 日志缓冲不够时，刷新脏页</li>
+</ol>
+<h2 id="1-Check-Point-分类："><a href="#1-Check-Point-分类：" class="headerlink" title="1. Check Point 分类："></a>1. Check Point 分类：</h2><ol>
+<li>Sharp Checkpoint</li>
+<li>Fuzzy Checkpoing</li>
+</ol>
+<h2 id="2-Sharp-Checkpoint"><a href="#2-Sharp-Checkpoint" class="headerlink" title="2. Sharp Checkpoint"></a>2. Sharp Checkpoint</h2><p>默认将<strong>数据库关闭时将所有脏页刷新到磁盘中</strong>，<br>参数是 innodb_fast_shutdown=1.</p>
+<h2 id="3-Fuzzy-Checkpoint"><a href="#3-Fuzzy-Checkpoint" class="headerlink" title="3. Fuzzy Checkpoint"></a>3. Fuzzy Checkpoint</h2><h3 id="1-Master-Thread-checkpoint"><a href="#1-Master-Thread-checkpoint" class="headerlink" title="1. Master Thread checkpoint"></a>1. Master Thread checkpoint</h3><p>每 1 或 10 秒将缓冲池中的部分脏页异步刷新到磁盘</p>
+<h3 id="2-Async-Sync-Flush-checkpoint"><a href="#2-Async-Sync-Flush-checkpoint" class="headerlink" title="2. Async/Sync Flush checkpoint"></a>2. Async/Sync Flush checkpoint</h3><p>在重做日志不可用情况下强制刷新一部分页会磁盘。</p>
+<h1 id="3-InnoDB-关键特性"><a href="#3-InnoDB-关键特性" class="headerlink" title="3. InnoDB 关键特性"></a>3. InnoDB 关键特性</h1><h2 id="1-插入缓冲"><a href="#1-插入缓冲" class="headerlink" title="1. 插入缓冲"></a>1. 插入缓冲</h2><h3 id="1-Insert-Buffer"><a href="#1-Insert-Buffer" class="headerlink" title="1. Insert Buffer"></a>1. Insert Buffer</h3><p>原理： 当对<strong>非聚集索</strong>引进<strong>行插入或更新</strong>操作时，若<strong>索引页在缓冲池</strong>中，则直接<strong>更新索引页</strong>。反之，先<strong>放到 Insert Buffer <strong>中，然后以一定频率将 Insert Buffer 中的数据和辅助索引页进行</strong>merge 操作</strong>。</p>
+<p>前提：<strong>不是唯一索引的辅助索引</strong><br>问题：为什么不能是唯一索引？<br>因为唯一索引在更新时，需要将索引页加载进缓冲池中，判断索引是否唯一。将索引页加入了缓冲池中，就失去了使用 Insert Buffer 的意义。<br>作用：提高插入性能，因为每次插入时不需要立即将数据 merge 到索引页中。</p>
+<p>本质：将非聚集索引的写操作缓冲起来，然后将写操作批量 merge 到索引页中。</p>
+<p>缺点：写密集情况下会暂用大量缓冲池内存<br>可以通过 IBUF_POOL_SIZE_PER_MAX_SIZE 设置 Insert buffer 占缓冲池的比例</p>
+<h3 id="2-change-buffer"><a href="#2-change-buffer" class="headerlink" title="2. change buffer"></a>2. change buffer</h3><p>insert buffer 的升级版，支持 insert 、delete、 update 语句缓冲。通过 Insert Buffer、 Delete Buffer 、Purge Buffer 来实现缓冲。</p>
+<p>Update 语句的实现过程</p>
+<ol>
+<li>数据的记录标记为删除</li>
+<li>数据真正删除</li>
+</ol>
+<p>将数据记录标记位删除通过，通过 Delete Buffer 来实现。然后通过 Purge Buffer 将数据真正删除。</p>
+<h3 id="3-Insert-Buffer-内部实现"><a href="#3-Insert-Buffer-内部实现" class="headerlink" title="3. Insert Buffer 内部实现"></a>3. Insert Buffer 内部实现</h3><p>Insert Buffer 的数据结构是一颗 B+树。<br>非叶节点存放的查询的 search key .<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635779623534-a1a111a7-ba6f-4e06-9b28-2805adb882e1.png#averageHue=%23eeeeee&clientId=u147b5b0d-e61f-4&from=paste&height=51&id=u23ae932e&name=image.png&originHeight=102&originWidth=545&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7625&status=done&style=none&taskId=u8a8fadad-c07e-4ea8-a65f-6252e61e696&title=&width=272.5" alt="image.png"></p>
+<ul>
+<li>space 表示数据插入的表的<strong>表空间 id（用于确定插入数据是哪张表）</strong></li>
+<li>marker 兼容老版本的 Insert Buffer</li>
+<li>offset 数据页在表中的偏移量（位置）（用于确定是辅助索引的哪一页）</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635780351139-02db6f9a-d6eb-43b8-b2c3-006e96cac8da.png#averageHue=%23eeeded&clientId=u147b5b0d-e61f-4&from=paste&height=74&id=u85fb66e2&name=image.png&originHeight=147&originWidth=742&originalType=binary&ratio=1&rotation=0&showTitle=false&size=20005&status=done&style=none&taskId=uf11cb2c4-21ca-4099-a07a-63bd4da678e&title=&width=371" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635780853424-d8b9a379-1c69-4fdb-bcb0-b7b93b0b0a50.png#averageHue=%23ececec&clientId=u147b5b0d-e61f-4&from=paste&height=86&id=u6590f1f8&name=image.png&originHeight=172&originWidth=968&originalType=binary&ratio=1&rotation=0&showTitle=false&size=15357&status=done&style=none&taskId=ud2fa6c63-6633-4abc-92bb-c812946d476&title=&width=484" alt="image.png"></p>
+<p>metadata 中记录信息插入的顺序以及插入信息的类型</p>
+<p>Insert Buffer 通过 space 和 offset 确定更新数据的表和辅助索引具体页。</p>
+<h3 id="4-Merge-Insert-Buffer"><a href="#4-Merge-Insert-Buffer" class="headerlink" title="4. Merge Insert Buffer"></a>4. Merge Insert Buffer</h3><h5 id="-3"><a href="#-3" class="headerlink" title=""></a></h5><ol>
+<li>辅助索引页读取到缓冲池中</li>
+<li>Insert Buffer Bitmap 页发现辅助索引页无可用空间时。</li>
+<li>Master Thread 定时进行 Merge</li>
+</ol>
+<h3 id="4-命令"><a href="#4-命令" class="headerlink" title="4. 命令"></a>4. 命令</h3><h4 id="1-innodb-change-buffering"><a href="#1-innodb-change-buffering" class="headerlink" title="1. innodb_change_buffering"></a>1. <code>innodb_change_buffering</code></h4><p>作用： 选择开启哪些缓冲，参数为<img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635779173141-60283c22-3b4a-4307-9afb-d2b31f2ecf19.png#averageHue=%23e4e4e4&clientId=u147b5b0d-e61f-4&from=paste&height=21&id=u50f1346f&name=image.png&originHeight=41&originWidth=472&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3875&status=done&style=none&taskId=uf0bc3b34-e529-4b4e-91b5-9d2fc61f89c&title=&width=236" alt="image.png"></p>
+<h4 id="2-innodb-change-buffer-max-size"><a href="#2-innodb-change-buffer-max-size" class="headerlink" title="2. innodb_change_buffer_max_size"></a>2. innodb_change_buffer_max_size</h4><p>作用：控制 change buffer 最大内存使用量<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635779232140-aea89c5b-1c60-420c-ad21-7455d07c85ef.png#averageHue=%23dfdfdf&clientId=u147b5b0d-e61f-4&from=paste&height=23&id=ubfd3b6b4&name=image.png&originHeight=45&originWidth=880&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9395&status=done&style=none&taskId=u5e544fdf-c639-4141-8cea-ffb33be97fc&title=&width=440" alt="image.png"><br><strong>最大值为 50.</strong></p>
+<h2 id="2-两次写"><a href="#2-两次写" class="headerlink" title="2. 两次写"></a>2. 两次写</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1636031467126-3252bdd4-ab40-4f6e-9266-86cd36868636.png#averageHue=%23d3e9eb&clientId=uecbbc78a-62fa-4&from=paste&height=255&id=u11158e89&name=image.png&originHeight=510&originWidth=816&originalType=binary&ratio=1&rotation=0&showTitle=false&size=174039&status=done&style=none&taskId=ueb092f1b-bb82-4392-9efa-7d478b9f7a8&title=&width=408" alt="image.png"></p>
+<h3 id="1-流程"><a href="#1-流程" class="headerlink" title="1. 流程"></a>1. 流程</h3><ol>
+<li>InnoDB 将脏页写到内存中的 Double write buffer 中</li>
+<li>然后 DWB 将数据现在写入磁盘上 DWB</li>
+<li>内存中的 DWB 再将数据刷到磁盘中</li>
+</ol>
+<h3 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h3><p>通过将脏页数据进行缓存，可以保证数据库异常关闭的情况下，脏页数据未完全写入磁盘时，无法通过 redo log 进行数据的恢复。可以通过 DWB 中之前保存的脏页数据，将数据页写入到磁盘中，然后 redo log 根据脏页进行数据的恢复。</p>
+<p><a href="https://developer.aliyun.com/article/743889?spm=a2c6h.14164896.0.0.7d52783blX00fB">double write buffer 深度</a></p>
+<h2 id="3-自适应哈希索引（AHI）"><a href="#3-自适应哈希索引（AHI）" class="headerlink" title="3. 自适应哈希索引（AHI）"></a>3. 自适应哈希索引（AHI）</h2><h3 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>由于哈希是一种时间复杂度为 O(1)的查找方法。可以通过在 B+树种建立哈希索引提高查询速度。</p>
+<p>自适应哈希索引：存储引擎通过监控索引页的查询条件和频率，来选择是否建立哈希索引。<br>原理：通过缓冲池中的页</p>
+<h3 id="2-前提"><a href="#2-前提" class="headerlink" title="2. 前提"></a>2. 前提</h3><ol>
+<li>连续使用的查询条件一样</li>
+<li>查询条件使用了 100 次</li>
+<li>数据页通过该查询条件访问了（页中记录/16）次。</li>
+</ol>
+<h3 id="3-优缺点"><a href="#3-优缺点" class="headerlink" title="3. 优缺点"></a>3. 优缺点</h3><ol>
+<li>提高了读取和写入速度</li>
+<li>只能用来等值查询，不能范围查询</li>
+</ol>
+<h2 id="4-异步-IO"><a href="#4-异步-IO" class="headerlink" title="4. 异步 IO"></a>4. 异步 IO</h2><h3 id="1-作用-2"><a href="#1-作用-2" class="headerlink" title="1. 作用"></a>1. 作用</h3><ol>
+<li>异步执行 IO 操作</li>
+<li>IO 合并</li>
+</ol>
+<h3 id="2-异步-IO-操作"><a href="#2-异步-IO-操作" class="headerlink" title="2. 异步 IO 操作"></a>2. 异步 IO 操作</h3><p>同步 IO: 用户发出 IO 请求后，需要等待 IO 请求完成，才能继续发送下一个 IO 请求。<br>异步 IO: 用户发出 IO 请求后不需要等待 IO 操作完成，可以继续发出 IO 请求。直到所有的 IO 请求发送完后，等待 IO 操作完成。</p>
+<h3 id="3-IO-合并"><a href="#3-IO-合并" class="headerlink" title="3. IO 合并"></a>3. IO 合并</h3><p>AIO:将多个 IO 请求合并为一个 IO 请求。</p>
+<p>例如： 用户需要访问多个连续页时（8,6）、（8,7）、（8,8）可以将多个 IO 操作合并成一个 IO 操作。</p>
+<p>（page,offset）指代某个表的某一页。</p>
+<h2 id="5-刷新临接页"><a href="#5-刷新临接页" class="headerlink" title="5. 刷新临接页"></a>5. 刷新临接页</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1636369637440-accdf8fa-3eba-4dfa-a7bd-ca3a30b7af22.png#averageHue=%2398b5b8&clientId=udb988001-8bfa-4&from=paste&height=285&id=u6fd4ce86&name=image.png&originHeight=569&originWidth=1027&originalType=binary&ratio=1&rotation=0&showTitle=false&size=95537&status=done&style=none&taskId=u91c37abd-0f4c-4431-84d0-0657b3bb723&title=&width=513.5" alt="image.png"></p>
+<p>工作原理：刷新脏页时，会检测所在区的所有分页，然后通过 AIO 一起进行刷新。</p>
+<p>建议机械硬盘开启特性，固态硬盘由于有着高性能的 IO 读写可以关闭。</p>
+<h1 id="-4"><a href="#-4" class="headerlink" title=""></a></h1><h3 id="-5"><a href="#-5" class="headerlink" title=""></a></h3>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql逻辑架构</title>
+    <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png#averageHue=%23f9f6f3&clientId=u39eee028-9d46-4&from=paste&height=664&id=u609f2fe9&name=image.png&originHeight=730&originWidth=980&originalType=binary&ratio=1&rotation=0&showTitle=false&size=181397&status=done&style=none&taskId=u72281ee6-13c7-4efb-9295-bafda71f115&title=&width=890.9090715991568" alt="image.png"></p>
+<h2 id="Mysql-架构"><a href="#Mysql-架构" class="headerlink" title="Mysql 架构"></a>Mysql 架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674177610690-d827ed10-467b-4b9e-a73d-67db0a9ab071.png#averageHue=%23c9c0ae&clientId=u2930fbf9-b22d-4&from=paste&height=455&id=rpgUJ&name=image.png&originHeight=501&originWidth=793&originalType=binary&ratio=1&rotation=0&showTitle=false&size=280500&status=done&style=none&taskId=u85ffcba6-fe08-41cc-9b2e-6d618c27bc3&title=&width=720.9090752838075" alt="image.png"></p>
+<h3 id="1-连接层"><a href="#1-连接层" class="headerlink" title="1. 连接层"></a>1. 连接层</h3><h4 id="1-Connection-pool"><a href="#1-Connection-pool" class="headerlink" title="1. Connection pool"></a>1. Connection pool</h4><p>作用：</p>
+<ol>
+<li>客户端与服务器建立 TCP 连接</li>
+<li>查询用户对应权限，判定用户能够进行哪些操作</li>
+<li>控制连接个数和连接的复用</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674178023914-f758ce45-8f06-4434-862b-4348ec02da7f.png#averageHue=%23e6e4de&clientId=u2930fbf9-b22d-4&from=paste&height=561&id=ua4ae3b11&name=image.png&originHeight=617&originWidth=530&originalType=binary&ratio=1&rotation=0&showTitle=false&size=72581&status=done&style=none&taskId=u35d0e871-73c9-44ff-80db-2e893ec8eea&title=&width=481.8181713750542" alt="image.png"></p>
+<h3 id="2-服务层"><a href="#2-服务层" class="headerlink" title="2. 服务层"></a>2. 服务层</h3><h4 id="1-Sql-接口"><a href="#1-Sql-接口" class="headerlink" title="1. Sql 接口"></a>1. Sql 接口</h4><ol>
+<li>接收 SQL 命令</li>
+<li>返回查询结果</li>
+</ol>
+<h4 id="2-解析器"><a href="#2-解析器" class="headerlink" title="2. 解析器"></a>2. 解析器</h4><ol>
+<li>解析 SQL 语句</li>
+<li>生成解析树</li>
+<li>验证用户权限</li>
+</ol>
+<h4 id="3-优化器"><a href="#3-优化器" class="headerlink" title="3. 优化器"></a>3. 优化器</h4><ol>
+<li>生成执行计划</li>
+<li>明确索引使用</li>
+<li>采用选取-投影-连接进行查询</li>
+</ol>
+<h4 id="4-查询缓存"><a href="#4-查询缓存" class="headerlink" title="4. 查询缓存"></a>4. 查询缓存</h4><ol>
+<li>记录查询结果</li>
+<li>key-value 形式存储</li>
+</ol>
+<h3 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h3><ol>
+<li>数据存储提取</li>
+<li>维护底层数据执行</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql技术内幕-第一章</title>
+    <url>/2021/12/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
+    <content><![CDATA[<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/12394516/1635612909935-781caa54-e671-46b3-b70e-4d4760efdb19.jpeg"></p>
+<h1 id="1-定义数据库和实例"><a href="#1-定义数据库和实例" class="headerlink" title="1. 定义数据库和实例"></a>1. 定义数据库和实例</h1><h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ol>
+<li><p>数据库**： **操作系统或者是内存中数据库类型文件的集合。</p>
+</li>
+<li><p>实例： 数据库实例是真正操作数据库的对象。通过数据库实例完成对数据库文件的增删改查。</p>
+</li>
+</ol>
+<p>MySQL 是一个单进程多线程的数据库。MySQL 数据库实例在系统上表现的就是一个进程。</p>
+<h1 id="2-MySQL-体系结构"><a href="#2-MySQL-体系结构" class="headerlink" title="2. MySQL 体系结构"></a>2. MySQL 体系结构</h1><h2 id="1-结构图"><a href="#1-结构图" class="headerlink" title="1. 结构图"></a>1. 结构图</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635610498443-00dd90e5-027b-45cc-9abd-453e79201f37.png#averageHue=%23dad9d9&clientId=u65aa59ec-0f7c-4&from=paste&height=297&id=u870f042c&name=image.png&originHeight=593&originWidth=916&originalType=binary&ratio=1&rotation=0&showTitle=false&size=162280&status=done&style=none&taskId=u84e62d2d-ba28-4b0e-b986-287bccf284f&title=&width=458" alt="image.png"></p>
+<h2 id="2-MySQL-组成部分"><a href="#2-MySQL-组成部分" class="headerlink" title="2. MySQL 组成部分"></a>2. MySQL 组成部分</h2><h3 id="1-8-大组成部分"><a href="#1-8-大组成部分" class="headerlink" title="1. 8 大组成部分"></a>1. 8 大组成部分</h3><ol>
+<li>连接池</li>
+<li>管理服务和工具组件</li>
+<li>Sql 接口组件</li>
+<li>查询分析器</li>
+<li>优化器</li>
+<li>缓存</li>
+<li>插件式存储引擎</li>
+<li>物理文件</li>
+</ol>
+<p><strong>存储引擎是基于表的，而不是数据库。</strong></p>
+<h1 id="3-MySQL-存储引擎"><a href="#3-MySQL-存储引擎" class="headerlink" title="3. MySQL 存储引擎"></a>3. MySQL 存储引擎</h1><h2 id="1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎"><a href="#1-InnoDB-存储引擎-最常用的-5-5-8-后默认存储引擎" class="headerlink" title="1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)"></a>1. InnoDB 存储引擎(最常用的 5.5.8 后默认存储引擎)</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>行锁设计</strong></li>
+<li><strong>支持外键</strong></li>
+<li><strong>类似于 Oracle 的非锁定读</strong></li>
+</ol>
+<h3 id="2-主要功能"><a href="#2-主要功能" class="headerlink" title="2. 主要功能"></a>2. 主要功能</h3><ol>
+<li>InnoDB 使用<strong>多版本并发控制（MVCC）来实现高并发性。</strong></li>
+<li><strong>实现了 4 种隔离级别</strong>。默认的为 REPEATABLE 级别</li>
+<li>使用<strong>next-key locking 策略来避免幻读现象</strong></li>
+<li>提供了插入缓冲（insert buffer）、二次写、自适应哈希索引、预读等高性能和高可用功能</li>
+<li>数据的存储的采用了<strong>聚集的方式</strong>，表的数据存储按主键的顺序存放。如果没有主键会默认每行生成一个 ROWID 作为主键。</li>
+</ol>
+<h3 id="3-面向对象"><a href="#3-面向对象" class="headerlink" title="3. 面向对象"></a>3. 面向对象</h3><p>设计目标主要面向<strong>在线事务处理应用。</strong></p>
+<h2 id="2-MyISAM-存储引擎（5-58-之前默认存储引擎）"><a href="#2-MyISAM-存储引擎（5-58-之前默认存储引擎）" class="headerlink" title="2. MyISAM 存储引擎（5.58 之前默认存储引擎）"></a>2. MyISAM 存储引擎（5.58 之前默认存储引擎）</h2><h3 id="1-特点-1"><a href="#1-特点-1" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>不支持事务、表锁/行锁</strong></li>
+<li><strong>支持全文索引</strong></li>
+<li><strong>缓冲池只缓存索引文件</strong>，不缓存数据。</li>
+<li>MyISAM 存储引擎表的由 MYD 和 MYI 两种文件存储。MYD 存储数据，MYI 存储索引。</li>
+</ol>
+<h2 id="3-NDB-存储引擎-集群存储引擎"><a href="#3-NDB-存储引擎-集群存储引擎" class="headerlink" title="3. NDB 存储引擎(集群存储引擎)"></a>3. NDB 存储引擎(集群存储引擎)</h2><h3 id="1-特点-2"><a href="#1-特点-2" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>数据全部放在内存中</strong>，5.1 后，可将非索引数据存放到磁盘上。</li>
+<li><strong>主键查找速度极快</strong></li>
+<li>通过增加 NDB 数据存储节点，可以线性提高数据性能。是高可用、高性能集群系统</li>
+<li><strong>查询速度慢</strong>。由于 NDB 存储引擎连接操作在数据库层完成，导致需要巨大网络开销。</li>
+</ol>
+<h2 id="4-Memory-存储引擎"><a href="#4-Memory-存储引擎" class="headerlink" title="4. Memory 存储引擎"></a>4. Memory 存储引擎</h2><h3 id="1-特点-3"><a href="#1-特点-3" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li><strong>数据存放在内存中</strong></li>
+<li><strong>默认使用哈希索引</strong></li>
+<li><strong>只支持表锁，并发性能差</strong></li>
+<li><strong>不支持 TEXT 和 BLOBl 乐行</strong></li>
+<li><strong>浪费内存，存储 varchar 是按照 char 的方式存储。</strong></li>
+</ol>
+<h2 id="5-存储引擎的比较"><a href="#5-存储引擎的比较" class="headerlink" title="5. 存储引擎的比较"></a>5. 存储引擎的比较</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613196777-e8e4aa9e-8031-41f7-9c6b-2759e7734602.png#averageHue=%23d7d7d7&clientId=u0834a0c7-dbbe-4&from=paste&height=288&id=ub63fdd4b&name=image.png&originHeight=576&originWidth=858&originalType=binary&ratio=1&rotation=0&showTitle=false&size=96128&status=done&style=none&taskId=u8a3c4e80-50ac-4e4b-94fd-03638655320&title=&width=429" alt="image.png"></p>
+<h1 id="4-连接-MySQL"><a href="#4-连接-MySQL" class="headerlink" title="4. 连接 MySQL"></a>4. 连接 MySQL</h1><p>本质： MySQL 实例和连接进程的进行通信。<br>进程间的通信方式：TCP/IP 套接字，UNIX 域套接字、管道、命名管道。</p>
+<h3 id="1-TCP-IP（常用）"><a href="#1-TCP-IP（常用）" class="headerlink" title="1. TCP/IP（常用）"></a>1. TCP/IP（常用）</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1635613490753-6a0743d1-db16-4a40-867b-8e10c6b131bb.png#averageHue=%23f4f4f4&clientId=u0834a0c7-dbbe-4&from=paste&height=65&id=u2b227af7&name=image.png&originHeight=130&originWidth=781&originalType=binary&ratio=1&rotation=0&showTitle=false&size=12153&status=done&style=none&taskId=ub2eb1b22-c425-4278-a08b-e32c658f8b5&title=&width=390.5" alt="image.png"><br>客户端通过向 MySQL 服务器发送 TCP/IP 连接请求，连接成功后。MySQL 数据库会查权限视图，判断用户的客户端 IP 是否连接到 MySQL 实例。</p>
+<h1 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h1><ol>
+<li>介绍了实例和数据库的区别。实例是操作数据库的对象，数据库是所有数据库类型文件的集合</li>
+<li>MySQL 的体系结构和其中的组件<ol>
+<li>连接池</li>
+<li>管理服务和工具组件</li>
+<li>Sql 接口</li>
+<li>查询和分析器</li>
+<li>优化器</li>
+<li>缓存</li>
+<li>插件式存储引擎</li>
+<li>物理文件</li>
+</ol>
+</li>
+<li>MySQL 主流的存储引擎及其特点<ol>
+<li>InnoDB 支持行锁、事务\外键</li>
+<li>MyISAM 不支持行表锁、事务。支持全文索引</li>
+<li>Memory 支持哈希索引、表锁、不支持 BLOB、TEXT 类型。varchar 定长.</li>
+<li>NDB 数据存放在内存中</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
     <url>/2021/05/13/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
@@ -1519,6 +1519,48 @@
         <tag>Java</tag>
         <tag>SpringSecurity</tag>
         <tag>开发问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2023/02/03/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>常数操作：和数据量无关，固定时间完成的操作，比如数组取数（只需要知道起始地址和计算偏移量，即可知道对应的数值）、加减乘除、位运算。</p>
+<p>时间复杂度：计算流程中发生过多少次常熟操作，总结出的操作数量表达式，表达式中取最高阶项（不要系数），最高阶为 N，时间复杂度为 O（N）;</p>
+<p><strong>异或运算</strong><br><strong>特性</strong>：</p>
+<ol>
+<li><strong>相同为 0，不同为 1</strong></li>
+<li><strong>不进位加法</strong></li>
+<li><strong>0^n=n，n^n=0</strong></li>
+<li><strong>异或运算满足交换律和结合律</strong></li>
+<li><strong>异或运算可以用来交换数值（两者地址不同）</strong></li>
+</ol>
+<p>异或运算相关算法题:</p>
+<ol>
+<li>找出</li>
+</ol>
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/gif/12394516/1673699474007-9bbed563-ab87-4618-8c25-5b775bc0a4f0.gif#averageHue=%23d0e1e8&clientId=u1a967895-dc45-4&from=paste&id=u22347cf1&originHeight=248&originWidth=811&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u782a420b-a441-459d-8917-a6273aae4e7&title="><br>步骤:</p>
+<p>1.</p>
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/gif/12394516/1673699485901-ff17cdee-9e00-4e19-9b8c-3bb642cfecc7.gif#averageHue=%23d2e2e8&clientId=u1a967895-dc45-4&from=paste&id=u946691a1&originHeight=257&originWidth=826&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u588d38c1-2ef3-4a8b-9ec9-87043148dd9&title="></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>枚举和注解</title>
+    <url>/2021/12/24/%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="枚举类的使用"><a href="#枚举类的使用" class="headerlink" title="枚举类的使用"></a>枚举类的使用</h1><h2 id="枚举类的定义"><a href="#枚举类的定义" class="headerlink" title="枚举类的定义"></a>枚举类的定义</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SeasonEnums</span> </span>&#123;</span><br><span class="line">    <span class="comment">//提供当前枚举类的对象</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>), SUMMER(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>), AUTUMN(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>), WINNER(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;冰天雪地&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String desc;</span><br><span class="line"></span><br><span class="line">    SeasonEnums(String name, String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;SeasonEnums&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, desc=&#x27;&quot;</span> + desc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="枚举类的方法使用"><a href="#枚举类的方法使用" class="headerlink" title="枚举类的方法使用"></a>枚举类的方法使用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(SeasonEnums.WINNER);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//1. values（）获取所有的枚举对象</span></span><br><span class="line">SeasonEnums[] values = SeasonEnums.values();</span><br><span class="line"><span class="keyword">for</span> (SeasonEnums value : values) &#123;</span><br><span class="line">	System.out.println(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//2. valueOf(String str)通过枚举对象名，获取对应枚举对象信息</span></span><br><span class="line">SeasonEnums spring = SeasonEnums.valueOf(<span class="string">&quot;SPRING&quot;</span>);</span><br><span class="line">System.out.println(spring);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;冬天&#x27;, desc=&#x27;冰天雪地&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;春天&#x27;, desc=&#x27;春暖花开&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;夏天&#x27;, desc=&#x27;夏日炎炎&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;秋天&#x27;, desc=&#x27;秋高气爽&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;冬天&#x27;, desc=&#x27;冰天雪地&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;春天&#x27;, desc=&#x27;春暖花开&#x27;&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="枚举类实现接口的方式"><a href="#枚举类实现接口的方式" class="headerlink" title="枚举类实现接口的方式"></a>枚举类实现接口的方式</h1><h2 id="枚举类中实现抽象方法"><a href="#枚举类中实现抽象方法" class="headerlink" title="枚举类中实现抽象方法"></a>枚举类中实现抽象方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SeasonEnums</span> <span class="keyword">implements</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">    <span class="comment">//提供当前枚举类的对象</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>), SUMMER(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>), AUTUMN(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>), WINNER(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;冰天雪地&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String desc;</span><br><span class="line"></span><br><span class="line">    SeasonEnums(String name, String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;SeasonEnums&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, desc=&#x27;&quot;</span> + desc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//枚举类实现接口的一种方式</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;这是一个季节&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="枚举对象中实现抽象方法"><a href="#枚举对象中实现抽象方法" class="headerlink" title="枚举对象中实现抽象方法"></a>枚举对象中实现抽象方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SeasonEnums</span> <span class="keyword">implements</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">    <span class="comment">//提供当前枚举类的对象</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;春天在哪里&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, SUMMER(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;宁夏&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, AUTUMN(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;秋天不回来&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, WINNER(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;冰天雪地&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;大约在冬季&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String desc;</span><br><span class="line"></span><br><span class="line">    SeasonEnums(String name, String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;SeasonEnums&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, desc=&#x27;&quot;</span> + desc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>注解</tag>
+        <tag>枚举</tag>
       </tags>
   </entry>
   <entry>
@@ -1566,47 +1608,5 @@
       <tags>
         <tag>Java</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>枚举和注解</title>
-    <url>/2021/12/24/%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="枚举类的使用"><a href="#枚举类的使用" class="headerlink" title="枚举类的使用"></a>枚举类的使用</h1><h2 id="枚举类的定义"><a href="#枚举类的定义" class="headerlink" title="枚举类的定义"></a>枚举类的定义</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SeasonEnums</span> </span>&#123;</span><br><span class="line">    <span class="comment">//提供当前枚举类的对象</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>), SUMMER(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>), AUTUMN(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>), WINNER(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;冰天雪地&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String desc;</span><br><span class="line"></span><br><span class="line">    SeasonEnums(String name, String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;SeasonEnums&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, desc=&#x27;&quot;</span> + desc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="枚举类的方法使用"><a href="#枚举类的方法使用" class="headerlink" title="枚举类的方法使用"></a>枚举类的方法使用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(SeasonEnums.WINNER);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//1. values（）获取所有的枚举对象</span></span><br><span class="line">SeasonEnums[] values = SeasonEnums.values();</span><br><span class="line"><span class="keyword">for</span> (SeasonEnums value : values) &#123;</span><br><span class="line">	System.out.println(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//2. valueOf(String str)通过枚举对象名，获取对应枚举对象信息</span></span><br><span class="line">SeasonEnums spring = SeasonEnums.valueOf(<span class="string">&quot;SPRING&quot;</span>);</span><br><span class="line">System.out.println(spring);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;冬天&#x27;, desc=&#x27;冰天雪地&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;春天&#x27;, desc=&#x27;春暖花开&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;夏天&#x27;, desc=&#x27;夏日炎炎&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;秋天&#x27;, desc=&#x27;秋高气爽&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;冬天&#x27;, desc=&#x27;冰天雪地&#x27;&#125;</span></span><br><span class="line"><span class="comment">SeasonEnums&#123;name=&#x27;春天&#x27;, desc=&#x27;春暖花开&#x27;&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="枚举类实现接口的方式"><a href="#枚举类实现接口的方式" class="headerlink" title="枚举类实现接口的方式"></a>枚举类实现接口的方式</h1><h2 id="枚举类中实现抽象方法"><a href="#枚举类中实现抽象方法" class="headerlink" title="枚举类中实现抽象方法"></a>枚举类中实现抽象方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SeasonEnums</span> <span class="keyword">implements</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">    <span class="comment">//提供当前枚举类的对象</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>), SUMMER(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>), AUTUMN(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>), WINNER(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;冰天雪地&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String desc;</span><br><span class="line"></span><br><span class="line">    SeasonEnums(String name, String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;SeasonEnums&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, desc=&#x27;&quot;</span> + desc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//枚举类实现接口的一种方式</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;这是一个季节&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="枚举对象中实现抽象方法"><a href="#枚举对象中实现抽象方法" class="headerlink" title="枚举对象中实现抽象方法"></a>枚举对象中实现抽象方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SeasonEnums</span> <span class="keyword">implements</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">    <span class="comment">//提供当前枚举类的对象</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;春天在哪里&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, SUMMER(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;宁夏&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, AUTUMN(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;秋天不回来&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, WINNER(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;冰天雪地&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;大约在冬季&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String desc;</span><br><span class="line"></span><br><span class="line">    SeasonEnums(String name, String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;SeasonEnums&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, desc=&#x27;&quot;</span> + desc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>注解</tag>
-        <tag>枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2023/02/03/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>常数操作：和数据量无关，固定时间完成的操作，比如数组取数（只需要知道起始地址和计算偏移量，即可知道对应的数值）、加减乘除、位运算。</p>
-<p>时间复杂度：计算流程中发生过多少次常熟操作，总结出的操作数量表达式，表达式中取最高阶项（不要系数），最高阶为 N，时间复杂度为 O（N）;</p>
-<p><strong>异或运算</strong><br><strong>特性</strong>：</p>
-<ol>
-<li><strong>相同为 0，不同为 1</strong></li>
-<li><strong>不进位加法</strong></li>
-<li><strong>0^n=n，n^n=0</strong></li>
-<li><strong>异或运算满足交换律和结合律</strong></li>
-<li><strong>异或运算可以用来交换数值（两者地址不同）</strong></li>
-</ol>
-<p>异或运算相关算法题:</p>
-<ol>
-<li>找出</li>
-</ol>
-<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/gif/12394516/1673699474007-9bbed563-ab87-4618-8c25-5b775bc0a4f0.gif#averageHue=%23d0e1e8&clientId=u1a967895-dc45-4&from=paste&id=u22347cf1&originHeight=248&originWidth=811&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u782a420b-a441-459d-8917-a6273aae4e7&title="><br>步骤:</p>
-<p>1.</p>
-<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/gif/12394516/1673699485901-ff17cdee-9e00-4e19-9b8c-3bb642cfecc7.gif#averageHue=%23d2e2e8&clientId=u1a967895-dc45-4&from=paste&id=u946691a1&originHeight=257&originWidth=826&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u588d38c1-2ef3-4a8b-9ec9-87043148dd9&title="></p>
-]]></content>
   </entry>
 </search>

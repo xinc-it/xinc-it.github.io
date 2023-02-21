@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
-    <url>/2023/02/21/%E6%97%A0%E6%A0%87%E9%A2%98/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>了解Mysql查询语句执行流程</title>
     <url>/2022/01/11/1!%E4%BA%86%E8%A7%A3Mysql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</url>
     <content><![CDATA[<p><strong>MySQL 逻辑架构图</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1629176680362-2a25040b-16f9-402a-895d-3c6fdfd78a1f.png#clientId=u444c9418-ad4f-4&from=paste&height=335&id=bsas8&name=image.png&originHeight=670&originWidth=898&originalType=binary&ratio=1&size=243581&status=done&style=none&taskId=u046362f2-96e4-4be8-9205-33faa94f32d&width=449" alt="image.png"></p>
@@ -1056,6 +1051,16 @@
       <tags>
         <tag>Java</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2023/02/21/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <content><![CDATA[<ol>
+<li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
+<li>系统 hosts 文件无法修改需要添加文件进行修改</li>
+<li>杀毒软件拦截 host 文件修改，建议退出杀毒软件尝试</li>
+</ol>
+]]></content>
   </entry>
   <entry>
     <title>枚举和注解</title>

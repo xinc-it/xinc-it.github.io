@@ -200,61 +200,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql-锁</title>
-    <url>/2021/09/10/5!%E9%94%81/</url>
-    <content><![CDATA[<h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
-<ol>
-<li><strong>全局锁</strong></li>
-<li><strong>表级锁</strong></li>
-<li><strong>行锁</strong></li>
-</ol>
-<h2 id="2-全局锁"><a href="#2-全局锁" class="headerlink" title="2. 全局锁"></a>2. 全局锁</h2><p>全局读锁命令<br><strong>全局锁就是对整个数据库实例加锁，Mysql 提供了一个加全局读锁的命令。可以让整个数据库处于只读状态。</strong><br>导致数据的增删改、建表修改表语句、事务的提交语句失效。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Flush tables with read lock</span><br></pre></td></tr></table></figure>
-
-<p>场景：<strong>全库的逻辑备份(也可以开启可重复读事务级别来进行备份)</strong><br>另一种方式是使用 mysqldump 工具使用参数-single-transaction 进行数据库备份。前提：数据库中所有的表支持可重复读。</p>
-<p>场景：用户买课和买课后的余额。不加锁导致两个表的数据前后不一致。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018821575-900c6793-130c-47c3-8b6c-b3533bf27c70.png#clientId=uf02e59f4-5d80-4&from=paste&height=271&id=u5e04065e&name=image.png&originHeight=542&originWidth=882&originalType=binary&ratio=1&size=204494&status=done&style=none&taskId=uadb7ab82-ba93-48d1-a88f-e117005dcaf&width=441" alt="image.png"></p>
-<h2 id="3-表级锁"><a href="#3-表级锁" class="headerlink" title="3. 表级锁"></a>3. 表级锁</h2><ol>
-<li>两种表锁</li>
-</ol>
-<ul>
-<li>表锁</li>
-<li>元数据锁</li>
-</ul>
-<ol start="2">
-<li>表锁</li>
-</ol>
-<p>作用：<strong>锁定表只能进行读或读和写操作。不允许操作其他表。（处理并发的常用方式）</strong></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">lock tables t1 read, t2 write;</span><br></pre></td></tr></table></figure>
-
-<p>只能对 t1 表进行读，t2 表进行读和写。直到执行<strong>unlock tables</strong>之前不允许对其他表进行读写操作。</p>
-<ol start="3">
-<li>MDL ( meatadata lock)</li>
-</ol>
-<p>作用：保证读写的正确性。防止 DDL(加字段等修改表结构的操作)和 DML 冲突（增删改数据）<br>特点： 自动加上，不需要使用 sql 语句。在对表进行数据的增删改查操作时加读锁。修改表结构时，加写锁。</p>
-<p>读读锁共存、读写锁、写写锁互斥。</p>
-<p><strong>示例</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634388295266-c5897d57-05ac-4ac9-b910-e2d9950d6f1e.png#clientId=ubaf7a982-8eca-4&from=paste&height=261&id=u0e8aeaeb&name=image.png&originHeight=521&originWidth=834&originalType=binary&ratio=1&size=78640&status=done&style=none&taskId=u2b78eb8a-f57d-433e-935f-d586ac65ede&width=417" alt="image.png"></p>
-<p>在多个事务开启且未结束的过程中给某个表添加个字段导致读写锁冲突。</p>
-<p>解决方法<br>在 information_schema 库中 innodb_trx 表中查询出正在执行事务，可以暂停表变更事务、或者是长事务。</p>
-<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
-<li><p>全局锁主要是用来逻辑备份，有两种方式一种是通过命令 flush tables with read lock;。另一种需要支持库中所有的表支持可重复读事务，使用 mysqldump -single-transaction 进行备份。</p>
-</li>
-<li><p>表锁通过 sql 语句限制指定表只能进行读、读/写操作,且不允许对其他表操作在解锁前。</p>
-</li>
-<li><p>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql-索引</title>
     <url>/2022/09/09/4!%E7%B4%A2%E5%BC%95/</url>
     <content><![CDATA[<h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#averageHue=%23dce4d1&clientId=uf02e59f4-5d80-4&from=paste&height=286&id=u7fa963ac&name=image.png&originHeight=572&originWidth=848&originalType=binary&ratio=1&rotation=0&showTitle=false&size=173484&status=done&style=none&taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&title=&width=424" alt="image.png"></p>
@@ -316,6 +261,61 @@
 </li>
 <li>索引覆盖：通过非主键索引查询主键索引的值，导致不需要回到主键索引树再次进行查询的过程。</li>
 <li>最左前缀原则</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql-锁</title>
+    <url>/2021/09/10/5!%E9%94%81/</url>
+    <content><![CDATA[<h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
+<ol>
+<li><strong>全局锁</strong></li>
+<li><strong>表级锁</strong></li>
+<li><strong>行锁</strong></li>
+</ol>
+<h2 id="2-全局锁"><a href="#2-全局锁" class="headerlink" title="2. 全局锁"></a>2. 全局锁</h2><p>全局读锁命令<br><strong>全局锁就是对整个数据库实例加锁，Mysql 提供了一个加全局读锁的命令。可以让整个数据库处于只读状态。</strong><br>导致数据的增删改、建表修改表语句、事务的提交语句失效。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Flush tables with read lock</span><br></pre></td></tr></table></figure>
+
+<p>场景：<strong>全库的逻辑备份(也可以开启可重复读事务级别来进行备份)</strong><br>另一种方式是使用 mysqldump 工具使用参数-single-transaction 进行数据库备份。前提：数据库中所有的表支持可重复读。</p>
+<p>场景：用户买课和买课后的余额。不加锁导致两个表的数据前后不一致。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631018821575-900c6793-130c-47c3-8b6c-b3533bf27c70.png#clientId=uf02e59f4-5d80-4&from=paste&height=271&id=u5e04065e&name=image.png&originHeight=542&originWidth=882&originalType=binary&ratio=1&size=204494&status=done&style=none&taskId=uadb7ab82-ba93-48d1-a88f-e117005dcaf&width=441" alt="image.png"></p>
+<h2 id="3-表级锁"><a href="#3-表级锁" class="headerlink" title="3. 表级锁"></a>3. 表级锁</h2><ol>
+<li>两种表锁</li>
+</ol>
+<ul>
+<li>表锁</li>
+<li>元数据锁</li>
+</ul>
+<ol start="2">
+<li>表锁</li>
+</ol>
+<p>作用：<strong>锁定表只能进行读或读和写操作。不允许操作其他表。（处理并发的常用方式）</strong></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">lock tables t1 read, t2 write;</span><br></pre></td></tr></table></figure>
+
+<p>只能对 t1 表进行读，t2 表进行读和写。直到执行<strong>unlock tables</strong>之前不允许对其他表进行读写操作。</p>
+<ol start="3">
+<li>MDL ( meatadata lock)</li>
+</ol>
+<p>作用：保证读写的正确性。防止 DDL(加字段等修改表结构的操作)和 DML 冲突（增删改数据）<br>特点： 自动加上，不需要使用 sql 语句。在对表进行数据的增删改查操作时加读锁。修改表结构时，加写锁。</p>
+<p>读读锁共存、读写锁、写写锁互斥。</p>
+<p><strong>示例</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634388295266-c5897d57-05ac-4ac9-b910-e2d9950d6f1e.png#clientId=ubaf7a982-8eca-4&from=paste&height=261&id=u0e8aeaeb&name=image.png&originHeight=521&originWidth=834&originalType=binary&ratio=1&size=78640&status=done&style=none&taskId=u2b78eb8a-f57d-433e-935f-d586ac65ede&width=417" alt="image.png"></p>
+<p>在多个事务开启且未结束的过程中给某个表添加个字段导致读写锁冲突。</p>
+<p>解决方法<br>在 information_schema 库中 innodb_trx 表中查询出正在执行事务，可以暂停表变更事务、或者是长事务。</p>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
+<li><p>全局锁主要是用来逻辑备份，有两种方式一种是通过命令 flush tables with read lock;。另一种需要支持库中所有的表支持可重复读事务，使用 mysqldump -single-transaction 进行备份。</p>
+</li>
+<li><p>表锁通过 sql 语句限制指定表只能进行读、读/写操作,且不允许对其他表操作在解锁前。</p>
+</li>
+<li><p>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</p>
+</li>
 </ol>
 ]]></content>
       <categories>
@@ -1054,7 +1054,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2023/04/12/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2023/04/13/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>

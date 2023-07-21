@@ -806,6 +806,49 @@
       </tags>
   </entry>
   <entry>
+    <title>Mysql逻辑架构</title>
+    <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png#averageHue=%23f9f6f3&clientId=u39eee028-9d46-4&from=paste&height=664&id=u609f2fe9&originHeight=730&originWidth=980&originalType=binary&ratio=1&rotation=0&showTitle=false&size=181397&status=done&style=none&taskId=u72281ee6-13c7-4efb-9295-bafda71f115&title=&width=890.9090715991568" alt="image.png"></p>
+<h2 id="Mysql-架构"><a href="#Mysql-架构" class="headerlink" title="Mysql 架构"></a>Mysql 架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674177610690-d827ed10-467b-4b9e-a73d-67db0a9ab071.png#averageHue=%23c9c0ae&clientId=u2930fbf9-b22d-4&from=paste&height=455&id=rpgUJ&originHeight=501&originWidth=793&originalType=binary&ratio=1&rotation=0&showTitle=false&size=280500&status=done&style=none&taskId=u85ffcba6-fe08-41cc-9b2e-6d618c27bc3&title=&width=720.9090752838075" alt="image.png"></p>
+<h3 id="1-连接层"><a href="#1-连接层" class="headerlink" title="1. 连接层"></a>1. 连接层</h3><h4 id="1-Connection-pool"><a href="#1-Connection-pool" class="headerlink" title="1. Connection pool"></a>1. Connection pool</h4><p>作用：</p>
+<ol>
+<li>客户端与服务器建立 TCP 连接</li>
+<li>查询用户对应权限，判定用户能够进行哪些操作</li>
+<li>控制连接个数和连接的复用</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674178023914-f758ce45-8f06-4434-862b-4348ec02da7f.png#averageHue=%23e6e4de&clientId=u2930fbf9-b22d-4&from=paste&height=561&id=ua4ae3b11&originHeight=617&originWidth=530&originalType=binary&ratio=1&rotation=0&showTitle=false&size=72581&status=done&style=none&taskId=u35d0e871-73c9-44ff-80db-2e893ec8eea&title=&width=481.8181713750542" alt="image.png"></p>
+<h3 id="2-服务层"><a href="#2-服务层" class="headerlink" title="2. 服务层"></a>2. 服务层</h3><h4 id="1-Sql-接口"><a href="#1-Sql-接口" class="headerlink" title="1. Sql 接口"></a>1. Sql 接口</h4><ol>
+<li>接收 SQL 命令</li>
+<li>返回查询结果</li>
+</ol>
+<h4 id="2-解析器"><a href="#2-解析器" class="headerlink" title="2. 解析器"></a>2. 解析器</h4><ol>
+<li>解析 SQL 语句</li>
+<li>生成解析树</li>
+<li>验证用户权限</li>
+</ol>
+<h4 id="3-优化器"><a href="#3-优化器" class="headerlink" title="3. 优化器"></a>3. 优化器</h4><ol>
+<li>生成执行计划</li>
+<li>明确索引使用</li>
+<li>采用选取-投影-连接进行查询</li>
+</ol>
+<h4 id="4-查询缓存"><a href="#4-查询缓存" class="headerlink" title="4. 查询缓存"></a>4. 查询缓存</h4><ol>
+<li>记录查询结果</li>
+<li>key-value 形式存储</li>
+</ol>
+<h3 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h3><ol>
+<li>数据存储提取</li>
+<li>维护底层数据执行</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql技术内幕-第二章</title>
     <url>/2022/01/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%BA%8C%E7%AB%A0/</url>
     <content><![CDATA[<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/12394516/1636370551211-b7e3691e-760d-4777-9125-49a114a0f304.jpeg"></p>
@@ -944,49 +987,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql逻辑架构</title>
-    <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png#averageHue=%23f9f6f3&clientId=u39eee028-9d46-4&from=paste&height=664&id=u609f2fe9&originHeight=730&originWidth=980&originalType=binary&ratio=1&rotation=0&showTitle=false&size=181397&status=done&style=none&taskId=u72281ee6-13c7-4efb-9295-bafda71f115&title=&width=890.9090715991568" alt="image.png"></p>
-<h2 id="Mysql-架构"><a href="#Mysql-架构" class="headerlink" title="Mysql 架构"></a>Mysql 架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674177610690-d827ed10-467b-4b9e-a73d-67db0a9ab071.png#averageHue=%23c9c0ae&clientId=u2930fbf9-b22d-4&from=paste&height=455&id=rpgUJ&originHeight=501&originWidth=793&originalType=binary&ratio=1&rotation=0&showTitle=false&size=280500&status=done&style=none&taskId=u85ffcba6-fe08-41cc-9b2e-6d618c27bc3&title=&width=720.9090752838075" alt="image.png"></p>
-<h3 id="1-连接层"><a href="#1-连接层" class="headerlink" title="1. 连接层"></a>1. 连接层</h3><h4 id="1-Connection-pool"><a href="#1-Connection-pool" class="headerlink" title="1. Connection pool"></a>1. Connection pool</h4><p>作用：</p>
-<ol>
-<li>客户端与服务器建立 TCP 连接</li>
-<li>查询用户对应权限，判定用户能够进行哪些操作</li>
-<li>控制连接个数和连接的复用</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674178023914-f758ce45-8f06-4434-862b-4348ec02da7f.png#averageHue=%23e6e4de&clientId=u2930fbf9-b22d-4&from=paste&height=561&id=ua4ae3b11&originHeight=617&originWidth=530&originalType=binary&ratio=1&rotation=0&showTitle=false&size=72581&status=done&style=none&taskId=u35d0e871-73c9-44ff-80db-2e893ec8eea&title=&width=481.8181713750542" alt="image.png"></p>
-<h3 id="2-服务层"><a href="#2-服务层" class="headerlink" title="2. 服务层"></a>2. 服务层</h3><h4 id="1-Sql-接口"><a href="#1-Sql-接口" class="headerlink" title="1. Sql 接口"></a>1. Sql 接口</h4><ol>
-<li>接收 SQL 命令</li>
-<li>返回查询结果</li>
-</ol>
-<h4 id="2-解析器"><a href="#2-解析器" class="headerlink" title="2. 解析器"></a>2. 解析器</h4><ol>
-<li>解析 SQL 语句</li>
-<li>生成解析树</li>
-<li>验证用户权限</li>
-</ol>
-<h4 id="3-优化器"><a href="#3-优化器" class="headerlink" title="3. 优化器"></a>3. 优化器</h4><ol>
-<li>生成执行计划</li>
-<li>明确索引使用</li>
-<li>采用选取-投影-连接进行查询</li>
-</ol>
-<h4 id="4-查询缓存"><a href="#4-查询缓存" class="headerlink" title="4. 查询缓存"></a>4. 查询缓存</h4><ol>
-<li>记录查询结果</li>
-<li>key-value 形式存储</li>
-</ol>
-<h3 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h3><ol>
-<li>数据存储提取</li>
-<li>维护底层数据执行</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
     <url>/2021/05/13/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
@@ -1054,7 +1054,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2023/07/20/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2023/07/21/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>

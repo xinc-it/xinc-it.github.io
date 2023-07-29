@@ -150,56 +150,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql-事务隔离</title>
-    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
-    <content><![CDATA[<h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
-<li><strong>原子性</strong></li>
-<li><strong>持久性</strong></li>
-<li><strong>隔离性</strong></li>
-<li><strong>一致性</strong></li>
-</ol>
-<h3 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2. 事务隔离级别"></a>2. 事务隔离级别</h3><ol>
-<li><strong>读已提交（事务未提交时，变更能被其它事务看到）</strong></li>
-<li><strong>读未提交（事务提交后，其它事务才能看到变更）</strong></li>
-<li><strong>可重复读（一个事务执行过程中，总是跟启动时看到的数据是一致的。未提交的变更对其它事务不可见）</strong></li>
-<li><strong>串行化（同一行记录写会加写锁，读会读锁。当出现读写锁冲突时，后访问的事务，必须等前一个事务完成，才能执行）</strong></li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988923063-4d56a761-7637-488b-951d-c443de806cb1.png#clientId=uf02e59f4-5d80-4&from=paste&height=381&id=uf414196c&originHeight=762&originWidth=788&originalType=binary&ratio=1&size=201874&status=done&style=none&taskId=u19543944-dee4-4fbf-bf51-efae564dfae&width=394" alt="image.png"></p>
-<p>v1=v2=1,v3=2<br>四种事务得到的结果</p>
-<ol>
-<li>读未提交： v1、v2、v3=2</li>
-<li>读已提交: v1=1 ，v2、v3=2</li>
-<li>可重复读：v1=v2=1，v3=2</li>
-<li>可串行化 ： v1=v2=1,v3=2</li>
-</ol>
-<h2 id="2-事务隔离的实现"><a href="#2-事务隔离的实现" class="headerlink" title="2. 事务隔离的实现"></a>2. 事务隔离的实现</h2><p>当一个值从 1 按顺序变成 2，3，3 那么他的日志里面就会有类似的回滚段记录<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631013980123-b4f659d1-a49a-4d6f-bffa-5c049fb7a4b5.png#clientId=uf02e59f4-5d80-4&from=paste&height=259&id=u4bd92b33&originHeight=517&originWidth=906&originalType=binary&ratio=1&size=104426&status=done&style=none&taskId=ub4313c28-1bd9-45bf-a56d-abe4cf1987a&width=453" alt="image.png"><br>如图事务 A、B、C 修改记录导致一个字段对应多个值。</p>
-<p>通过 MVCC 来实现一个数据的多个版本，通过 undo log 实现数据版本的回滚<br>通过 MVCC 和 undo log 来实现事务的隔离<br>具体可以参考</p>
-<p><a href="https://www.yuque.com/sanxingalaxys9/gwxct1/lq01qk?view=doc_embed">Mysql 实战 45 讲</a></p>
-<p>当回滚段日志过长时，系统会自动清除。</p>
-<h2 id="3-事务的启动方式"><a href="#3-事务的启动方式" class="headerlink" title="3. 事务的启动方式"></a>3. 事务的启动方式</h2><ol>
-<li>set autocommit=0 关闭自动提交，只要执行 select 语句自动开启事务</li>
-<li>begin 或是 start transaction</li>
-</ol>
-<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
-<li>四大特性和隔离级别</li>
-<li>事务隔离的实现（通过 MVCC 和 undo log)</li>
-<li>事务的启动方式<ol>
-<li>自动启动 select 语句执行时自动启动</li>
-<li>手动启动 begin、 start transaction</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql-索引</title>
     <url>/2022/09/09/4!%E7%B4%A2%E5%BC%95/</url>
     <content><![CDATA[<h2 id="1-索引常见模型"><a href="#1-索引常见模型" class="headerlink" title="1.索引常见模型"></a>1.索引常见模型</h2><h3 id="1-哈希表"><a href="#1-哈希表" class="headerlink" title="1. 哈希表"></a>1. 哈希表</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631014492663-2fed2cf8-9707-4346-bf90-06ff2a5b0d4e.png#averageHue=%23dce4d1&clientId=uf02e59f4-5d80-4&from=paste&height=286&id=u7fa963ac&originHeight=572&originWidth=848&originalType=binary&ratio=1&rotation=0&showTitle=false&size=173484&status=done&style=none&taskId=u6e8f087d-7794-4326-8ff8-d1cb74fcb50&title=&width=424" alt="image.png"></p>
@@ -261,6 +211,56 @@
 </li>
 <li>索引覆盖：通过非主键索引查询主键索引的值，导致不需要回到主键索引树再次进行查询的过程。</li>
 <li>最左前缀原则</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql-事务隔离</title>
+    <url>/2022/09/07/3!%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/</url>
+    <content><![CDATA[<h2 id="1-隔离性和隔离级别"><a href="#1-隔离性和隔离级别" class="headerlink" title="1. 隔离性和隔离级别"></a>1. 隔离性和隔离级别</h2><h3 id="1-事务特性"><a href="#1-事务特性" class="headerlink" title="1. 事务特性"></a>1. 事务特性</h3><ol>
+<li><strong>原子性</strong></li>
+<li><strong>持久性</strong></li>
+<li><strong>隔离性</strong></li>
+<li><strong>一致性</strong></li>
+</ol>
+<h3 id="2-事务隔离级别"><a href="#2-事务隔离级别" class="headerlink" title="2. 事务隔离级别"></a>2. 事务隔离级别</h3><ol>
+<li><strong>读已提交（事务未提交时，变更能被其它事务看到）</strong></li>
+<li><strong>读未提交（事务提交后，其它事务才能看到变更）</strong></li>
+<li><strong>可重复读（一个事务执行过程中，总是跟启动时看到的数据是一致的。未提交的变更对其它事务不可见）</strong></li>
+<li><strong>串行化（同一行记录写会加写锁，读会读锁。当出现读写锁冲突时，后访问的事务，必须等前一个事务完成，才能执行）</strong></li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988923063-4d56a761-7637-488b-951d-c443de806cb1.png#clientId=uf02e59f4-5d80-4&from=paste&height=381&id=uf414196c&originHeight=762&originWidth=788&originalType=binary&ratio=1&size=201874&status=done&style=none&taskId=u19543944-dee4-4fbf-bf51-efae564dfae&width=394" alt="image.png"></p>
+<p>v1=v2=1,v3=2<br>四种事务得到的结果</p>
+<ol>
+<li>读未提交： v1、v2、v3=2</li>
+<li>读已提交: v1=1 ，v2、v3=2</li>
+<li>可重复读：v1=v2=1，v3=2</li>
+<li>可串行化 ： v1=v2=1,v3=2</li>
+</ol>
+<h2 id="2-事务隔离的实现"><a href="#2-事务隔离的实现" class="headerlink" title="2. 事务隔离的实现"></a>2. 事务隔离的实现</h2><p>当一个值从 1 按顺序变成 2，3，3 那么他的日志里面就会有类似的回滚段记录<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1631013980123-b4f659d1-a49a-4d6f-bffa-5c049fb7a4b5.png#clientId=uf02e59f4-5d80-4&from=paste&height=259&id=u4bd92b33&originHeight=517&originWidth=906&originalType=binary&ratio=1&size=104426&status=done&style=none&taskId=ub4313c28-1bd9-45bf-a56d-abe4cf1987a&width=453" alt="image.png"><br>如图事务 A、B、C 修改记录导致一个字段对应多个值。</p>
+<p>通过 MVCC 来实现一个数据的多个版本，通过 undo log 实现数据版本的回滚<br>通过 MVCC 和 undo log 来实现事务的隔离<br>具体可以参考</p>
+<p><a href="https://www.yuque.com/sanxingalaxys9/gwxct1/lq01qk?view=doc_embed">Mysql 实战 45 讲</a></p>
+<p>当回滚段日志过长时，系统会自动清除。</p>
+<h2 id="3-事务的启动方式"><a href="#3-事务的启动方式" class="headerlink" title="3. 事务的启动方式"></a>3. 事务的启动方式</h2><ol>
+<li>set autocommit=0 关闭自动提交，只要执行 select 语句自动开启事务</li>
+<li>begin 或是 start transaction</li>
+</ol>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><ol>
+<li>四大特性和隔离级别</li>
+<li>事务隔离的实现（通过 MVCC 和 undo log)</li>
+<li>事务的启动方式<ol>
+<li>自动启动 select 语句执行时自动启动</li>
+<li>手动启动 begin、 start transaction</li>
+</ol>
+</li>
 </ol>
 ]]></content>
       <categories>
@@ -1054,7 +1054,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2023/07/28/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2023/07/29/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>

@@ -273,6 +273,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Mysql-行锁</title>
+    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
+    <content><![CDATA[<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&from=paste&height=284&id=tMiKr&originHeight=568&originWidth=857&originalType=binary&ratio=1&size=76026&status=done&style=none&taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
+<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong></p>
+<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
+<ol>
+<li>从顾客 A 账户余额中扣除电影票价；</li>
+<li>给影院 B 的账户余额增加这张电影票价；</li>
+<li>记录一条交易日志。</li>
+</ol>
+<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。</p>
+<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&from=paste&height=281&id=uf1f2e0cc&originHeight=561&originWidth=871&originalType=binary&ratio=1&size=90990&status=done&style=none&taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。</p>
+<p>解决方法</p>
+<ul>
+<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
+<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
+</ul>
+<p>死锁检测的缺点：</p>
+<ol>
+<li>确保业务不会出现死锁，关闭死锁检测</li>
+<li>控制并发度</li>
+</ol>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
+<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
+<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
+<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
+</ol>
+<ul>
+<li>第一种，直接执行 delete from T limit 10000;</li>
+<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
+<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
+</ul>
+<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql-锁</title>
     <url>/2021/09/10/5!%E9%94%81/</url>
     <content><![CDATA[<h2 id="1-锁的分类："><a href="#1-锁的分类：" class="headerlink" title="1. 锁的分类："></a>1. 锁的分类：</h2><p><strong>根据加锁范围：</strong></p>
@@ -317,50 +361,6 @@
 <li><p>MDL 是自动加上的，不需要通过 sql 语句。存在读写锁、写写锁互斥情况。锁在事务提交后释放。作用是为了防止 DDL 和 DML 操作冲突。</p>
 </li>
 </ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>Mysql</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql-行锁</title>
-    <url>/2022/09/11/6!%E8%A1%8C%E9%94%81/</url>
-    <content><![CDATA[<h2 id="1-两阶段锁"><a href="#1-两阶段锁" class="headerlink" title="1. 两阶段锁"></a>1. 两阶段锁</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634436939942-730ba0be-6f13-45fd-9e43-01d1e21cdcae.png#clientId=u3b414356-8e51-4&from=paste&height=284&id=tMiKr&originHeight=568&originWidth=857&originalType=binary&ratio=1&size=76026&status=done&style=none&taskId=u92c3677b-e488-453e-8a85-2b6bec9261e&width=428.5" alt="image.png"><br>**下面的操作序列中，如果为两行数据加了行锁事务 B 的 update 语句执行时会是什么现象呢？假设字段 id 是表 t 的主键。</p>
-<p>在 InnoDB 中，行锁是在需要的时候加上，在<strong>事务结束时释放。（</strong>最有可能造成锁冲突的行的读锁尽量往后放<strong>）</strong></p>
-<p>示例：<br>顾客 A 在影院 B 买电影票<br>操作如下</p>
-<ol>
-<li>从顾客 A 账户余额中扣除电影票价；</li>
-<li>给影院 B 的账户余额增加这张电影票价；</li>
-<li>记录一条交易日志。</li>
-</ol>
-<p>其中多个顾客买票可能造成 B 的账户行数据冲突。因此将 B 的操作放在最后。最大程度减少了事务之间的锁等待。</p>
-<h2 id="2-死锁和死锁检测"><a href="#2-死锁和死锁检测" class="headerlink" title="2. 死锁和死锁检测"></a>2. 死锁和死锁检测</h2><p>示例：当行锁同时锁住 id=1 和 2 的两行数据<br><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634437587628-d3672f2b-b62b-4ced-ac7b-dcc6de65eb02.png#clientId=u3b414356-8e51-4&from=paste&height=281&id=uf1f2e0cc&originHeight=561&originWidth=871&originalType=binary&ratio=1&size=90990&status=done&style=none&taskId=ub90e33fe-f5b8-4aab-ad45-1cf1dd6750d&width=435.5" alt="image.png"><br>在这种情况下事务 A 等待 id=2 的行锁，事务 B 等待 id=1 的行锁。事务 A 和事务 B 互相都在等待对方无法释放的资源，从而进入了死锁。</p>
-<p>解决方法</p>
-<ul>
-<li>设置获取锁等待时间：设置获取锁超时时间，如果超时则锁住的线程自动退出。通过 innodb_lock_wait_timeout 来设置等待时间默认为 50s</li>
-<li>发起死锁检测：发现死锁后主动回滚争抢锁的某一个事务。让其他事务继续执行。通过 innodb_deadlock_detect 设置为 on 表示开启逻辑。</li>
-</ul>
-<p>死锁检测的缺点：</p>
-<ol>
-<li>确保业务不会出现死锁，关闭死锁检测</li>
-<li>控制并发度</li>
-</ol>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><ol>
-<li>读锁的两阶段协议：需要的时候加上、事务结束的时候释放。尽可能将影响并发度最大的锁往后放。减少其他锁的等待时间</li>
-<li>死锁的形成，事务之间争抢不释放的锁资源。导致一直处于等待状态</li>
-<li>死锁的解决方法：1. 设置锁等待时间 2. 开启死锁检测</li>
-</ol>
-<ul>
-<li>第一种，直接执行 delete from T limit 10000;</li>
-<li>第二种，在一个连接中循环执行 20 次 delete from T limit 500;</li>
-<li>第三种，在 20 个连接中同时执行 delete from T limit 500。</li>
-</ul>
-<p>你会选择哪一种方法呢？为什么呢？<br>第二种，第三种容易造成死锁。第一种锁的范围太大导致获取锁的时间长。</p>
 ]]></content>
       <categories>
         <category>数据库</category>
@@ -1054,7 +1054,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2023/08/07/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2023/08/08/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>

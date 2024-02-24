@@ -1054,7 +1054,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2024/02/23/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2024/02/24/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>

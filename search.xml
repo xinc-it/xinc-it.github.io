@@ -698,6 +698,25 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode递增顺序查找树</title>
+    <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&originHeight=560&originWidth=770&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
+<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
+<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>)&#123;</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>)&#123;</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql技术内幕-第一章</title>
     <url>/2021/12/11/Mysql%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
     <content><![CDATA[<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/12394516/1635612909935-781caa54-e671-46b3-b70e-4d4760efdb19.jpeg"></p>
@@ -925,25 +944,6 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode递增顺序查找树</title>
-    <url>/2021/01/04/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
-    <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70#id=sJMFS&originHeight=560&originWidth=770&originalType=binary&ratio=1&status=done&style=none"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
-<h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
-<h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">increasingBST</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root!=<span class="keyword">null</span>)&#123;</span><br><span class="line">           ArrayList array=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            Solution s=<span class="keyword">new</span> Solution();</span><br><span class="line">            s.inOrderTraversal(root,array);</span><br><span class="line">           root=s.toTree(<span class="keyword">null</span>,array,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//通过递归的方式不断将集合中的值有做新的右子树的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">toTree</span><span class="params">(TreeNode root,List&lt;Integer&gt; array,<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        root=<span class="keyword">new</span> TreeNode(array.get(length));</span><br><span class="line">        root.left=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;array.size()-<span class="number">1</span>)&#123;</span><br><span class="line">            length++;</span><br><span class="line">            root.right=toTree(root.right,array,length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//中序遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversal</span><span class="params">(TreeNode root,List&lt;Integer&gt; array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           inOrderTraversal(root.left,array);</span><br><span class="line">           array.add(root.val);</span><br><span class="line">           inOrderTraversal(root.right,array);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在我看来树的重点需要掌握的就是树的遍历方式。前序、中序、后序、层序。基本上许多和树有关的题目都会涉及到他的遍历方式。这些方式都可以通过递归的方式来实现。</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql逻辑架构</title>
     <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
     <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png#averageHue=%23f9f6f3&clientId=u39eee028-9d46-4&from=paste&height=664&id=u609f2fe9&originHeight=730&originWidth=980&originalType=binary&ratio=1&rotation=0&showTitle=false&size=181397&status=done&style=none&taskId=u72281ee6-13c7-4efb-9295-bafda71f115&title=&width=890.9090715991568" alt="image.png"></p>
@@ -1054,7 +1054,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2024/07/30/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2024/07/31/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>

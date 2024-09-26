@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Mysql-更新语句的执行</title>
+    <url>/2022/09/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
+    <content><![CDATA[<h2 id="1-更新语句执行流程"><a href="#1-更新语句执行流程" class="headerlink" title="1. 更新语句执行流程"></a>1. 更新语句执行流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630974533552-29681b12-3ee4-4012-ae23-882ab740984d.png"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; update T <span class="built_in">set</span> c=c+1 <span class="built_in">where</span> ID=2;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>客户端通过连接器连接 MySQL 服务器</li>
+<li>将缓存中相关表的结果清空</li>
+<li>分析器通过词法和语法分析判断是更新语句</li>
+<li>优化器通过索引，决定使用 ID 的索引</li>
+<li>执行器执行更新语句</li>
+<li>进行 redo log 和 bin log 的修改</li>
+</ol>
+<h2 id="2-Redo-log-引擎日志"><a href="#2-Redo-log-引擎日志" class="headerlink" title="2.Redo log(引擎日志)"></a>2.Redo log(引擎日志)</h2><p>情景老板记账：先把借帐和还账记录写在黑板上，空闲时，再把黑板上账的写入到账本中。</p>
+<p>作用： 用作数据库写入将数据磁盘的缓存，防止每次更新都要将数据写进磁盘，提高了更新效率。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630975170760-0904cfb2-ee0b-4650-a584-bb831be94070.png"></p>
+<h3 id="1-WAL-Write-Ahead-Logging"><a href="#1-WAL-Write-Ahead-Logging" class="headerlink" title="1. WAL (Write-Ahead Logging)"></a>1. WAL (Write-Ahead Logging)</h3><p>**<font style="color:#F5222D;background-color:#FADB14;">先写日志，再写磁盘</font>**。</p>
+<p>InnoDB 引擎会把记录写道 redo log 中，并更新内存。然后更新就算完成。引擎会在空闲时间操作记录</p>
+<p>写入磁盘。</p>
+<p>如果 redo log 写满了，会把一部分记录更新到磁盘中。</p>
+<p>通过 write pos 和 check point 两个指针来判断日志是否写满</p>
+<h3 id="2-crash-safe"><a href="#2-crash-safe" class="headerlink" title="2. crash-safe"></a>2. crash-safe</h3><p>当数据库发生异常时，可以通过 redo log 可以获取到之前的提交记录。</p>
+<p>通过提交记录可以将未同步到数据库中数据同步到数据库中。</p>
+<p><strong><font style="color:#F5222D;">redo log 存储的是物理变更日志，用于记录磁盘中指定地方的数值修改记录。</font></strong></p>
+<h3 id="3-特点"><a href="#3-特点" class="headerlink" title="3. 特点"></a>3. 特点</h3><ol>
+<li> 存储的物理日志（记录的是数据页上数据的更改）</li>
+<li> 先写日志，后写磁盘</li>
+<li> 可以 crash safe 进行数据的修复</li>
+<li> InnoDB 引擎层日志</li>
+<li> 空间有限会用完，通过队列的实现循环写</li>
+</ol>
+<h2 id="3-binlog（Server-层日志）"><a href="#3-binlog（Server-层日志）" class="headerlink" title="3. binlog（Server 层日志）"></a>3. binlog（Server 层日志）</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
+<li>服务层日志</li>
+<li>存储的内容是逻辑日志（记录的是语句的原始逻辑）</li>
+<li>空间无限，通过新增文件实现追加写</li>
+</ol>
+<h2 id="4-执行流程"><a href="#4-执行流程" class="headerlink" title="4. 执行流程"></a>4. 执行流程</h2><ol>
+<li>执行引擎先找到 ID=2 的这一行数据，如果内存中存在直接返回给执行器，否则从磁盘读入内存然后返回给执行器</li>
+<li>把值加上 1，然后调用引擎接口写入数据</li>
+<li>引擎会将新数据更新到内存中，同时更新到 redo log 中。redo log 处于 prepare 状态，告诉执行器完成了，可以提交事务了。</li>
+<li>执行器生成更新操作的 bin log,并把 bin log 写入磁盘</li>
+<li>执行器调用引擎的事务接口，将写入的 redo log 改成 commit 状态</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634976756709-8dbcb97a-235f-4b93-a181-f46a29389d94.png"></p>
+<h2 id="5-两阶段提交"><a href="#5-两阶段提交" class="headerlink" title="5. 两阶段提交"></a>5. 两阶段提交</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988222445-a6208d34-24c4-4e8d-89b2-8952bbb46186.png"></p>
+<hr>
+<p><strong>原因</strong></p>
+<ol>
+<li>如果发生 crash 导致系统崩溃的话，如果顺序不一致，可能导致之后无法通过 binlog 恢复到任一时刻的数据</li>
+<li>可能导致 binlog 和 redo log 的数据不一致导致数据冲突。</li>
+</ol>
+<h2 id="6-两种日志的不同点"><a href="#6-两种日志的不同点" class="headerlink" title="6. 两种日志的不同点"></a>6. 两种日志的不同点</h2><ol>
+<li>redo log 是 InnoDB 引擎特有的，binlog 是 MySQL 的 Server 层实现的</li>
+<li>redo log 是物理日志，记录的是 <strong>在某个数据页上做了修改</strong>，binlog 是逻辑日志记录的是语句逻辑 <strong>给 ID=2 的数据进行加 1</strong></li>
+<li>redo log 是循环写，空间大小固定。bin log 是追加写，当 bin log 文件到达一定大小后会切换到下一个，不会覆盖以前的日志</li>
+</ol>
+<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><ol>
+<li>更新语句的执行流程</li>
+<li>Redo log 的作用是用来存储 MySQL 产生更新语句的物理日志。通过 WAL 技术先将日志写入 队列中然偶后通过指定条件写入磁盘中</li>
+<li>bin log 的作用和特点</li>
+<li>两种日志的不同点</li>
+<li>两阶段提交的作用<ol>
+<li>保证数据库的数据不冲突</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>数据库</tag>
+        <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>了解Mysql查询语句执行流程</title>
     <url>/2022/01/11/1!%E4%BA%86%E8%A7%A3Mysql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</url>
     <content><![CDATA[<p><strong>MySQL 逻辑架构图</strong></p>
@@ -87,85 +164,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
-        <tag>InnoDB</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql-更新语句的执行</title>
-    <url>/2022/09/06/2!%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/</url>
-    <content><![CDATA[<h2 id="1-更新语句执行流程"><a href="#1-更新语句执行流程" class="headerlink" title="1. 更新语句执行流程"></a>1. 更新语句执行流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630974533552-29681b12-3ee4-4012-ae23-882ab740984d.png"></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; update T <span class="built_in">set</span> c=c+1 <span class="built_in">where</span> ID=2;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>客户端通过连接器连接 MySQL 服务器</li>
-<li>将缓存中相关表的结果清空</li>
-<li>分析器通过词法和语法分析判断是更新语句</li>
-<li>优化器通过索引，决定使用 ID 的索引</li>
-<li>执行器执行更新语句</li>
-<li>进行 redo log 和 bin log 的修改</li>
-</ol>
-<h2 id="2-Redo-log-引擎日志"><a href="#2-Redo-log-引擎日志" class="headerlink" title="2.Redo log(引擎日志)"></a>2.Redo log(引擎日志)</h2><p>情景老板记账：先把借帐和还账记录写在黑板上，空闲时，再把黑板上账的写入到账本中。</p>
-<p>作用： 用作数据库写入将数据磁盘的缓存，防止每次更新都要将数据写进磁盘，提高了更新效率。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630975170760-0904cfb2-ee0b-4650-a584-bb831be94070.png"></p>
-<h3 id="1-WAL-Write-Ahead-Logging"><a href="#1-WAL-Write-Ahead-Logging" class="headerlink" title="1. WAL (Write-Ahead Logging)"></a>1. WAL (Write-Ahead Logging)</h3><p>**<font style="color:#F5222D;background-color:#FADB14;">先写日志，再写磁盘</font>**。</p>
-<p>InnoDB 引擎会把记录写道 redo log 中，并更新内存。然后更新就算完成。引擎会在空闲时间操作记录</p>
-<p>写入磁盘。</p>
-<p>如果 redo log 写满了，会把一部分记录更新到磁盘中。</p>
-<p>通过 write pos 和 check point 两个指针来判断日志是否写满</p>
-<h3 id="2-crash-safe"><a href="#2-crash-safe" class="headerlink" title="2. crash-safe"></a>2. crash-safe</h3><p>当数据库发生异常时，可以通过 redo log 可以获取到之前的提交记录。</p>
-<p>通过提交记录可以将未同步到数据库中数据同步到数据库中。</p>
-<p><strong><font style="color:#F5222D;">redo log 存储的是物理变更日志，用于记录磁盘中指定地方的数值修改记录。</font></strong></p>
-<h3 id="3-特点"><a href="#3-特点" class="headerlink" title="3. 特点"></a>3. 特点</h3><ol>
-<li> 存储的物理日志（记录的是数据页上数据的更改）</li>
-<li> 先写日志，后写磁盘</li>
-<li> 可以 crash safe 进行数据的修复</li>
-<li> InnoDB 引擎层日志</li>
-<li> 空间有限会用完，通过队列的实现循环写</li>
-</ol>
-<h2 id="3-binlog（Server-层日志）"><a href="#3-binlog（Server-层日志）" class="headerlink" title="3. binlog（Server 层日志）"></a>3. binlog（Server 层日志）</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ol>
-<li>服务层日志</li>
-<li>存储的内容是逻辑日志（记录的是语句的原始逻辑）</li>
-<li>空间无限，通过新增文件实现追加写</li>
-</ol>
-<h2 id="4-执行流程"><a href="#4-执行流程" class="headerlink" title="4. 执行流程"></a>4. 执行流程</h2><ol>
-<li>执行引擎先找到 ID=2 的这一行数据，如果内存中存在直接返回给执行器，否则从磁盘读入内存然后返回给执行器</li>
-<li>把值加上 1，然后调用引擎接口写入数据</li>
-<li>引擎会将新数据更新到内存中，同时更新到 redo log 中。redo log 处于 prepare 状态，告诉执行器完成了，可以提交事务了。</li>
-<li>执行器生成更新操作的 bin log,并把 bin log 写入磁盘</li>
-<li>执行器调用引擎的事务接口，将写入的 redo log 改成 commit 状态</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1634976756709-8dbcb97a-235f-4b93-a181-f46a29389d94.png"></p>
-<h2 id="5-两阶段提交"><a href="#5-两阶段提交" class="headerlink" title="5. 两阶段提交"></a>5. 两阶段提交</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/12394516/1630988222445-a6208d34-24c4-4e8d-89b2-8952bbb46186.png"></p>
-<hr>
-<p><strong>原因</strong></p>
-<ol>
-<li>如果发生 crash 导致系统崩溃的话，如果顺序不一致，可能导致之后无法通过 binlog 恢复到任一时刻的数据</li>
-<li>可能导致 binlog 和 redo log 的数据不一致导致数据冲突。</li>
-</ol>
-<h2 id="6-两种日志的不同点"><a href="#6-两种日志的不同点" class="headerlink" title="6. 两种日志的不同点"></a>6. 两种日志的不同点</h2><ol>
-<li>redo log 是 InnoDB 引擎特有的，binlog 是 MySQL 的 Server 层实现的</li>
-<li>redo log 是物理日志，记录的是 <strong>在某个数据页上做了修改</strong>，binlog 是逻辑日志记录的是语句逻辑 <strong>给 ID=2 的数据进行加 1</strong></li>
-<li>redo log 是循环写，空间大小固定。bin log 是追加写，当 bin log 文件到达一定大小后会切换到下一个，不会覆盖以前的日志</li>
-</ol>
-<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h2><ol>
-<li>更新语句的执行流程</li>
-<li>Redo log 的作用是用来存储 MySQL 产生更新语句的物理日志。通过 WAL 技术先将日志写入 队列中然偶后通过指定条件写入磁盘中</li>
-<li>bin log 的作用和特点</li>
-<li>两种日志的不同点</li>
-<li>两阶段提交的作用<ol>
-<li>保证数据库的数据不冲突</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
         <tag>数据库</tag>
-        <tag>Mysql</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -221,8 +221,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
+        <tag>数据库</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -312,8 +312,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
+        <tag>数据库</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -377,8 +377,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
+        <tag>数据库</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -432,8 +432,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
+        <tag>数据库</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
@@ -637,7 +637,7 @@
   </entry>
   <entry>
     <title>LeetCode-求二叉树的最大深度</title>
-    <url>/2024/09/25/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
+    <url>/2024/09/26/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
     <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
 <h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
@@ -665,7 +665,7 @@
   </entry>
   <entry>
     <title>LeetCode-汉明距离</title>
-    <url>/2024/09/25/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
+    <url>/2024/09/26/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
     <content><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png"></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这里有两种解题思路</p>
 <h2 id="1-位运算法"><a href="#1-位运算法" class="headerlink" title="1. 位运算法"></a>1. 位运算法</h2><p><strong>位运算</strong>如果你不了解的话，可以看下第二种解题思路。但是整体代码有点冗余，而且效率也不高。<br><code>^</code>的运算规则二进制位中各个位上数就是相同为 0，不同为 1。<br><code>&amp;</code>的运算规则是都为 1 时结果为 1，反之全为 0。<br><code>|</code>的运算规则是只要有 1 结果为 1，反之为 0。<br><code>&gt;&gt;</code>当前数二级制向右移一位，同时最高位根据数的正负来补 0 或 1<br><code>&lt;&lt;</code> 当前数二进制向左移一位，同时最低位补 0。</p>
@@ -697,7 +697,7 @@
   </entry>
   <entry>
     <title>LeetCode之合并二叉树</title>
-    <url>/2024/09/25/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <url>/2024/09/26/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
     <content><![CDATA[<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"></p>
 <h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
 <h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
@@ -730,7 +730,7 @@
   </entry>
   <entry>
     <title>LeetCode将有序数组转化为二叉搜索树</title>
-    <url>/2024/09/25/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
+    <url>/2024/09/26/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
     <content><![CDATA[<h1 id="一、将有序数组转化为二叉搜索树"><a href="#一、将有序数组转化为二叉搜索树" class="headerlink" title="一、将有序数组转化为二叉搜索树"></a>一、将有序数组转化为二叉搜索树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219235754380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"><br><strong>详情链接：</strong><a href="https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/">有序数组转二叉树</a></p>
 <h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><h2 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1.解题思路"></a>1.解题思路</h2><p>将当前数组的中间值用于创建当前的节点，然后中间值左边的数，分为一个新的子数组，这里我们暂且叫左子数组，将右边的分为右子数组。将左子数组放入当前节点的左子树。右子树组，放入当前节点的右子树。重复上述步骤即可。</p>
 <h2 id="2-解题步骤"><a href="#2-解题步骤" class="headerlink" title="2.解题步骤"></a>2.解题步骤</h2><ol>
@@ -775,7 +775,7 @@
   </entry>
   <entry>
     <title>LeetCode递增顺序查找树</title>
-    <url>/2024/09/25/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <url>/2024/09/26/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
     <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
 <h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></table></figure>
@@ -884,9 +884,52 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
+        <tag>数据库</tag>
         <tag>InnoDB</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql逻辑架构</title>
+    <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png"></p>
+<h2 id="Mysql-架构"><a href="#Mysql-架构" class="headerlink" title="Mysql 架构"></a>Mysql 架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674177610690-d827ed10-467b-4b9e-a73d-67db0a9ab071.png"></p>
+<h3 id="1-连接层"><a href="#1-连接层" class="headerlink" title="1. 连接层"></a>1. 连接层</h3><h4 id="1-Connection-pool"><a href="#1-Connection-pool" class="headerlink" title="1. Connection pool"></a>1. Connection pool</h4><p>作用：</p>
+<ol>
+<li>客户端与服务器建立 TCP 连接</li>
+<li>查询用户对应权限，判定用户能够进行哪些操作</li>
+<li>控制连接个数和连接的复用</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674178023914-f758ce45-8f06-4434-862b-4348ec02da7f.png"></p>
+<h3 id="2-服务层"><a href="#2-服务层" class="headerlink" title="2. 服务层"></a>2. 服务层</h3><h4 id="1-Sql-接口"><a href="#1-Sql-接口" class="headerlink" title="1. Sql 接口"></a>1. Sql 接口</h4><ol>
+<li>接收 SQL 命令</li>
+<li>返回查询结果</li>
+</ol>
+<h4 id="2-解析器"><a href="#2-解析器" class="headerlink" title="2. 解析器"></a>2. 解析器</h4><ol>
+<li>解析 SQL 语句</li>
+<li>生成解析树</li>
+<li>验证用户权限</li>
+</ol>
+<h4 id="3-优化器"><a href="#3-优化器" class="headerlink" title="3. 优化器"></a>3. 优化器</h4><ol>
+<li>生成执行计划</li>
+<li>明确索引使用</li>
+<li>采用选取-投影-连接进行查询</li>
+</ol>
+<h4 id="4-查询缓存"><a href="#4-查询缓存" class="headerlink" title="4. 查询缓存"></a>4. 查询缓存</h4><ol>
+<li>记录查询结果</li>
+<li>key-value 形式存储</li>
+</ol>
+<h3 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h3><ol>
+<li>数据存储提取</li>
+<li>维护底层数据执行</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -1049,57 +1092,14 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Mysql</tag>
+        <tag>数据库</tag>
         <tag>InnoDB</tag>
       </tags>
   </entry>
   <entry>
-    <title>Mysql逻辑架构</title>
-    <url>/2023/01/11/Mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<h1 id="架构剖析"><a href="#架构剖析" class="headerlink" title="架构剖析"></a>架构剖析</h1><h2 id="请求流程"><a href="#请求流程" class="headerlink" title="请求流程"></a>请求流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1673793013564-ddef72da-8e2f-46e8-976c-3b78d324bad9.png"></p>
-<h2 id="Mysql-架构"><a href="#Mysql-架构" class="headerlink" title="Mysql 架构"></a>Mysql 架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674177610690-d827ed10-467b-4b9e-a73d-67db0a9ab071.png"></p>
-<h3 id="1-连接层"><a href="#1-连接层" class="headerlink" title="1. 连接层"></a>1. 连接层</h3><h4 id="1-Connection-pool"><a href="#1-Connection-pool" class="headerlink" title="1. Connection pool"></a>1. Connection pool</h4><p>作用：</p>
-<ol>
-<li>客户端与服务器建立 TCP 连接</li>
-<li>查询用户对应权限，判定用户能够进行哪些操作</li>
-<li>控制连接个数和连接的复用</li>
-</ol>
-<p><img src="https://cdn.nlark.com/yuque/0/2023/png/12394516/1674178023914-f758ce45-8f06-4434-862b-4348ec02da7f.png"></p>
-<h3 id="2-服务层"><a href="#2-服务层" class="headerlink" title="2. 服务层"></a>2. 服务层</h3><h4 id="1-Sql-接口"><a href="#1-Sql-接口" class="headerlink" title="1. Sql 接口"></a>1. Sql 接口</h4><ol>
-<li>接收 SQL 命令</li>
-<li>返回查询结果</li>
-</ol>
-<h4 id="2-解析器"><a href="#2-解析器" class="headerlink" title="2. 解析器"></a>2. 解析器</h4><ol>
-<li>解析 SQL 语句</li>
-<li>生成解析树</li>
-<li>验证用户权限</li>
-</ol>
-<h4 id="3-优化器"><a href="#3-优化器" class="headerlink" title="3. 优化器"></a>3. 优化器</h4><ol>
-<li>生成执行计划</li>
-<li>明确索引使用</li>
-<li>采用选取-投影-连接进行查询</li>
-</ol>
-<h4 id="4-查询缓存"><a href="#4-查询缓存" class="headerlink" title="4. 查询缓存"></a>4. 查询缓存</h4><ol>
-<li>记录查询结果</li>
-<li>key-value 形式存储</li>
-</ol>
-<h3 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h3><ol>
-<li>数据存储提取</li>
-<li>维护底层数据执行</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
-    <url>/2024/09/25/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
+    <url>/2024/09/26/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
 <h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><h2 id="1-表单登录页面"><a href="#1-表单登录页面" class="headerlink" title="1. 表单登录页面"></a>1. 表单登录页面</h2><p><img src="https://img-blog.csdnimg.cn/20210513173942750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"></p>
 <h2 id="2-配置类"><a href="#2-配置类" class="headerlink" title="2. 配置类"></a>2. 配置类</h2><p><img src="https://img-blog.csdnimg.cn/20210513173201531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"></p>
@@ -1181,7 +1181,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2024/09/25/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2024/09/26/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>
@@ -1211,7 +1211,7 @@
   </entry>
   <entry>
     <title>Shiro官方文档笔记</title>
-    <url>/2024/09/25/Shiro%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0/</url>
+    <url>/2024/09/26/Shiro%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="1-核心架构"><a href="#1-核心架构" class="headerlink" title="1. 核心架构"></a>1. 核心架构</h1><h2 id="1-核心流程"><a href="#1-核心流程" class="headerlink" title="1. 核心流程"></a>1. 核心流程</h2><p><img src="https://img-blog.csdnimg.cn/img_convert/f0ce7abbc21ee54f870ed39a960ba893.png"></p>
 <h3 id="1-Subject"><a href="#1-Subject" class="headerlink" title="1.  Subject"></a>1.  Subject</h3><p>指需要认证的用户信息实体，subject 需要通过 securityManager 指定 Realm 来查询是否存在改用户信息和给用户进行授权的操作</p>
 <h3 id="2-SecurityManager"><a href="#2-SecurityManager" class="headerlink" title="2. SecurityManager"></a>2. SecurityManager</h3><p>shiro 体系的核心。协调内部安全组件。如：Realm 等。</p>

@@ -637,7 +637,7 @@
   </entry>
   <entry>
     <title>LeetCode-求二叉树的最大深度</title>
-    <url>/2025/01/23/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
+    <url>/2025/01/25/LeetCode-%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
     <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210117094814654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"><br><strong>题目链接：</strong><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/">二叉树的最大深度</a></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>通过递归的方式，不断遍历其树的每一个节点。然后判断当前节点是否为空，不为空高度加 1,同时遍历当前节点的子节点，然后比较左右两节点的高度，返回最大的节点高度。反之则直接返回上一节点的高度。</p>
 <h1 id="二、解题步骤"><a href="#二、解题步骤" class="headerlink" title="二、解题步骤"></a>二、解题步骤</h1><h2 id="1-详细步骤"><a href="#1-详细步骤" class="headerlink" title="1.详细步骤"></a>1.详细步骤</h2><ol>
@@ -665,7 +665,7 @@
   </entry>
   <entry>
     <title>LeetCode-汉明距离</title>
-    <url>/2025/01/23/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
+    <url>/2025/01/25/LeetCode-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/</url>
     <content><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p><img src="https://img-blog.csdnimg.cn/img_convert/eb8bf20167f1cc2d7f1d9c054ec9d21b.png"></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>这里有两种解题思路</p>
 <h2 id="1-位运算法"><a href="#1-位运算法" class="headerlink" title="1. 位运算法"></a>1. 位运算法</h2><p><strong>位运算</strong>如果你不了解的话，可以看下第二种解题思路。但是整体代码有点冗余，而且效率也不高。<br><code>^</code>的运算规则二进制位中各个位上数就是相同为 0，不同为 1。<br><code>&amp;</code>的运算规则是都为 1 时结果为 1，反之全为 0。<br><code>|</code>的运算规则是只要有 1 结果为 1，反之为 0。<br><code>&gt;&gt;</code>当前数二级制向右移一位，同时最高位根据数的正负来补 0 或 1<br><code>&lt;&lt;</code> 当前数二进制向左移一位，同时最低位补 0。</p>
@@ -697,7 +697,7 @@
   </entry>
   <entry>
     <title>LeetCode之合并二叉树</title>
-    <url>/2025/01/23/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <url>/2025/01/25/LeetCode%E4%B9%8B%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
     <content><![CDATA[<h1 id="合并二叉树"><a href="#合并二叉树" class="headerlink" title="合并二叉树"></a>合并二叉树</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219005707214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"></p>
 <h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2. 解题思路"></a>2. 解题思路</h2><p>采用递归和后序遍历的方式来同时遍历两棵树。遍历的同时，一定要判断两颗树的当前节点是否为空。然后创建一个新的节点，节点值为两个节点之和。遍历完成后即可得到合并后的树。</p>
 <h2 id="3-解题步骤"><a href="#3-解题步骤" class="headerlink" title="3. 解题步骤"></a>3. 解题步骤</h2><ol>
@@ -730,7 +730,7 @@
   </entry>
   <entry>
     <title>LeetCode将有序数组转化为二叉搜索树</title>
-    <url>/2025/01/23/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
+    <url>/2025/01/25/LeetCode%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
     <content><![CDATA[<h1 id="一、将有序数组转化为二叉搜索树"><a href="#一、将有序数组转化为二叉搜索树" class="headerlink" title="一、将有序数组转化为二叉搜索树"></a>一、将有序数组转化为二叉搜索树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="https://img-blog.csdnimg.cn/20201219235754380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"><br><strong>详情链接：</strong><a href="https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/">有序数组转二叉树</a></p>
 <h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><h2 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1.解题思路"></a>1.解题思路</h2><p>将当前数组的中间值用于创建当前的节点，然后中间值左边的数，分为一个新的子数组，这里我们暂且叫左子数组，将右边的分为右子数组。将左子数组放入当前节点的左子树。右子树组，放入当前节点的右子树。重复上述步骤即可。</p>
 <h2 id="2-解题步骤"><a href="#2-解题步骤" class="headerlink" title="2.解题步骤"></a>2.解题步骤</h2><ol>
@@ -775,7 +775,7 @@
   </entry>
   <entry>
     <title>LeetCode递增顺序查找树</title>
-    <url>/2025/01/23/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <url>/2025/01/25/LeetCode%E9%80%92%E5%A2%9E%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
     <content><![CDATA[<h1 id="题目详情"><a href="#题目详情" class="headerlink" title="题目详情"></a>题目详情</h1><p><img src="https://img-blog.csdnimg.cn/20210104232857846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"><br><a href="https://leetcode-cn.com/problems/increasing-order-search-tree/">题目详情链接</a></p>
 <h1 id="一、解题思路"><a href="#一、解题思路" class="headerlink" title="一、解题思路"></a>一、解题思路</h1><p>将原树进行中序遍历将树中的节点的非空值放入到一个 list 集合中，创建一棵新树然后通过递归的方式将不断生成的新的右子树直到集合遍历完。</p>
 <h1 id="二、使用步骤"><a href="#二、使用步骤" class="headerlink" title="二、使用步骤"></a>二、使用步骤</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对原树进行中序遍历。将非空树的值一次放入到List集合中。</span><br><span class="line">2.创建一个函数用于对集合进行遍历，将每次遍历得到的值用来创建当前树的值。</span><br><span class="line">  在集合遍历完之前，继续递归该函数，将传递的实参改为当前树的右子树。</span><br></pre></td></tr></table></figure>
@@ -1099,7 +1099,7 @@
   </entry>
   <entry>
     <title>SpringSecurity中执行表单登录认证时无法执行loadUserByUsername方法</title>
-    <url>/2025/01/23/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
+    <url>/2025/01/25/SpringSecurity%E4%B8%AD%E6%89%A7%E8%A1%8C%E8%A1%A8%E5%8D%95%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%97%B6%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8CloadUserByUsername%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="项目场景："><a href="#项目场景：" class="headerlink" title="项目场景："></a>项目场景：</h1><p>执行表单登录认证时配置了 loginProcessUrl 和 loginPage。但是执行登录认证时并不执行 UserDetailsService 接口的 loadByUsername 方法。导致认证失败。</p>
 <h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><h2 id="1-表单登录页面"><a href="#1-表单登录页面" class="headerlink" title="1. 表单登录页面"></a>1. 表单登录页面</h2><p><img src="https://img-blog.csdnimg.cn/20210513173942750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"></p>
 <h2 id="2-配置类"><a href="#2-配置类" class="headerlink" title="2. 配置类"></a>2. 配置类</h2><p><img src="https://img-blog.csdnimg.cn/20210513173201531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzODIwODk2,size_16,color_FFFFFF,t_70"></p>
@@ -1181,7 +1181,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2025/01/23/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
+    <url>/2025/01/25/switchhost%E4%BF%AE%E6%94%B9%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90%E5%8E%9F%E5%9B%A0/</url>
     <content><![CDATA[<ol>
 <li>host 文件为只读，取消 host 文件只读属性，并且为所有用户增加写入和修改权限</li>
 <li>系统 hosts 文件无法修改需要添加文件进行修改</li>
@@ -1211,7 +1211,7 @@
   </entry>
   <entry>
     <title>Shiro官方文档笔记</title>
-    <url>/2025/01/23/Shiro%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0/</url>
+    <url>/2025/01/25/Shiro%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="1-核心架构"><a href="#1-核心架构" class="headerlink" title="1. 核心架构"></a>1. 核心架构</h1><h2 id="1-核心流程"><a href="#1-核心流程" class="headerlink" title="1. 核心流程"></a>1. 核心流程</h2><p><img src="https://img-blog.csdnimg.cn/img_convert/f0ce7abbc21ee54f870ed39a960ba893.png"></p>
 <h3 id="1-Subject"><a href="#1-Subject" class="headerlink" title="1.  Subject"></a>1.  Subject</h3><p>指需要认证的用户信息实体，subject 需要通过 securityManager 指定 Realm 来查询是否存在改用户信息和给用户进行授权的操作</p>
 <h3 id="2-SecurityManager"><a href="#2-SecurityManager" class="headerlink" title="2. SecurityManager"></a>2. SecurityManager</h3><p>shiro 体系的核心。协调内部安全组件。如：Realm 等。</p>
